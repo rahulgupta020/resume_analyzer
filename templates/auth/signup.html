@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+
+{% block navbar %}
+    {% include "base/navbar.html" %}
+{% endblock %}
+
+{% block page_layout %}
+<form method="post">
+    {% csrf_token %}
+    <input name="username" placeholder="Username"><br><br>
+    <input name="email" placeholder="Email"><br><br>
+    <input name="password" type="password" placeholder="password"><br><br>
+    <input name="confirm_password" type="password" placeholder="confirm password"><br><br>
+    <button>Signup</button>
+</form>
+{% endblock %}

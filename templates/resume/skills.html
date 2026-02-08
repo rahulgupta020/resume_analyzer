@@ -1,0 +1,77 @@
+{% extends "base/base.html" %}
+
+{% block navbar %}
+{% include "base/navbar.html" %}
+{% endblock %}
+
+{% block page_layout %}
+<div class="layout">
+
+    {% include "base/sidebar_resume.html" %}
+
+    <div class="content">
+        <h3>Skills</h3>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div id="skills-container">
+
+        {% if skills %}
+            {% for skill in skills %}
+            <div class="skill-card">
+                <input type="text"
+                       name="skill_name_{{ forloop.counter0 }}"
+                       value="{{ skill.skill_name }}"
+                       placeholder="Skill Name"
+                       required>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Default one empty field -->
+            <div class="skill-card">
+                <input type="text"
+                       name="skill_name_0"
+                       placeholder="Skill Name"
+                       required>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <input type="hidden"
+           id="skill-count"
+           name="skill_count"
+           value="{{ skills|length|default:1 }}">
+
+    <div style="margin-top: 20px;">
+        <button type="submit">Save</button>
+        <button type="button" onclick="addSkill()">Add More</button>
+    </div>
+
+</form>
+
+    </div>
+</div>
+
+<script>
+function addSkill() {
+    const container = document.getElementById('skills-container');
+    let count = parseInt(document.getElementById('skill-count').value);
+
+    const div = document.createElement('div');
+    div.className = 'skill-card';
+
+    div.innerHTML = `
+        <input type="text"
+               name="skill_name_${count}"
+               placeholder="Skill Name"
+               required>
+    `;
+
+    container.appendChild(div);
+    document.getElementById('skill-count').value = count + 1;
+}
+</script>
+
+{% endblock %}

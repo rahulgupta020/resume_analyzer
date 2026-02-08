@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+
+
+/* NAVBAR */
+
+.navbar {
+    background: #1f2937;
+    color: #fff;
+    padding: 12px;
+}
+.navbar a {
+    color: #fff;
+    margin-right: 15px;
+    text-decoration: none;
+}
+.nav-user {
+    margin-right: 20px;
+}
+.page {
+    padding: 20px;
+}
+.layout {
+    display: flex;
+}
+.sidebar {
+    width: 220px;
+    background: #f3f4f6;
+    padding: 15px;
+    min-height: 90vh;
+}
+.sidebar a {
+    display: block;
+    margin-bottom: 10px;
+    color: #000;
+    text-decoration: none;
+}
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+

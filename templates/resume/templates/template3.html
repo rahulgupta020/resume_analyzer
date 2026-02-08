@@ -1,0 +1,32 @@
+<center>
+    <h1>{{ header.full_name }}</h1>
+    <p>{{ header.profession }}</p>
+</center>
+
+<hr>
+
+<section>
+<h3>Profile</h3>
+<p>{{ summary.summary }}</p>
+</section>
+
+<section>
+<h3>Work Experience</h3>
+{% for exp in experiences %}
+    <p><b>{{ exp.job_title }}</b> - {{ exp.employer }}</p>
+{% endfor %}
+</section>
+
+<section>
+<h3>Education</h3>
+{% for edu in educations %}
+    <p>{{ edu.degree }}</p>
+{% endfor %}
+</section>
+
+<section>
+<h3>Skills</h3>
+{% for skill in skills %}
+    {{ skill.skill_name }},
+{% endfor %}
+</section>

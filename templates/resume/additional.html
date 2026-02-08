@@ -1,0 +1,88 @@
+{% extends "base/base.html" %}
+
+{% block navbar %}
+{% include "base/navbar.html" %}
+{% endblock %}
+
+{% block page_layout %}
+<div class="layout">
+
+    {% include "base/sidebar_resume.html" %}
+
+    <div class="content">
+        <h3>Additional Details</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div id="additional-container">
+
+                {% if additionals %}
+                    {% for additional in additionals %}
+                    <div class="additional-card">
+                        <input type="text"
+                               name="additional_title_{{ forloop.counter0 }}"
+                               value="{{ additional.additional_title }}"
+                               placeholder="Title"
+                               required>
+
+                        <textarea name="additional_desc_{{ forloop.counter0 }}"
+                                  placeholder="Description"
+                                  rows="4">{{ additional.additional_desc }}</textarea>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Default empty field -->
+                    <div class="additional-card">
+                        <input type="text"
+                               name="additional_title_0"
+                               placeholder="Title"
+                               required>
+
+                        <textarea name="additional_desc_0"
+                                  placeholder="Description"
+                                  rows="4"></textarea>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <input type="hidden"
+                   id="additional-count"
+                   name="additional_count"
+                   value="{{ additionals|length|default:1 }}">
+
+            <div style="margin-top: 20px;">
+                <button type="submit">Save</button>
+                <button type="button" onclick="addAdditional()">Add More</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+function addAdditional() {
+    const container = document.getElementById('additional-container');
+    let count = parseInt(document.getElementById('additional-count').value);
+
+    const div = document.createElement('div');
+    div.className = 'additional-card';
+
+    div.innerHTML = `
+        <input type="text"
+               name="additional_title_${count}"
+               placeholder="Title"
+               required>
+
+        <textarea name="additional_desc_${count}"
+                  placeholder="Description"
+                  rows="4"></textarea>
+    `;
+
+    container.appendChild(div);
+    document.getElementById('additional-count').value = count + 1;
+}
+</script>
+
+{% endblock %}

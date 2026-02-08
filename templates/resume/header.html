@@ -1,0 +1,30 @@
+{% extends "base/base.html" %}
+
+{% block navbar %}
+    {% include "base/navbar.html" %}
+{% endblock %}
+
+{% block page_layout %}
+<div class="layout">
+
+    {% include "base/sidebar_resume.html" %}
+
+    <div class="content">
+        <h3>Header Section</h3>
+
+        <form method="post">
+            {% csrf_token %}
+            <label>Full Name:</label><input name="full_name" value="{{ header.full_name|default:'' }}"><br><br>
+            <label>Profession:</label><input name="profession" value="{{ header.profession|default:'' }}"><br><br>
+            <label>Email:</label><input name="email" value="{{ header.email|default:'' }}"><br><br>
+            <label>Phone:</label><input name="phone" value="{{ header.phone|default:'' }}"><br><br>
+            <label>Address:</label><input name="address" value="{{ header.address|default:'' }}"><br><br>
+            <label>LinkedIn:</label><input name="linkedin" value="{{ header.linkedin|default:'' }}"><br><br>
+            <label>GitHub:</label><input name="github" value="{{ header.github|default:'' }}"><br><br>
+            <label>Website:</label><input name="website" value="{{ header.website|default:'' }}"><br><br>
+            <button>Save</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

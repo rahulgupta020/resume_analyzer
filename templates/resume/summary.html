@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+
+{% block navbar %}
+    {% include "base/navbar.html" %}
+{% endblock %}
+
+{% block page_layout %}
+<div class="layout">
+
+    {% include "base/sidebar_resume.html" %}
+
+    <div class="content">
+        <h3>Summary Section</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Professional Summary:</label><br>
+            <textarea
+                name="summary"
+                rows="6"
+                style="width: 100%;"
+            >{{ summary.summary|default:'' }}</textarea>
+            <br><br>
+
+            <button>Save</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

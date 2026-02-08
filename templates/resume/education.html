@@ -1,0 +1,142 @@
+{% extends "base/base.html" %}
+
+{% block navbar %}
+{% include "base/navbar.html" %}
+{% endblock %}
+
+{% block page_layout %}
+<div class="layout">
+
+    {% include "base/sidebar_resume.html" %}
+
+    <div class="content">
+        <h3>Education</h3>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div id="education-container">
+
+        {% if educations %}
+            {% for edu in educations %}
+            <div class="education-card">
+                <h5>Education {{ forloop.counter }}</h5>
+
+                <input type="text"
+                       name="institute_name_{{ forloop.counter0 }}"
+                       placeholder="Institute Name"
+                       value="{{ edu.institute_name }}"
+                       required>
+
+                <input type="text"
+                       name="institute_location_{{ forloop.counter0 }}"
+                       placeholder="Institute Location"
+                       value="{{ edu.institute_location }}">
+
+                <input type="text"
+                       name="degree_{{ forloop.counter0 }}"
+                       placeholder="Degree"
+                       value="{{ edu.degree }}"
+                       required>
+
+                <input type="text"
+                       name="field_of_study_{{ forloop.counter0 }}"
+                       placeholder="Field of Study"
+                       value="{{ edu.feld_of_study }}"
+                       required>
+
+                <div class="row">
+                    <input type="number"
+                           name="start_year_{{ forloop.counter0 }}"
+                           placeholder="Start Year"
+                           value="{{ edu.start_year }}"
+                           required>
+
+                    <input type="number"
+                           name="end_year_{{ forloop.counter0 }}"
+                           placeholder="End Year"
+                           value="{{ edu.end_year }}"
+                           required>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Default empty education -->
+            <div class="education-card">
+                <h5>Education 1</h5>
+
+                <input type="text" name="institute_name_0"
+                       placeholder="Institute Name" required>
+
+                <input type="text" name="institute_location_0"
+                       placeholder="Institute Location">
+
+                <input type="text" name="degree_0"
+                       placeholder="Degree" required>
+
+                <input type="text" name="field_of_study_0"
+                       placeholder="Field of Study" required>
+
+                <div class="row">
+                    <input type="number" name="start_year_0"
+                           placeholder="Start Year" required>
+
+                    <input type="number" name="end_year_0"
+                           placeholder="End Year" required>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <input type="hidden"
+           id="education-count"
+           name="education_count"
+           value="{{ educations|length|default:1 }}">
+
+    <div style="margin-top: 20px;">
+        <button type="submit">Save</button>
+        <button type="button" onclick="addEducation()">Add More</button>
+    </div>
+
+</form>
+    </div>
+</div>
+
+<script>
+function addEducation() {
+    const container = document.getElementById('education-container');
+    let count = parseInt(document.getElementById('education-count').value);
+
+    const div = document.createElement('div');
+    div.className = 'education-card';
+
+    div.innerHTML = `
+        <h5>Education ${count + 1}</h5>
+
+        <input type="text" name="institute_name_${count}"
+               placeholder="Institute Name" required>
+
+        <input type="text" name="institute_location_${count}"
+               placeholder="Institute Location">
+
+        <input type="text" name="degree_${count}"
+               placeholder="Degree" required>
+
+        <input type="text" name="field_of_study_${count}"
+               placeholder="Field of Study" required>
+
+        <div class="row">
+            <input type="number" name="start_year_${count}"
+                   placeholder="Start Year" required>
+
+            <input type="number" name="end_year_${count}"
+                   placeholder="End Year" required>
+        </div>
+    `;
+
+    container.appendChild(div);
+    document.getElementById('education-count').value = count + 1;
+}
+</script>
+
+{% endblock %}

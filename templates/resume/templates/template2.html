@@ -1,0 +1,35 @@
+<div style="display:flex">
+
+<div style="width:30%; background:#f4f4f4; padding:20px;">
+    <h2>{{ header.full_name }}</h2>
+    <p>{{ header.profession }}</p>
+
+    <h4>Contact</h4>
+    <p>{{ header.email }}</p>
+    <p>{{ header.phone }}</p>
+
+    <h4>Skills</h4>
+    {% for skill in skills %}
+        <p>{{ skill.skill_name }}</p>
+    {% endfor %}
+</div>
+
+<div style="width:70%; padding:20px;">
+
+    <h3>Summary</h3>
+    <p>{{ summary.summary }}</p>
+
+    <h3>Experience</h3>
+    {% for exp in experiences %}
+        <h4>{{ exp.job_title }}</h4>
+        <p>{{ exp.employer }}</p>
+        <p>{{ exp.description }}</p>
+    {% endfor %}
+
+    <h3>Education</h3>
+    {% for edu in educations %}
+        <p>{{ edu.degree }} - {{ edu.institute_name }}</p>
+    {% endfor %}
+
+</div>
+</div>

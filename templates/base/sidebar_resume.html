@@ -1,0 +1,12 @@
+<div class="sidebar">
+    <h4>Resume Sections</h4>
+
+    <a href="{% url 'edit_header' %}">Header</a>
+    <a href="{% url 'edit_summary' %}">Summary</a>
+    {% if experience_type == "experienced" %}
+        <a href="{% url 'edit_experience' %}">Experience</a>
+    {% endif %}
+    <a href="{% url 'edit_education' %}">Education</a>
+    <a href="{% url 'edit_skills' %}">Skills</a>
+    <a href="{% url 'edit_additional' %}">Additional</a>
+</div>

@@ -1,0 +1,7 @@
+django
+psycopg2-binary
+python-docx
+PyPDF2
+pandas
+spacy
+python-dotenv

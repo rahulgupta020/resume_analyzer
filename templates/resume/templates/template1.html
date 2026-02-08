@@ -1,0 +1,37 @@
+<h1>{{ header.full_name }}</h1>
+<p>{{ header.profession }}</p>
+<p>{{ header.email }} | {{ header.phone }}</p>
+
+<hr>
+
+<h3>Summary</h3>
+<p>{{ summary.summary }}</p>
+
+<h3>Experience</h3>
+{% for exp in experiences %}
+    <h4>{{ exp.job_title }} - {{ exp.employer }}</h4>
+    <p>{{ exp.start_month }}/{{ exp.start_year }} -
+        {% if exp.currently_working %}Present{% else %}
+        {{ exp.end_month }}/{{ exp.end_year }}
+        {% endif %}
+    </p>
+    <p>{{ exp.description }}</p>
+{% endfor %}
+
+<h3>Education</h3>
+{% for edu in educations %}
+    <p><strong>{{ edu.degree }}</strong> - {{ edu.institute_name }}</p>
+{% endfor %}
+
+<h3>Skills</h3>
+<ul>
+{% for skill in skills %}
+    <li>{{ skill.skill_name }}</li>
+{% endfor %}
+</ul>
+
+<h3>Additional</h3>
+{% for add in additionals %}
+    <p><strong>{{ add.additional_title }}</strong></p>
+    <p>{{ add.additional_desc }}</p>
+{% endfor %}
