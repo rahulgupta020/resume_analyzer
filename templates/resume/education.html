@@ -1,142 +1,86 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
+{% load static %}
 
-{% block navbar %}
-{% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Education{% endblock %}
 
-{% block page_layout %}
-<div class="layout">
+{% block content %}
+<div class="container mt-4">
 
-    {% include "base/sidebar_resume.html" %}
+    <h2 class="mb-3">Education Details</h2>
+    <p class="text-muted">Add your educational background.</p>
 
-    <div class="content">
-        <h3>Education</h3>
+    <!-- ✅ FORM -->
+<form method="post" action="{% url 'edit_education' %}" id="education-form">        {% csrf_token %}
 
-<form method="post">
-    {% csrf_token %}
+        <div class="education-entry row">
 
-    <div id="education-container">
-
-        {% if educations %}
-            {% for edu in educations %}
-            <div class="education-card">
-                <h5>Education {{ forloop.counter }}</h5>
-
-                <input type="text"
-                       name="institute_name_{{ forloop.counter0 }}"
-                       placeholder="Institute Name"
-                       value="{{ edu.institute_name }}"
-                       required>
-
-                <input type="text"
-                       name="institute_location_{{ forloop.counter0 }}"
-                       placeholder="Institute Location"
-                       value="{{ edu.institute_location }}">
-
-                <input type="text"
-                       name="degree_{{ forloop.counter0 }}"
-                       placeholder="Degree"
-                       value="{{ edu.degree }}"
-                       required>
-
-                <input type="text"
-                       name="field_of_study_{{ forloop.counter0 }}"
-                       placeholder="Field of Study"
-                       value="{{ edu.feld_of_study }}"
-                       required>
-
-                <div class="row">
-                    <input type="number"
-                           name="start_year_{{ forloop.counter0 }}"
-                           placeholder="Start Year"
-                           value="{{ edu.start_year }}"
-                           required>
-
-                    <input type="number"
-                           name="end_year_{{ forloop.counter0 }}"
-                           placeholder="End Year"
-                           value="{{ edu.end_year }}"
-                           required>
-                </div>
+            <div class="col-md-6 mb-3">
+                <label>Degree</label>
+                <input type="text" name="degree[]" class="form-control" placeholder="e.g. B.Tech" required>
             </div>
-            {% endfor %}
-        {% else %}
-            <!-- Default empty education -->
-            <div class="education-card">
-                <h5>Education 1</h5>
 
-                <input type="text" name="institute_name_0"
-                       placeholder="Institute Name" required>
-
-                <input type="text" name="institute_location_0"
-                       placeholder="Institute Location">
-
-                <input type="text" name="degree_0"
-                       placeholder="Degree" required>
-
-                <input type="text" name="field_of_study_0"
-                       placeholder="Field of Study" required>
-
-                <div class="row">
-                    <input type="number" name="start_year_0"
-                           placeholder="Start Year" required>
-
-                    <input type="number" name="end_year_0"
-                           placeholder="End Year" required>
-                </div>
+            <div class="col-md-6 mb-3">
+                <label>Institution</label>
+                <input type="text" name="institution[]" class="form-control" placeholder="e.g. XYZ University" required>
             </div>
-        {% endif %}
-    </div>
 
-    <input type="hidden"
-           id="education-count"
-           name="education_count"
-           value="{{ educations|length|default:1 }}">
+            <div class="col-md-6 mb-3">
+                <label>Location</label>
+                <input type="text" name="location[]" class="form-control" placeholder="e.g. Pune" required>
+            </div>
 
-    <div style="margin-top: 20px;">
-        <button type="submit">Save</button>
-        <button type="button" onclick="addEducation()">Add More</button>
-    </div>
+            <div class="col-md-6 mb-3">
+                <label>Graduation Date</label>
+                <input type="date" name="graduation_date[]" class="form-control" required>
+            </div>
 
-</form>
-    </div>
+            <div class="col-md-6 mb-3">
+                <label>GPA (Optional)</label>
+                <input type="number" name="gpa[]" step="0.01" class="form-control" placeholder="e.g. 8.5">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Coursework (Optional)</label>
+                <input type="text" name="coursework[]" class="form-control" placeholder="DSA, DBMS">
+            </div>
+
+        </div>
+
+        <!-- Add More Button -->
+        <button type="button" class="btn btn-secondary mb-3" id="add-education">
+            + Add Another Education
+        </button>
+
+        <!-- Navigation Buttons -->
+        <div class="d-flex justify-content-between">
+
+            <!-- Back -->
+            <a href="{% url 'edit_experience' %}" class="btn btn-secondary">
+                ← Back
+            </a>
+
+            <!-- Next -->
+            <button type="submit" class="btn btn-primary">
+                Save & Continue →
+            </button>
+
+        </div>
+
+    </form>
+
 </div>
 
+<!-- JS -->
 <script>
-function addEducation() {
-    const container = document.getElementById('education-container');
-    let count = parseInt(document.getElementById('education-count').value);
+document.getElementById('add-education').addEventListener('click', function() {
+    const form = document.getElementById('education-form');
+    const entry = form.querySelector('.education-entry').cloneNode(true);
 
-    const div = document.createElement('div');
-    div.className = 'education-card';
+    // Clear inputs
+    entry.querySelectorAll('input').forEach(input => input.value = '');
 
-    div.innerHTML = `
-        <h5>Education ${count + 1}</h5>
-
-        <input type="text" name="institute_name_${count}"
-               placeholder="Institute Name" required>
-
-        <input type="text" name="institute_location_${count}"
-               placeholder="Institute Location">
-
-        <input type="text" name="degree_${count}"
-               placeholder="Degree" required>
-
-        <input type="text" name="field_of_study_${count}"
-               placeholder="Field of Study" required>
-
-        <div class="row">
-            <input type="number" name="start_year_${count}"
-                   placeholder="Start Year" required>
-
-            <input type="number" name="end_year_${count}"
-                   placeholder="End Year" required>
-        </div>
-    `;
-
-    container.appendChild(div);
-    document.getElementById('education-count').value = count + 1;
-}
+    form.insertBefore(entry, document.getElementById('add-education'));
+});
 </script>
 
 {% endblock %}

@@ -1,65 +1,88 @@
 {% extends "base/base.html" %}
+{% load static %}
 
-{% block navbar %}
-{% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Additional Information - ResumeIQ{% endblock %}
 
-{% block page_layout %}
-<div class="layout">
+{% block content %}
+<section class="form-page-wrapper">
+    <div class="container py-4">
 
-    {% include "base/sidebar_resume.html" %}
-
-    <div class="content">
-        <h3>Additional Details</h3>
-
-        <form method="post">
-            {% csrf_token %}
-
-            <div id="additional-container">
-
-                {% if additionals %}
-                    {% for additional in additionals %}
-                    <div class="additional-card">
-                        <input type="text"
-                               name="additional_title_{{ forloop.counter0 }}"
-                               value="{{ additional.additional_title }}"
-                               placeholder="Title"
-                               required>
-
-                        <textarea name="additional_desc_{{ forloop.counter0 }}"
-                                  placeholder="Description"
-                                  rows="4">{{ additional.additional_desc }}</textarea>
+        <div class="card form-card shadow-lg border-0 mb-5">
+            <div class="card-body p-4 p-md-5">
+                <div class="form-header mb-4 d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2 class="fw-bold mb-1">Additional Information</h2>
+                        <p class="text-muted">Highlight your projects, certifications, or awards.</p>
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <!-- Default empty field -->
-                    <div class="additional-card">
-                        <input type="text"
-                               name="additional_title_0"
-                               placeholder="Title"
-                               required>
+                    <span class="badge bg-soft-info text-info p-2">
+                        <i class="fas fa-magic me-1"></i> Showcase Your Impact
+                    </span>
+                </div>
 
-                        <textarea name="additional_desc_0"
-                                  placeholder="Description"
-                                  rows="4"></textarea>
+                <form method="post">
+                    {% csrf_token %}
+                    <div id="additional-container">
+                        {% if additionals %}
+                            {% for additional in additionals %}
+                            <div class="additional-entry-card p-4 mb-4 rounded-3 border">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Title of Project / Award</label>
+                                    <input type="text" name="additional_title_{{ forloop.counter0 }}" 
+                                           value="{{ additional.additional_title }}" class="form-control" 
+                                           placeholder="e.g. Portfolio Website" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Description</label>
+                                    <textarea name="additional_desc_{{ forloop.counter0 }}" class="form-control" 
+                                              rows="4" placeholder="Describe your contribution and results...">{{ additional.additional_desc }}</textarea>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="additional-entry-card p-4 mb-4 rounded-3 border">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Title of Project / Award</label>
+                                    <input type="text" name="additional_title_0" class="form-control" 
+                                           placeholder="e.g. ResumeIQ Platform" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Description</label>
+                                    <textarea name="additional_desc_0" class="form-control" rows="4" 
+                                              placeholder="e.g. Built a full-stack application using Django and SQLite..."></textarea>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
 
+                    <input type="hidden" id="additional-count" name="additional_count" value="{{ additionals|length|default:1 }}">
+
+                    <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                        <a href="{% url 'edit_skills' %}" class="btn btn-outline-secondary px-4">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary px-4 me-2" onclick="addAdditional()">
+                                <i class="fas fa-plus me-1"></i> Add More
+                            </button>
+                            <button type="submit" class="btn btn-primary px-5 py-2">
+                                Save & Continue <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
+        </div>
 
-            <input type="hidden"
-                   id="additional-count"
-                   name="additional_count"
-                   value="{{ additionals|length|default:1 }}">
-
-            <div style="margin-top: 20px;">
-                <button type="submit">Save</button>
-                <button type="button" onclick="addAdditional()">Add More</button>
+        <div class="advantages-footer py-5 border-top">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    
+                </div>
             </div>
+        </div>
 
-        </form>
     </div>
-</div>
+</section>
 
 <script>
 function addAdditional() {
@@ -67,22 +90,21 @@ function addAdditional() {
     let count = parseInt(document.getElementById('additional-count').value);
 
     const div = document.createElement('div');
-    div.className = 'additional-card';
+    div.className = 'additional-entry-card p-4 mb-4 rounded-3 border bg-light-hover';
 
     div.innerHTML = `
-        <input type="text"
-               name="additional_title_${count}"
-               placeholder="Title"
-               required>
-
-        <textarea name="additional_desc_${count}"
-                  placeholder="Description"
-                  rows="4"></textarea>
+        <div class="form-group mb-3">
+            <label class="form-label fw-bold">Title Of Project / Award</label>
+            <input type="text" name="additional_title_${count}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label fw-bold">Description</label>
+            <textarea name="additional_desc_${count}" class="form-control" rows="4"></textarea>
+        </div>
     `;
 
     container.appendChild(div);
     document.getElementById('additional-count').value = count + 1;
 }
 </script>
-
 {% endblock %}

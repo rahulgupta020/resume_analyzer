@@ -1,30 +1,93 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
+{% load static %}
 
-{% block navbar %}
-    {% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Personal Information - ResumeIQ{% endblock %}
 
-{% block page_layout %}
-<div class="layout">
+{% block content %}
+<section class="form-page-wrapper">
+    <div class="container py-4">
+        
+        <div class="card form-card shadow-lg border-0 mb-5">
+            <div class="card-body p-4 p-md-5">
+                <div class="form-header mb-4">
+                    <h2 class="fw-bold mb-1">Personal Information</h2>
+                    <p class="text-muted">Fill your basic details to start your resume.</p>
+                </div>
 
-    {% include "base/sidebar_resume.html" %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="full_name" class="form-control"
+                                   placeholder="e.g. Nelle Knapp" value="{{ header.full_name|default:'' }}" required> </div>
 
-    <div class="content">
-        <h3>Header Section</h3>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Profession</label>
+                            <input type="text" name="profession" class="form-control"
+                                   placeholder="e.g. Software Engineer" value="{{ header.profession|default:'' }}" required>
+                        </div>
 
-        <form method="post">
-            {% csrf_token %}
-            <label>Full Name:</label><input name="full_name" value="{{ header.full_name|default:'' }}"><br><br>
-            <label>Profession:</label><input name="profession" value="{{ header.profession|default:'' }}"><br><br>
-            <label>Email:</label><input name="email" value="{{ header.email|default:'' }}"><br><br>
-            <label>Phone:</label><input name="phone" value="{{ header.phone|default:'' }}"><br><br>
-            <label>Address:</label><input name="address" value="{{ header.address|default:'' }}"><br><br>
-            <label>LinkedIn:</label><input name="linkedin" value="{{ header.linkedin|default:'' }}"><br><br>
-            <label>GitHub:</label><input name="github" value="{{ header.github|default:'' }}"><br><br>
-            <label>Website:</label><input name="website" value="{{ header.website|default:'' }}"><br><br>
-            <button>Save</button>
-        </form>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control"
+                                   placeholder="nelle@example.com" value="{{ header.email|default:'' }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" name="phone" class="form-control"
+                                   placeholder="+1 (968) 484-4537" value="{{ header.phone|default:'' }}" required>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control"
+                                   placeholder="City, State, Country" value="{{ header.address|default:'' }}">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label"><i class="fab fa-linkedin text-primary me-1"></i> LinkedIn</label>
+                            <input type="url" name="linkedin" class="form-control"
+                                   placeholder="linkedin.com/in/user" value="{{ header.linkedin|default:'' }}">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label"><i class="fab fa-github text-dark me-1"></i> GitHub</label>
+                            <input type="url" name="github" class="form-control"
+                                   placeholder="github.com/user" value="{{ header.github|default:'' }}">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label"><i class="fas fa-globe text-success me-1"></i> Website</label>
+                            <input type="url" name="website" class="form-control"
+                                   placeholder="portfolio.com" value="{{ header.website|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary px-4">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 py-2">
+                            Save & Continue <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="advantages-footer py-5 border-top">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="d-flex align-items-center mb-3">
+                       
+               
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-</div>
+</section>
 {% endblock %}

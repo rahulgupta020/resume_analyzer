@@ -1,12 +1,93 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
+{% load static %}
 
-{% block navbar %}
-    {% include "base/navbar.html" %}
-{% endblock %}
+{% block sidebar %}{% endblock %} 
+{% block content_class %}col-md-12{% endblock %}
 
-{% block page_layout %}
-<h3>Your Resumes</h3>
+{% block content %}
+<div class="dashboard-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="brand-header">
+            <h1 class="h3 fw-bold m-0">ResumeIQ Dashboard</h1>
+            <p class="slogan">Fast. Easy. Effective.</p> </div>
 
-<a href="/resume/fresher_exp/">Create New Resume</a>
+        <div class="theme-switch-wrapper">
+            <span class="me-2 text-muted small">Mode</span>
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round">
+                    <i class="fas fa-sun text-warning" style="font-size: 10px;"></i>
+                    <i class="fas fa-moon text-white" style="font-size: 10px;"></i>
+                </div>
+            </label>
+        </div>
+    </div>
 
+    <section class="hero-dashboard mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7 hero-content">
+                <h2>ResumeIQ. The Best Resume Maker Online.</h2> <p>Build a new resume from scratch or improve an existing one, let ResumeIQ help you present your work life, personality, and skills on a resume that stands out.</p> <div class="d-flex gap-3 mt-4">
+                    <a href="{% url 'fresher_exp' %}" class="btn-hero-main">Create new resume</a>
+                    <a href="{% url 'fresher_exp' %}" class="btn-hero-outline">Improve my resume</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center hero-img-wrapper">
+                <img src="{% static 'images/logo/hero_resume_preview.png' %}" alt="Resume Preview" class="img-fluid floating-hero-img">
+            </div>
+        </div>
+    </section>
+
+    <section class="trusted-section py-4 mb-5 border-bottom border-top">
+        <div class="row align-items-center text-center">
+            <div class="col-md-4">
+                <p class="hiring-stat m-0">↑ 30% higher chance of getting a job*</p> <p class="hiring-stat m-0">↑ 42% higher response rate from recruiters*</p>
+            </div>
+            <div class="col-md-2">
+                <span class="text-muted small fw-bold">Our users have been hired at**:</span> </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-around align-items-center flex-wrap gap-3">
+                    <img src="{% static 'images/logo/tcs.png' %}" alt="TCS" height="40" class="img-fluid floating-hero-img"> <img src="{% static 'images/logo/amazon.png' %}" alt="Amazon" height="100" class="img-fluid floating-hero-img">
+                    <img src="{% static 'images/logo/paytm.png' %}" alt="Paytm" height="40" class="img-fluid floating-hero-img">
+                    <img src="{% static 'images/logo/infosys.png' %}" alt="Infosys" height="25" class="img-fluid floating-hero-img">
+                    <img src="{% static 'images/logo/wipro.png' %}" alt="wipro" height="40" class="img-fluid floating-hero-img">
+                    <img src="{% static 'images/logo/deloitte.png' %}" alt="deloitte" height="25" class="img-fluid floating-hero-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center">
+                <img src="{% static 'images/logo/feature_preview.png' %}" alt="Features" class="img-fluid rounded shadow-sm"> </div>
+            <div class="col-md-6">
+                <ul class="benefit-list list-unstyled">
+                    <li><span class="step-num">1</span> <strong>Enhance your resume with our expert content</strong></li> <li><span class="step-num">2</span> <strong>Resume and cover letter in one place</strong></li>
+                    <li><span class="step-num">3</span> <strong>Professionally designed templates</strong></li>
+                    <li><span class="step-num">4</span> <strong>Expert tips & guidance</strong></li>
+                    <li><span class="step-num">5</span> <strong>Apply for jobs with confidence</strong></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="template-selection">
+        <h3 class="fw-bold mb-4">Pick Selection of Templates</h3> <div class="row g-4">
+            <div class="col-md-4">
+                <div class="tmpl-card">
+                    <img src="{% static 'images/T1.jpg' %}" alt="Template 1" class="img-fluid">
+                    <div class="p-3"><h6>Modern Professional</h6></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="tmpl-card">
+                    <img src="{% static 'images/T2.jpg' %}" alt="Template 2" class="img-fluid">
+                    <div class="p-3"><h6>Creative Executive</h6></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+  
 {% endblock %}

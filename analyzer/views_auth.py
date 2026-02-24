@@ -32,7 +32,7 @@ def signup_view(request):
         return redirect('login')
     return render(request, 'auth/signup.html')
 
-
+"""
 def login_view(request):
     if request.method == 'POST':
         user = authenticate(
@@ -43,6 +43,35 @@ def login_view(request):
         if user:
             login(request, user)
             return redirect('dashboard')
+    return render(request, 'auth/login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+"""
+#Add by SP 2/21
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Convert email → username
+        try:
+            user_obj = User.objects.get(email=email)
+            username = user_obj.username
+        except User.DoesNotExist:
+            messages.error(request, "Invalid email or password")
+            return render(request, 'auth/login.html')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Invalid email or password")
+
     return render(request, 'auth/login.html')
 
 

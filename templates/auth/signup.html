@@ -1,16 +1,51 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
+{% load static %}
 
-{% block navbar %}
-    {% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Sign Up - ResumeIQ{% endblock %}
 
-{% block page_layout %}
-<form method="post">
-    {% csrf_token %}
-    <input name="username" placeholder="Username"><br><br>
-    <input name="email" placeholder="Email"><br><br>
-    <input name="password" type="password" placeholder="password"><br><br>
-    <input name="confirm_password" type="password" placeholder="confirm password"><br><br>
-    <button>Signup</button>
-</form>
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Create Your Account</h2>
+            <p>Join ResumeIQ and start building your professional resume today.</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="full_name" class="form-control" placeholder="Sumit Pandey" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Create a strong password" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control" placeholder="Repeat your password" required>
+                </div>
+
+                <div class="checkbox-group mb-3">
+                    <input type="checkbox" required> 
+                    <span>I agree to the <a href="#">Terms & Privacy</a></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+            </form>
+
+            <p class="auth-footer">
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            </p>
+        </div>
+    </div>
+</section>
 {% endblock %}

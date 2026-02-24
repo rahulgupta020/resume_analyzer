@@ -122,10 +122,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [ BASE_DIR / "static" ]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -135,3 +138,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
+
+#Add by SP 2/21
+LOGIN_URL = '/login/'   # use name from analyzer/urls.py
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'

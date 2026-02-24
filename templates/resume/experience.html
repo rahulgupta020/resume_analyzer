@@ -1,176 +1,125 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
 
-{% block navbar %}
-{% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Experience{% endblock %}
 
-{% block page_layout %}
-<div class="layout">
+{% block content %}
+<div class="container mt-4">
 
-    {% include "base/sidebar_resume.html" %}
+    <h2 class="mb-3">Work Experience</h2>
+    <p class="text-muted">Add your work experience details.</p>
 
-    <div class="content">
-        <h3>Experience</h3>
+    <form method="post" id="experience-form">
+        {% csrf_token %}
 
-<form method="post">
-    {% csrf_token %}
+        <!-- Hidden counter -->
+        <input type="hidden" name="experience_count" id="experience_count" value="1">
 
-    <div id="experience-container">
+        <div id="experience-container">
 
-        {% if experiences %}
-            {% for exp in experiences %}
-            <div class="experience-card">
-                <h5>Experience {{ forloop.counter }}</h5>
-
-                <input type="text" name="job_title_{{ forloop.counter0 }}"
-                       placeholder="Job Title"
-                       value="{{ exp.job_title }}" required>
-
-                <input type="text" name="employer_{{ forloop.counter0 }}"
-                       placeholder="Employer"
-                       value="{{ exp.employer }}" required>
-
-                <input type="text" name="location_{{ forloop.counter0 }}"
-                       placeholder="Location"
-                       value="{{ exp.location }}" required>
+            <!-- Experience Card -->
+            <div class="experience-entry border p-3 mb-3 rounded">
 
                 <div class="row">
-                    <input type="number" name="start_month_{{ forloop.counter0 }}"
-                           placeholder="Start Month"
-                           value="{{ exp.start_month }}" required>
 
-                    <input type="number" name="start_year_{{ forloop.counter0 }}"
-                           placeholder="Start Year"
-                           value="{{ exp.start_year }}" required>
+                    <div class="col-md-6 mb-3">
+                        <label>Job Title</label>
+                        <input type="text" name="job_title_0" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Company</label>
+                        <input type="text" name="employer_0" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Location</label>
+                        <input type="text" name="location_0" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>Start Month</label>
+                        <input type="number" name="start_month_0" class="form-control" min="1" max="12">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>Start Year</label>
+                        <input type="number" name="start_year_0" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>End Month</label>
+                        <input type="number" name="end_month_0" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>End Year</label>
+                        <input type="number" name="end_year_0" class="form-control">
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label>
+                            <input type="checkbox" name="currently_working_0">
+                            Currently Working
+                        </label>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label>Description</label>
+                        <textarea name="description_0" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label>Skills Used</label>
+                        <input type="text" name="skills_0" class="form-control">
+                    </div>
+
                 </div>
 
-                <label>
-                    <input type="checkbox"
-                           name="currently_working_{{ forloop.counter0 }}"
-                           {% if exp.currently_working %}checked{% endif %}
-                           onchange="toggleEndDate(this)">
-                    I currently work here
-                </label>
-
-                <div class="end-date-fields"
-                     {% if exp.currently_working %}style="display:none"{% endif %}>
-                    <input type="number"
-                           name="end_month_{{ forloop.counter0 }}"
-                           placeholder="End Month"
-                           value="{{ exp.end_month }}">
-
-                    <input type="number"
-                           name="end_year_{{ forloop.counter0 }}"
-                           placeholder="End Year"
-                           value="{{ exp.end_year }}">
-                </div>
-
-                <textarea name="description_{{ forloop.counter0 }}"
-                          placeholder="Job Description"
-                          required>{{ exp.description }}</textarea>
-
-                <input type="text"
-                       name="skills_{{ forloop.counter0 }}"
-                       placeholder="Skills (comma separated)"
-                       value="{{ exp.skills }}">
             </div>
-            {% endfor %}
-        {% else %}
-            <!-- Default empty experience -->
-            <div class="experience-card">
-                <h5>Experience 1</h5>
 
-                <input type="text" name="job_title_0" placeholder="Job Title" required>
-                <input type="text" name="employer_0" placeholder="Employer" required>
-                <input type="text" name="location_0" placeholder="Location" required>
+        </div>
 
-                <div class="row">
-                    <input type="number" name="start_month_0" placeholder="Start Month" required>
-                    <input type="number" name="start_year_0" placeholder="Start Year" required>
-                </div>
+        <!-- Add Button -->
+        <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">
+            + Add More Experience
+        </button>
 
-                <label>
-                    <input type="checkbox" name="currently_working_0"
-                           onchange="toggleEndDate(this)">
-                    I currently work here
-                </label>
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'edit_summary' %}" class="btn btn-secondary">
+                ← Back
+            </a>
 
-                <div class="end-date-fields">
-                    <input type="number" name="end_month_0" placeholder="End Month">
-                    <input type="number" name="end_year_0" placeholder="End Year">
-                </div>
+            <button type="submit" class="btn btn-primary">
+                Save & Continue →
+            </button>
+        </div>
 
-                <textarea name="description_0" placeholder="Job Description" required></textarea>
+    </form>
 
-                <input type="text" name="skills_0" placeholder="Skills (comma separated)">
-            </div>
-        {% endif %}
-    </div>
-
-    <input type="hidden" id="experience-count"
-           name="experience_count"
-           value="{{ experiences|length|default:1 }}">
-
-    <div style="margin-top: 20px;">
-        <button type="submit">Save</button>
-        <button type="button" onclick="addExperience()">Add More</button>
-    </div>
-</form>
-
-        
-    </div>
 </div>
 
 <script>
-function toggleEndDate(checkbox) {
-    const card = checkbox.closest('.experience-card');
-    const endFields = card.querySelector('.end-date-fields');
-
-    if (checkbox.checked) {
-        endFields.style.display = 'none';
-        endFields.style.display = checkbox.checked ? 'none' : 'block';
-    } else {
-        endFields.style.display = 'block';
-    }
-}
+let count = 1;
 
 function addExperience() {
     const container = document.getElementById('experience-container');
-    let count = parseInt(document.getElementById('experience-count').value);
 
-    const div = document.createElement('div');
-    div.className = 'experience-card';
+    const newBlock = document.querySelector('.experience-entry').cloneNode(true);
 
-    div.innerHTML = `
-        <h5>Experience ${count + 1}</h5>
+    newBlock.querySelectorAll('input, textarea').forEach(el => {
+        let name = el.name;
+        if (name) {
+            el.name = name.replace('_0', '_' + count);
+            el.value = '';
+        }
+    });
 
-        <input type="text" name="job_title_${count}" placeholder="Job Title" required>
-        <input type="text" name="employer_${count}" placeholder="Employer" required>
-        <input type="text" name="location_${count}" placeholder="Location" required>
+    container.appendChild(newBlock);
 
-        <div class="row">
-            <input type="number" name="start_month_${count}" placeholder="Start Month" required>
-            <input type="number" name="start_year_${count}" placeholder="Start Year" required>
-        </div>
-
-        <label>
-            <input type="checkbox" name="currently_working_${count}"
-                   onchange="toggleEndDate(this)">
-            I currently work here
-        </label>
-
-        <div class="end-date-fields">
-            <input type="number" name="end_month_${count}" placeholder="End Month">
-            <input type="number" name="end_year_${count}" placeholder="End Year">
-        </div>
-
-        <textarea name="description_${count}" placeholder="Job Description" required></textarea>
-
-        <input type="text" name="skills_${count}" placeholder="Skills (comma separated)">
-    `;
-
-    container.appendChild(div);
-    document.getElementById('experience-count').value = count + 1;
+    count++;
+    document.getElementById('experience_count').value = count;
 }
 </script>
+
 {% endblock %}

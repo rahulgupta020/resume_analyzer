@@ -1,76 +1,82 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
 
-{% block navbar %}
-{% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Skills{% endblock %}
 
-{% block page_layout %}
-<div class="layout">
+{% block content %}
+<div class="container mt-4">
 
-    {% include "base/sidebar_resume.html" %}
+    <h2 class="mb-3">Skills</h2>
+    <p class="text-muted">Add your skills with optional descriptions.</p>
 
-    <div class="content">
-        <h3>Skills</h3>
+    <form method="post" action="{% url 'edit_skills' %}" id="skills-form">
+        {% csrf_token %}
 
-<form method="post">
-    {% csrf_token %}
+        <div id="skills-container">
 
-    <div id="skills-container">
+            <!-- ✅ Skill Row -->
+            <div class="row skill-entry mb-3">
 
-        {% if skills %}
-            {% for skill in skills %}
-            <div class="skill-card">
-                <input type="text"
-                       name="skill_name_{{ forloop.counter0 }}"
-                       value="{{ skill.skill_name }}"
-                       placeholder="Skill Name"
-                       required>
+                <div class="col-md-6">
+                    <label>Skill</label>
+                    <input type="text" name="skill_name_0" class="form-control" placeholder="e.g. Python" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Description (Optional)</label>
+                    <input type="text" name="skill_desc_0" class="form-control" placeholder="e.g. Intermediate, 2 years">
+                </div>
+
             </div>
-            {% endfor %}
-        {% else %}
-            <!-- Default one empty field -->
-            <div class="skill-card">
-                <input type="text"
-                       name="skill_name_0"
-                       placeholder="Skill Name"
-                       required>
-            </div>
-        {% endif %}
 
-    </div>
+        </div>
 
-    <input type="hidden"
-           id="skill-count"
-           name="skill_count"
-           value="{{ skills|length|default:1 }}">
+        <input type="hidden" name="skill_count" id="skill-count" value="1">
 
-    <div style="margin-top: 20px;">
-        <button type="submit">Save</button>
-        <button type="button" onclick="addSkill()">Add More</button>
-    </div>
+        <!-- ✅ Add Button -->
+        <button type="button" class="btn btn-secondary mb-3" onclick="addSkill()">
+            + Add Skill
+        </button>
 
-</form>
+        <!-- ✅ Navigation -->
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'edit_education' %}" class="btn btn-secondary">
+                ← Back
+            </a>
+            <button type="submit" class="btn btn-primary">
+                Save & Continue →
+            </button>
+        </div>
 
-    </div>
+    </form>
+
 </div>
 
+<!-- ✅ JS for dynamic rows -->
 <script>
+let skillCount = 1;
+
 function addSkill() {
     const container = document.getElementById('skills-container');
-    let count = parseInt(document.getElementById('skill-count').value);
 
-    const div = document.createElement('div');
-    div.className = 'skill-card';
+    const row = document.createElement('div');
+    row.classList.add('row', 'skill-entry', 'mb-3');
 
-    div.innerHTML = `
-        <input type="text"
-               name="skill_name_${count}"
-               placeholder="Skill Name"
-               required>
+    row.innerHTML = `
+        <div class="col-md-6">
+            <label>Skill</label>
+            <input type="text" name="skill_name_${skillCount}" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label>Description (Optional)</label>
+            <input type="text" name="skill_desc_${skillCount}" class="form-control">
+        </div>
     `;
 
-    container.appendChild(div);
-    document.getElementById('skill-count').value = count + 1;
+    container.appendChild(row);
+
+    skillCount++;
+    document.getElementById('skill-count').value = skillCount;
 }
 </script>
 

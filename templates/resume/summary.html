@@ -1,31 +1,54 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
+{% load static %}
 
-{% block navbar %}
-    {% include "base/navbar.html" %}
-{% endblock %}
+{% block title %}Professional Summary - ResumeIQ{% endblock %}
 
-{% block page_layout %}
-<div class="layout">
+{% block content %}
+<section class="form-page-wrapper">
+    <div class="container py-4">
+        
+        <div class="card form-card shadow-lg border-0 mb-5">
+            <div class="card-body p-4 p-md-5">
+                <div class="form-header mb-4 d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2 class="fw-bold mb-1">Professional Summary</h2>
+                        <p class="text-muted">Write a short summary about yourself to catch the recruiter's eye.</p>
+                    </div>
+                    <span class="badge bg-soft-primary text-primary p-2">
+                        <i class="fas fa-robot me-1"></i> AI Writing Assistant
+                    </span>
+                </div>
 
-    {% include "base/sidebar_resume.html" %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Summary</label>
+                        <textarea name="summary" rows="8" class="form-control summary-textarea" 
+                                  placeholder="e.g. Passionate Teacher with 5+ years of experience developing diverse curriculums..." 
+                                  required>{{ summary.summary|default:'' }}</textarea>
+                        <div class="form-text mt-2">
+                            <i class="fas fa-info-circle me-1"></i> 
+                            <strong>Tip:</strong> Keep it between 3-5 sentences. Focus on your biggest achievements.
+                        </div>
+                    </div>
 
-    <div class="content">
-        <h3>Summary Section</h3>
+                    <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                        <a href="{% url 'edit_header' %}" class="btn btn-outline-secondary px-4">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 py-2">
+                            Save & Continue <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-        <form method="post">
-            {% csrf_token %}
+        
+                </div>
+            </div>
+        </div>
 
-            <label>Professional Summary:</label><br>
-            <textarea
-                name="summary"
-                rows="6"
-                style="width: 100%;"
-            >{{ summary.summary|default:'' }}</textarea>
-            <br><br>
-
-            <button>Save</button>
-        </form>
     </div>
-
-</div>
+</section>
 {% endblock %}
