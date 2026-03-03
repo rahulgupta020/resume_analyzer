@@ -2,6 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import ResumeFresherExperience, ResumeHeader, ResumeSummary, ResumeExperience, ResumeEducation, ResumeSkill, ResumeAdditional, ResumeTemplate
 
+#ADD
+import io
+import pytesseract
+from PIL import Image
+from docx import Document
+from pdfminer.high_level import extract_text
+from django.contrib import messages
+#END
+
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
@@ -241,3 +250,57 @@ def resume_preview(request):
         return render(request, "resume/templates/template3.html", context)
 
     return render(request, "resume/templates/template1.html", context)
+
+
+#Add by SP 3/3/26
+# analyzer/views_resume.py
+# --- ADD THIS UTILITY FUNCTION ---
+def get_raw_text(file):
+    """Extracts text based on file extension"""
+    extension = file.name.split('.')[-1].lower()
+    
+    if extension == 'pdf':
+        return extract_text(io.BytesIO(file.read()))
+    elif extension in ['docx', 'doc']:
+        doc = Document(file)
+        return '\n'.join([p.text for p in doc.paragraphs])
+    elif extension in ['jpg', 'jpeg', 'png']:
+        return pytesseract.image_to_string(Image.open(file))
+    return ""
+
+# --- UPDATE YOUR UPLOAD_RESUME VIEW ---
+@login_required
+def upload_resume(request):
+    if request.method == 'POST' and request.FILES.get('resume'):
+        resume_file = request.FILES['resume']
+        
+        # 1. Extract raw text
+        raw_text = get_raw_text(resume_file)
+        
+        if not raw_text:
+            messages.error(request, "Failed to extract text from the file.")
+            return redirect('upload_resume')
+
+        # 2. Map to existing models (Example: Header & Summary)
+        lines = [line.strip() for line in raw_text.split('\n') if line.strip()]
+        
+        # Populate ResumeHeader
+        ResumeHeader.objects.update_or_create(
+            user=request.user,
+            defaults={
+                'full_name': lines[0] if lines else "Analyzed User",
+                'profession': "Software Developer" if "PYTHON" in raw_text.upper() else "Professional",
+            }
+        )
+
+        # Populate ResumeSummary
+        if "ABOUT ME" in raw_text.upper() or "SUMMARY" in raw_text.upper():
+            ResumeSummary.objects.update_or_create(
+                user=request.user,
+                defaults={'summary': raw_text[:500]} # Stores the first part as a summary
+            )
+
+        messages.success(request, "Resume analyzed! Please review your details.")
+        return redirect('edit_header') # Redirect to your existing builder flow
+
+    return render(request, 'resume/upload_resume.html')

@@ -1,0 +1,119 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block sidebar %}{% endblock %} 
+{% block content_class %}col-md-12{% endblock %}
+
+{% block content %}
+<section class="upload-page-wrapper py-5">
+    <div class="container">
+        
+        <div class="card upload-card shadow-lg border-0 mb-5">
+            <div class="card-body p-5 text-center">
+                
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="upload-header mb-4">
+                        <h1 class="fw-bold h2">Upload Your Existing Resume</h1>
+                        <p class="text-muted slogan">🎯 Analyze Smarter. Apply Stronger. Get Hired Faster.</p>
+                    </div>
+                    
+                    <div class="drop-zone p-5 mb-4 border-dashed rounded-4" id="drop-zone" onclick="document.getElementById('fileInput').click()">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-primary animate-bounce"></i>
+                        </div>
+                        
+                        <p class="fw-bold mb-1" id="drop-zone-text">Drag and drop your resume here or <span class="text-primary">browse files</span></p>
+                        
+                        <p id="file-name-display" class="text-success fw-bold mt-2" style="display: none;"></p>
+                        
+                        <p class="small text-muted mb-3">Supports PDF, DOC, DOCX, and Images (JPEG/PNG)</p>
+                        
+                        <input type="file" id="fileInput" name="resume" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;" required>
+                    </div>
+                    
+                    <div class="upload-action">
+                        <button type="submit" class="btn btn-primary btn-hero-main px-5 py-3 shadow">
+                            Upload & Start Analysis <span class="ms-2">🚀</span>
+                        </button>
+                    </div>
+                </form>
+                
+                <p class="mt-4 text-muted">
+                    Don't have a resume? <a href="{% url 'fresher_exp' %}" class="text-primary fw-bold text-decoration-none">Create one from scratch</a>.
+                </p>
+            </div>
+        </div>
+
+        <div class="advantages-section pt-5 border-top">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <div class="stat-highlight-card p-4 mb-3 rounded-4 shadow-sm bg-white border">
+                        <div class="d-flex align-items-center">
+                            <span class="stat-arrow me-3">↑ 30%</span>
+                            <p class="m-0 fw-bold">higher chance of getting a job*</p>
+                        </div>
+                    </div>
+                    <div class="stat-highlight-card p-4 rounded-4 shadow-sm bg-white border">
+                        <div class="d-flex align-items-center">
+                            <span class="stat-arrow text-info me-3">↑ 42%</span>
+                            <p class="m-0 fw-bold">higher response rate from recruiters*</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7 px-lg-5">
+                    <h3 class="fw-bold mb-4">Why analyze with ResumeIQ?</h3>
+                    <ul class="benefit-list list-unstyled">
+                        <li><span class="step-num">1</span> <strong>Enhance your resume with our expert content</strong></li>
+                        <li><span class="step-num">2</span> <strong>Resume and cover letter in one place</strong></li>
+                        <li><span class="step-num">3</span> <strong>Professionally designed templates</strong></li>
+                        <li><span class="step-num">4</span> <strong>Expert tips & guidance throughout</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="logo-flow-container mt-5">
+                <p class="text-center small text-muted text-uppercase fw-bold mb-4">Our users have been hired at**:</p>
+                <div class="logo-flow-track">
+                    <img src="{% static 'images/logo/tcs.png' %}" alt="TCS">
+                    <img src="{% static 'images/logo/amazon.png' %}" alt="Amazon">
+                    <img src="{% static 'images/logo/paytm.png' %}" alt="Paytm">
+                    <img src="{% static 'images/logo/infosys.png' %}" alt="Infosys">
+                    <img src="{% static 'images/logo/wipro.png' %}" alt="Wipro">
+                    <img src="{% static 'images/logo/deloitte.png' %}" alt="Deloitte">
+                    <img src="{% static 'images/logo/tcs.png' %}" alt="TCS">
+                    <img src="{% static 'images/logo/amazon.png' %}" alt="Amazon">
+                    <img src="{% static 'images/logo/paytm.png' %}" alt="Paytm">
+                    <img src="{% static 'images/logo/infosys.png' %}" alt="Infosys">
+                    <img src="{% static 'images/logo/wipro.png' %}" alt="Wipro">
+                    <img src="{% static 'images/logo/deloitte.png' %}" alt="Deloitte">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+document.getElementById('fileInput').addEventListener('change', function() {
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const dropZoneText = document.getElementById('drop-zone-text');
+    const dropZone = document.getElementById('drop-zone');
+
+    if (this.files.length > 0) {
+        const fileName = this.files[0].name;
+        
+        // Update UI with file details
+        fileNameDisplay.innerText = "📄 Selected: " + fileName;
+        fileNameDisplay.style.display = 'block';
+        dropZoneText.style.display = 'none';
+        
+        // Success Feedback
+        dropZone.style.borderColor = "#22c55e"; 
+        dropZone.style.backgroundColor = "rgba(34, 197, 94, 0.05)";
+    }
+});
+</script>
+{% endblock %}

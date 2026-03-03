@@ -15,6 +15,53 @@
     <form method="post" action="{% url 'select_template' %}">
         {% csrf_token %}
 
+        <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold m-0">Filters</h5>
+                    <a href="#" class="clear-filters">Clear Filters</a>
+                </div>
+
+                <div class="filter-group">
+                    <h6>Headshot</h6>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="with_photo">
+                        <span class="checkmark"></span> With photo
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="without_photo">
+                        <span class="checkmark"></span> Without photo
+                    </label>
+                </div>
+
+                <div class="filter-group">
+                    <h6>Columns</h6>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="1_col">
+                        <span class="checkmark"></span> 1 Column
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="2_col">
+                        <span class="checkmark"></span> 2 Columns
+                    </label>
+                </div>
+
+                <div class="filter-group">
+                    <h6>Style</h6>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="traditional">
+                        <span class="checkmark"></span> Traditional
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="creative">
+                        <span class="checkmark"></span> Creative
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="contemporary">
+                        <span class="checkmark"></span> Contemporary
+                    </label>
+                </div>
+            </div>
+        </aside>
+
         <div class="template-grid">
 
             <!-- TEMPLATE 1 -->

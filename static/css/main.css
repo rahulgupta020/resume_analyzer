@@ -15,6 +15,7 @@ body {
     min-height: 100vh;
 }
 
+
 /* ============================================================
    2. BOOTSTRAP GRID FIXES (base.html structure)
    ============================================================ */
@@ -376,109 +377,64 @@ body {
     flex-shrink: 0;
 }
 
-/* Floating Hero Image Animation */
-.floating-hero-img {
+/*Button of Dashboard */
+/* --- Enhanced Dashboard Buttons --- */
+
+/* Base styles for both buttons to ensure they are the same size */
+.btn-hero-main, 
+.btn-hero-outline {
+    padding: 14px 32px;
     border-radius: 10px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    animation: float 6s ease-in-out infinite;
-}
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0px); }
-}
-/*For Dark and Light Mode */
-/* --- Mode Colors --- */
-/* --- Theme Variables --- */
-:root {
-    /* Light Mode (Default) */
-    --bg-color: #f8fafc;
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-    --navbar-bg: #0a2540;
-    --hero-gradient: linear-gradient(135deg, #0a2540, #0f3f66);
-}
-
-[data-theme="dark"] {
-    /* Dark Mode */
-    --bg-color: #0f172a; /* Deep Navy/Black */
-    --card-bg: #1e293b; /* Slate Blue Card */
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-    --border-color: #334155;
-    --navbar-bg: #020617;
-    --hero-gradient: linear-gradient(135deg, #020617, #1e293b);
-}
-
-/* --- Global Transitions --- */
-body { 
-    background-color: var(--bg-color); 
-    color: var(--text-main); 
-    transition: background-color 0.3s ease, color 0.3s ease; 
-}
-
-.card, .suggestion-card, .tmpl-card { 
-    background-color: var(--card-bg) !important; 
-    border-color: var(--border-color) !important; 
-    color: var(--text-main);
-}
-
-.simple-navbar {
-    background-color: var(--navbar-bg) !important;
-}
-
-.hero-dashboard {
-    background: var(--hero-gradient) !important;
-}
-
-/* --- Theme Toggle Switch Styling --- */
-.theme-switch-wrapper {
-    display: flex;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.theme-switch {
-    display: inline-block;
-    height: 28px;
-    position: relative;
-    width: 50px;
+/* Primary "Create" Button - Professional Green */
+.btn-hero-main {
+    background-color: #22c55e;
+    color: #ffffff;
+    border: 2px solid #22c55e;
 }
 
-.theme-switch input { display:none; }
-
-.slider {
-    background-color: #ccc;
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5px;
+.btn-hero-main:hover {
+    background-color: #16a34a;
+    border-color: #16a34a;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.3);
 }
 
-.slider:before {
-    background-color: white;
-    bottom: 3px;
-    content: "";
-    height: 22px;
-    left: 4px;
-    position: absolute;
-    transition: .4s;
-    width: 22px;
-    z-index: 2;
+/* Outline "Upgrade" Button - Matches Brand Blue */
+.btn-hero-outline {
+    background-color: transparent;
+    color: #0f172a; /* Dark text for light mode */
+    border: 2px solid #0f172a;
 }
 
-input:checked + .slider { background-color: #38bdf8; }
-input:checked + .slider:before { transform: translateX(20px); }
-.slider.round { border-radius: 34px; }
-.slider.round:before { border-radius: 50%; }
+/* Dark mode adjustment for outline button */
+[data-theme="dark"] .btn-hero-outline {
+    color: #f1f5f9;
+    border-color: #f1f5f9;
+}
+
+.btn-hero-outline:hover {
+    background-color: #0f172a;
+    color: #ffffff;
+    transform: translateY(-3px);
+}
+
+[data-theme="dark"] .btn-hero-outline:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
 /*Header*/
 /* ============================================================
    6. RESUME STEP FORMS (Header, Education, etc.)
@@ -1056,6 +1012,72 @@ button[onclick="addSkill()"]:hover {
     opacity: 0.6;
     max-width: 80%;
 }
+/*Water  Flow.......................*/
+.logo-flow-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 30px 0;
+}
+
+/* Gradient fade effect (like video edges 🎬) */
+.logo-flow-container::before,
+.logo-flow-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 120px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.logo-flow-container::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-color), transparent);
+}
+
+.logo-flow-container::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-color), transparent);
+}
+
+.logo-flow-track {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    width: max-content;
+    animation: ultra-smooth-flow 20s linear infinite;
+}
+
+.logo-flow-track img {
+    height: 45px;
+    object-fit: contain;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+/* Hover zoom effect */
+.logo-flow-track img:hover {
+    transform: scale(1.15);
+}
+
+/* SUPER SMOOTH FLOW */
+@keyframes ultra-smooth-flow {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-33.33%);
+    }
+}
+
+/* Pause on hover */
+.logo-flow-container:hover .logo-flow-track {
+    animation-play-state: paused;
+}
+
+
 /*Resume_Preview*/
 /* ============================================================
    14. RESUME PREVIEW STYLES
@@ -1176,4 +1198,57 @@ button[onclick="addSkill()"]:hover {
     .resume-section ul {
         grid-template-columns: 1fr;
     }
+}
+
+
+/*  15. Resume Upload........*/
+
+/* --- Upload Card & Drop Zone --- */
+.upload-card {
+    border-radius: 20px !important;
+}
+
+.drop-zone {
+    border: 2px dashed #cbd5e1;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.drop-zone:hover {
+    border-color: #22c55e;
+    background-color: rgba(34, 197, 94, 0.05);
+}
+
+.animate-bounce {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* --- Water Flow Animation --- */
+.logo-flow-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+.logo-flow-track {
+    display: flex;
+    width: max-content;
+    animation: flow-right-to-left 30s linear infinite;
+}
+
+.logo-flow-track img {
+    height: 40px;
+    margin: 0 45px;
+    filter: grayscale(0%);
+}
+
+@keyframes flow-right-to-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
