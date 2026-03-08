@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 def signup_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        full_name = request.POST.get('full_name')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
@@ -15,24 +15,27 @@ def signup_view(request):
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return render(request, 'auth/signup.html')
-        
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already taken.")
-            return render(request, 'auth/signup.html')
-        
+
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already registered.")
             return render(request, 'auth/signup.html')
 
-        User.objects.create_user(
+        # Use email as username
+        username = email
+
+        user = User.objects.create_user(
             username=username,
             email=email,
             password=password,
+            first_name=full_name
         )
+
         messages.success(request, "Account created successfully. Please log in.")
         return redirect('login')
+
     return render(request, 'auth/signup.html')
 
+    
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')

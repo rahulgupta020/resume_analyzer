@@ -5,3 +5,5 @@ PyPDF2
 pandas
 spacy
 python-dotenv
+pytesseract
+pdfminer.six
