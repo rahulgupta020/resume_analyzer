@@ -17,7 +17,8 @@ urlpatterns = [
     # --- ADDED: Project 2 - Resume Upload Path ---
     # Reason: Required to handle the "Upgrade My Resume" redirection
     path('resume/upload_resume/', upload_resume, name='upload_resume'),
-    
+    # ✅ ADD THIS EXACT LINE:
+    path('myaccounts/', my_accounts, name='my_accounts'),    
     path('resume/header/', edit_header, name='edit_header'),
     path('resume/summary/', edit_summary, name='edit_summary'),
     path('resume/experience/', edit_experience, name='edit_experience'),

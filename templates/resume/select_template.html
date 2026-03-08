@@ -4,272 +4,221 @@
 {% block title %}Select Template{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container-fluid py-4">
 
-    <h2 class="section-title text-center mb-2">Choose Your Resume Template</h2>
-    <p class="section-subtitle text-center text-muted mb-4">
-        You can always change your template later.
-    </p>
+    <div class="text-center mb-5">
+        <h2 class="section-title fw-bold">Choose Your Resume Template</h2>
+        <p class="section-subtitle text-muted">You can always change your template later.</p>
+    </div>
 
-    <!-- FORM -->
-    <form method="post" action="{% url 'select_template' %}">
+    <form method="post" action="{% url 'select_template' %}" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="fw-bold m-0">Filters</h5>
-                    <a href="#" class="clear-filters">Clear Filters</a>
-                </div>
-
-                <div class="filter-group">
-                    <h6>Headshot</h6>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="with_photo">
-                        <span class="checkmark"></span> With photo
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="without_photo">
-                        <span class="checkmark"></span> Without photo
-                    </label>
-                </div>
-
-                <div class="filter-group">
-                    <h6>Columns</h6>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="1_col">
-                        <span class="checkmark"></span> 1 Column
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="2_col">
-                        <span class="checkmark"></span> 2 Columns
-                    </label>
-                </div>
-
-                <div class="filter-group">
-                    <h6>Style</h6>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="traditional">
-                        <span class="checkmark"></span> Traditional
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="creative">
-                        <span class="checkmark"></span> Creative
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" name="contemporary">
-                        <span class="checkmark"></span> Contemporary
-                    </label>
-                </div>
-            </div>
-        </aside>
-
-        <div class="template-grid">
-
-            <!-- TEMPLATE 1 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/withphoto.png' %}" alt="Template 1">
-                </div>
-
-                <div class="recommended-badge">RECOMMENDED</div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template1"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-            <!-- TEMPLATE 2 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 2">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-            <!-- TEMPLATE 3 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without2.png' %}" alt="Template 3">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template3"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 4 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/Fresher1.png' %}" alt="Template 4">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 5 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/Curriculum Vitae Minimalista Blanco Azul.png' %}" alt="Template 5">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 6 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 6">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 7 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 7">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 8 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 8">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 9 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 9">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 10 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 10">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 11 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 11">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-             <!-- TEMPLATE 12 -->
-            <div class="template-card">
-                <div class="template-image-wrapper">
-                    <img src="{% static 'images/without1.png' %}" alt="Template 12">
-                </div>
-
-                <div class="template-hover-overlay">
-                    <button type="submit"
-                            name="template"
-                            value="template2"
-                            class="use-template-btn">
-                        Use this template
-                    </button>
-                </div>
-            </div>
-
-
-        </div>
-
-        <!-- Navigation -->
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{% url 'edit_additional' %}" class="btn btn-secondary">
-                ← Back
-            </a>
+        
+        <div class="row px-lg-4">
             
+            <aside class="col-lg-3 col-md-4 mb-4">
+                <div class="filter-sidebar shadow-sm p-4 border rounded bg-white" style="position: sticky; top: 20px;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold m-0">Filters</h5>
+                        <a href="#" class="clear-filters text-decoration-none">Clear Filters</a>
+                    </div>
+
+                    <div class="filter-group mb-4">
+                        <h6 class="fw-bold small text-muted text-uppercase mb-3">Headshot</h6>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="with_photo" id="withPhotoCheck">
+                            <span class="checkmark"></span> With photo
+                        </label>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="without_photo" id="withoutPhotoCheck">
+                            <span class="checkmark"></span> Without photo
+                        </label>
+                    </div>
+
+                    <div id="photo-upload-box" class="mb-4 p-3 border rounded" style="display: none; background-color: #f8fafc; border-left: 4px solid #1a73e8 !important;">
+                        <h6 class="text-primary fw-bold mb-2" style="font-size: 14px;">Upload Profile Photo</h6>
+                        <p class="small text-muted mb-2" style="font-size: 12px; line-height: 1.2;">Please upload your professional headshot for this template.</p>
+                        <input type="file" name="profile_image" class="form-control form-control-sm" accept="image/png, image/jpeg, image/jpg">
+                    </div>
+
+                    <div class="filter-group mb-4">
+                        <h6 class="fw-bold small text-muted text-uppercase mb-3">Columns</h6>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="1_col">
+                            <span class="checkmark"></span> 1 Column
+                        </label>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="2_col">
+                            <span class="checkmark"></span> 2 Columns
+                        </label>
+                    </div>
+
+                    <div class="filter-group mb-4">
+                        <h6 class="fw-bold small text-muted text-uppercase mb-3">Style</h6>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="traditional">
+                            <span class="checkmark"></span> Traditional
+                        </label>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="creative">
+                            <span class="checkmark"></span> Creative
+                        </label>
+                        <label class="custom-checkbox d-block mb-2">
+                            <input type="checkbox" name="contemporary">
+                            <span class="checkmark"></span> Contemporary
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="col-lg-9 col-md-8">
+                <div class="template-grid">
+
+                    <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/withphoto.png' %}" alt="Template 1">
+                        </div>
+                        <div class="recommended-badge">RECOMMENDED</div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template1" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 2">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template2" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without2.png' %}" alt="Template 3">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template3" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/Fresher1.png' %}" alt="Template 4">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template4" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/Curriculum Vitae Minimalista Blanco Azul.png' %}" alt="Template 5">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template5" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 6">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template6" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 7">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template7" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 8">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template8" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 9">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template9" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 10">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template10" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 11">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template11" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                     <div class="template-card">
+                        <div class="template-image-wrapper">
+                            <img src="{% static 'images/without1.png' %}" alt="Template 12">
+                        </div>
+                        <div class="template-hover-overlay">
+                            <button type="submit" name="template" value="template12" class="use-template-btn">Use this template</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-5">
+                    <a href="{% url 'edit_additional' %}" class="btn btn-secondary px-4">
+                        ← Back to Additional Info
+                    </a>
+                </div>
+            </main>
         </div>
-
     </form>
-
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const withPhotoCheck = document.getElementById('withPhotoCheck');
+    const withoutPhotoCheck = document.getElementById('withoutPhotoCheck');
+    const uploadBox = document.getElementById('photo-upload-box');
+
+    // Listen for clicks on the "With photo" checkbox
+    withPhotoCheck.addEventListener('change', function() {
+        if (this.checked) {
+            uploadBox.style.display = 'block'; // Show the upload box
+            withoutPhotoCheck.checked = false; // Uncheck "Without photo"
+        } else {
+            uploadBox.style.display = 'none';  // Hide it if unchecked
+        }
+    });
+
+    // Make sure they don't conflict
+    withoutPhotoCheck.addEventListener('change', function() {
+        if (this.checked) {
+            uploadBox.style.display = 'none';
+            withPhotoCheck.checked = false;
+        }
+    });
+});
+</script>
+
 {% endblock %}

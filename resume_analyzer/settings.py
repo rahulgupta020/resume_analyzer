@@ -143,3 +143,6 @@ TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
 LOGIN_URL = '/login/'   # use name from analyzer/urls.py
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+
+#Add by SP 3/5/26

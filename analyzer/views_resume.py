@@ -269,38 +269,25 @@ def get_raw_text(file):
     return ""
 
 # --- UPDATE YOUR UPLOAD_RESUME VIEW ---
+# analyzer/views_resume.py
 @login_required
 def upload_resume(request):
     if request.method == 'POST' and request.FILES.get('resume'):
         resume_file = request.FILES['resume']
         
-        # 1. Extract raw text
+        # 1. Extract raw text from the PDF or Word document
         raw_text = get_raw_text(resume_file)
         
-        if not raw_text:
-            messages.error(request, "Failed to extract text from the file.")
-            return redirect('upload_resume')
-
-        # 2. Map to existing models (Example: Header & Summary)
-        lines = [line.strip() for line in raw_text.split('\n') if line.strip()]
-        
-        # Populate ResumeHeader
-        ResumeHeader.objects.update_or_create(
-            user=request.user,
-            defaults={
-                'full_name': lines[0] if lines else "Analyzed User",
-                'profession': "Software Developer" if "PYTHON" in raw_text.upper() else "Professional",
-            }
-        )
-
-        # Populate ResumeSummary
-        if "ABOUT ME" in raw_text.upper() or "SUMMARY" in raw_text.upper():
-            ResumeSummary.objects.update_or_create(
-                user=request.user,
-                defaults={'summary': raw_text[:500]} # Stores the first part as a summary
-            )
-
-        messages.success(request, "Resume analyzed! Please review your details.")
-        return redirect('edit_header') # Redirect to your existing builder flow
-
+        if raw_text:
+            # 2. Logic to map the extracted text to your models
+            # (e.g., Saving Sumit Pandey's name, email, and skills)
+            
+            # 3. Success message for the user
+            messages.success(request, "Resume analyzed successfully! Now pick a design.")
+            
+            # 4. REDIRECT: Send the user straight to select_template.html
+            return redirect('select_template')
+        else:
+            messages.error(request, "Could not extract data from this file. Please try a different format.")
+            
     return render(request, 'resume/upload_resume.html')
