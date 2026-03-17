@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red:   #cc2200;
+  --grey:  #6b6b6b;
+  --dark:  #222;
+  --mid:   #444;
+  --light: #888;
+  --rule:  #ccc;
+  --bg:    #f5f5f5;
+  --white: #fff;
+}
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+  min-height: 110px;
+  position: relative;
+}
+.header-name {
+  background: var(--white);
+  padding: 18px 24px 14px;
+}
+.header-name .first {
+  font-family: 'Oswald', sans-serif;
+  font-size: 52px; font-weight: 700;
+  color: var(--grey); line-height: 1;
+  letter-spacing: .02em;
+}
+.header-name .last {
+  font-family: 'Oswald', sans-serif;
+  font-size: 52px; font-weight: 700;
+  color: var(--red); line-height: 1;
+  letter-spacing: .02em;
+}
+.header-tag {
+  background: var(--grey);
+  display: flex; align-items: center; justify-content: center;
+  padding: 14px 20px;
+  writing-mode: horizontal-tb;
+  min-width: 120px;
+}
+.header-tag span {
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--white); text-align: center; line-height: 1.5;
+}
+
+/* ── CONTENT ── */
+.content { padding: 24px 32px 36px; display: flex; flex-direction: column; gap: 18px; flex: 1; }
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13.5px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--dark);
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 4px; margin-bottom: 10px;
+}
+
+/* ── CONTACT GRID ── */
+.contact-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px 16px; font-size: 11px; color: var(--mid);
+}
+.contact-grid span { display: block; line-height: 1.6; }
+.contact-grid .label { font-weight: 700; color: var(--dark); }
+
+/* ── SUMMARY ── */
+.summary-text { font-size: 11.5px; line-height: 1.72; color: var(--mid); }
+
+/* ── WORK EXPERIENCE ── */
+.exp-item { margin-bottom: 14px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-title  { font-size: 12px; font-weight: 700; color: var(--dark); }
+.exp-org    { font-size: 11.5px; font-style: italic; color: var(--light); margin-bottom: 7px; }
+.exp-bullets { list-style: disc; padding-left: 18px; }
+.exp-bullets li { font-size: 11px; color: var(--mid); line-height: 1.6; margin-bottom: 3px; }
+
+/* ── ACADEMIC (two-col) ── */
+.academic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.acad-inst  { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+.acad-deg   { font-size: 11.5px; font-style: italic; color: var(--mid); margin-bottom: 7px; }
+.acad-bullets { list-style: disc; padding-left: 18px; }
+.acad-bullets li { font-size: 11px; color: var(--mid); line-height: 1.6; margin-bottom: 3px; }
+
+/* ── AWARDS (three-col) ── */
+.awards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 16px; }
+.award-title { font-size: 12px; font-weight: 600; color: var(--dark); }
+.award-year  { font-size: 11.5px; font-weight: 700; color: var(--dark); }
+.award-org   { font-size: 11px; font-style: italic; color: var(--light); margin-top: 2px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-name">
+      {% if header.full_name %}
+        {% with parts=header.full_name.split %}
+          <div class="first">{{ parts.0 }}</div>
+          <div class="last">{{ parts.1 }}</div>
+        {% endwith %}
+      {% else %}
+        <div class="first">CHRIS</div>
+        <div class="last">GIBBONS</div>
+      {% endif %}
+    </div>
+    <div class="header-tag">
+      <span>{{ header.profession|default:"Marketing\nManagement\nStudent" }}</span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- Professional Summary -->
+    <div>
+      <div class="sec-label">Professional Summary</div>
+      <p class="summary-text">{{ summary.summary|default:"I am a motivated and enthusiastic marketing student seeking an internship opportunity in a dynamic environment where I can hone my skills in market research, digital marketing strategies, and consumer behavior." }}</p>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <div class="sec-label">Contact</div>
+      <div class="contact-grid">
+        <div>
+          <span class="label">Phone:</span>
+          <span>{{ header.phone|default:"+123-456-7890" }}</span>
+          <span class="label">Email:</span>
+          <span>{{ header.email|default:"hello@reallygreatsite.com" }}</span>
+        </div>
+        <div>
+          <span class="label">Address:</span>
+          <span>{{ header.address|default:"123 Anywhere St., Any City, ST 12345" }}</span>
+        </div>
+        <div>
+          <span class="label">LinkedIn:</span>
+          <span>{{ header.website|default:"www.reallygreatsite.com" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Work Experience -->
+    <div>
+      <div class="sec-label">Work Experience</div>
+      {% for exp in experiences %}
+      <div class="exp-item">
+        <div class="exp-title">{{ exp.job_title }} | {{ exp.start_year }}–{% if exp.currently_working %}present{% else %}{{ exp.end_year }}{% endif %}</div>
+        <div class="exp-org">{{ exp.employer }}</div>
+        {% if exp.description %}<ul class="exp-bullets"><li>{{ exp.description }}</li></ul>{% endif %}
+      </div>
+      {% empty %}
+      <div class="exp-item">
+        <div class="exp-title">Part-Time Marketing Assistant | 2027–present</div>
+        <div class="exp-org">Modern Events Co.</div>
+        <ul class="exp-bullets">
+          <li>Coordinated and executed the annual promotional event, attracting over 300 attendees</li>
+          <li>Assisted in the creation and distribution of email marketing campaigns, achieving a click-through rate of 12%</li>
+          <li>Contributed to the development of quarterly social media content calendars, ensuring relevance in themes and topics covered</li>
+          <li>Assisted in managing social media accounts through scheduled content posting and maintaining strong audience engagement</li>
+          <li>Conducted market research and analysis, contributing to a 10% improvement in data accuracy</li>
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Academic History -->
+    <div>
+      <div class="sec-label">Academic History</div>
+      <div class="academic-grid">
+        {% for edu in educations %}
+        <div>
+          <div class="acad-inst">{{ edu.institute_name }} | {{ edu.start_year }}–{% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+          <div class="acad-deg">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
+          {% if edu.description %}<ul class="acad-bullets"><li>{{ edu.description }}</li></ul>{% endif %}
+        </div>
+        {% empty %}
+        <div>
+          <div class="acad-inst">Eastern State University | 2026–Present</div>
+          <div class="acad-deg">Bachelor of Science in Marketing Management</div>
+          <ul class="acad-bullets">
+            <li>Dean's List, 2027</li>
+            <li>Member, Eastern State University Choir, 2026</li>
+            <li>Vice-President, Eastern State University Marketing Club, 2028–present</li>
+          </ul>
+        </div>
+        <div>
+          <div class="acad-inst">Eastern State High School | 2022–2026</div>
+          <div class="acad-deg">High School Diploma</div>
+          <ul class="acad-bullets">
+            <li>Student Council President, 2024–2026</li>
+            <li>Contributing Writer, Eastern State High School Magazine, 2022–2025</li>
+            <li>Science Fair Winner, "Renewable Energy Solutions in Business", 2024</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Awards & Certification -->
+    <div>
+      <div class="sec-label">Awards and Certification</div>
+      <div class="awards-grid">
+        {% for add in additionals %}
+        <div>
+          <div class="award-title">{{ add.additional_title }}</div>
+          <div class="award-year">{{ add.year|default:"" }}</div>
+          <div class="award-org">{{ add.additional_desc }}</div>
+        </div>
+        {% empty %}
+        <div>
+          <div class="award-title">Academic Excellence</div>
+          <div class="award-year">2027</div>
+          <div class="award-org">Eastern State University</div>
+        </div>
+        <div>
+          <div class="award-title">Leadership Award</div>
+          <div class="award-year">2028</div>
+          <div class="award-org">Eastern State University Marketing Department</div>
+        </div>
+        <div>
+          <div class="award-title">Community Service Award</div>
+          <div class="award-year">2024</div>
+          <div class="award-org">East State Animal Shelter</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

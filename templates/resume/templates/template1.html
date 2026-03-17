@@ -1,37 +1,331 @@
-<h1>{{ header.full_name }}</h1>
-<p>{{ header.profession }}</p>
-<p>{{ header.email }} | {{ header.phone }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<hr>
+:root {
+  --navy: #0b1f3a;
+  --blue: #2a6db5;
+  --sky:  #b9d6f2;
+  --grey: #e8ecf0;
+  --text: #2d3748;
+  --muted: #5a6a7e;
+  --white: #ffffff;
+}
 
-<h3>Summary</h3>
-<p>{{ summary.summary }}</p>
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #4a4d51;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
 
-<h3>Experience</h3>
-{% for exp in experiences %}
-    <h4>{{ exp.job_title }} - {{ exp.employer }}</h4>
-    <p>{{ exp.start_month }}/{{ exp.start_year }} -
-        {% if exp.currently_working %}Present{% else %}
-        {{ exp.end_month }}/{{ exp.end_year }}
+/* ── A4 PAGE ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── DECORATIVE SHAPES ── */
+.deco { position: absolute; z-index: 1; }
+.deco-tr-dark  { top:0; right:0; width:130px; height:130px; background:var(--navy); clip-path:polygon(100% 0,0 0,100% 100%); }
+.deco-tr-bar   { top:18px; right:52px; width:210px; height:22px; background:var(--sky); transform:skewX(45deg); }
+.deco-bl-dark  { bottom:0; left:0; width:240px; height:110px; background:var(--navy); clip-path:polygon(0 0,100% 100%,0 100%); }
+.deco-bl-bar   { bottom:108px; left:-10px; width:190px; height:26px; background:var(--sky); transform:skewX(-45deg); }
+
+/* ── GREY HEADER BAND ── */
+.grey-band {
+  position: absolute;
+  top: 95px; left: 0; right: 0;
+  height: 165px;
+  background: var(--grey);
+  z-index: 2;
+}
+
+/* ── CONTENT LAYER ── */
+.resume-body {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex: 1;
+  padding-top: 35px;
+}
+
+/* ── COLUMNS ── */
+.col-left  { width: 38%; padding: 0 28px 60px 32px; }
+.col-right { width: 62%; padding: 0 40px 60px 18px; }
+
+/* ── PROFILE PHOTO ── */
+.photo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+  cursor: pointer;
+}
+.photo-wrap img, .photo-placeholder {
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--white);
+  box-shadow: 0 6px 24px rgba(0,0,0,.18);
+  position: relative; z-index: 10;
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: block;
+}
+.photo-wrap:hover img { transform: scale(1.03); box-shadow: 0 10px 32px rgba(0,0,0,.28); }
+.photo-placeholder {
+  background: linear-gradient(135deg, var(--blue), var(--navy));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 3.5rem;
+  font-family: 'Cormorant Garamond', serif; font-weight: 700;
+}
+
+/* ── SECTION TITLE left ── */
+.sec { margin-top: 24px; }
+.sec-title {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--navy);
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--navy);
+  margin-bottom: 12px;
+}
+.sec-title i { font-size: 11px; color: var(--blue); }
+
+/* ── BODY COPY ── */
+p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
+
+/* ── CONTACT LIST ── */
+.contact-list { list-style: none; }
+.contact-list li { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 8px; font-size: 11.5px; }
+.contact-list li i { color: var(--blue); width: 14px; text-align: center; margin-top: 3px; flex-shrink: 0; }
+
+/* ── BULLET LIST ── */
+.dot-list { list-style: none; }
+.dot-list li { padding: 3px 0 3px 15px; position: relative; font-size: 12px; }
+.dot-list li::before {
+  content: '';
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 5px; height: 5px;
+  border-radius: 50%; background: var(--blue);
+}
+
+/* ── NAME BLOCK ── */
+.name-block {
+  height: 165px;
+  display: flex; flex-direction: column; justify-content: center;
+  margin-top: 60px;
+}
+.name-block h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px; font-weight: 700; color: var(--navy);
+  line-height: 1.0; letter-spacing: -.5px;
+}
+.name-block .profession {
+  font-size: 13px; font-weight: 400; color: var(--muted);
+  margin-top: 8px; letter-spacing: .1em; text-transform: uppercase;
+}
+
+/* ── RIGHT SECTION TITLES ── */
+.r-sec { margin-top: 30px; }
+.r-title {
+  display: flex; align-items: center; gap: 11px;
+  font-size: 11px; font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--navy);
+  margin-bottom: 16px;
+}
+.r-title i { font-size: 15px; color: var(--blue); }
+
+/* ── TIMELINE ── */
+.timeline { border-left: 2px solid var(--navy); margin-left: 8px; padding-left: 22px; }
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-item::before {
+  content: '';
+  position: absolute; left: -29px; top: 5px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--blue);
+  border: 2.5px solid var(--white);
+  box-shadow: 0 0 0 2px var(--blue);
+}
+.tl-date  { font-size: 11px; font-weight: 600; color: var(--blue); margin-bottom: 3px; }
+.tl-title { font-size: 12px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .04em; }
+.tl-sub   { font-size: 11.5px; color: var(--muted); margin: 2px 0 6px; }
+.tl-desc  { list-style: none; padding-left: 2px; }
+.tl-desc li { position: relative; padding-left: 14px; font-size: 11.5px; margin-bottom: 3px; color: var(--muted); }
+.tl-desc li::before { content: '•'; position: absolute; left: 0; color: var(--navy); font-weight: bold; }
+
+/* ── MODAL ── */
+#modal-toggle { display: none; }
+#modal-toggle:checked ~ .modal { display: flex; }
+.modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,.88);
+  justify-content: center; align-items: center;
+}
+.modal img {
+  width: min(500px, 90vw); height: min(500px, 90vw);
+  border-radius: 50%; object-fit: cover;
+  border: 8px solid var(--white);
+  box-shadow: 0 0 60px rgba(0,0,0,.6);
+}
+.modal-close {
+  position: absolute; top: 28px; right: 36px;
+  color: var(--white); font-size: 44px; cursor: pointer; line-height: 1;
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+
+<input type="checkbox" id="modal-toggle">
+<div class="modal">
+  <label for="modal-toggle" class="modal-close"><i class="fas fa-times"></i></label>
+  <img src="{% if header.profile_image %}{{ header.profile_image.url }}{% else %}https://via.placeholder.com/600{% endif %}" alt="Profile">
+</div>
+
+<div class="page">
+
+  <div class="deco deco-tr-dark"></div>
+  <div class="deco deco-tr-bar"></div>
+  <div class="deco deco-bl-dark"></div>
+  <div class="deco deco-bl-bar"></div>
+  <div class="grey-band"></div>
+
+  <div class="resume-body">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
+
+      <label for="modal-toggle" class="photo-wrap">
+        {% if header.profile_image %}
+          <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}">
+        {% else %}
+          <div class="photo-placeholder">{{ header.full_name|slice:":1"|default:"A" }}</div>
         {% endif %}
-    </p>
-    <p>{{ exp.description }}</p>
-{% endfor %}
+      </label>
 
-<h3>Education</h3>
-{% for edu in educations %}
-    <p><strong>{{ edu.degree }}</strong> - {{ edu.institute_name }}</p>
-{% endfor %}
+      <div class="sec">
+        <div class="sec-title"><i class="fas fa-user"></i> About Me</div>
+        <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum." }}</p>
+      </div>
 
-<h3>Skills</h3>
-<ul>
-{% for skill in skills %}
-    <li>{{ skill.skill_name }}</li>
-{% endfor %}
-</ul>
+      <div class="sec">
+        <div class="sec-title"><i class="fas fa-address-book"></i> Contact</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere Street., Any City" }}</li>
+        </ul>
+      </div>
 
-<h3>Additional</h3>
-{% for add in additionals %}
-    <p><strong>{{ add.additional_title }}</strong></p>
-    <p>{{ add.additional_desc }}</p>
-{% endfor %}
+      <div class="sec">
+        <div class="sec-title"><i class="fas fa-bolt"></i> Skills</div>
+        <ul class="dot-list">
+          {% for skill in skills %}
+            <li>{{ skill.skill_name }}</li>
+          {% empty %}
+            <li>Web Design</li><li>Branding</li><li>Graphic Design</li><li>SEO</li><li>Marketing</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title"><i class="fas fa-language"></i> Language</div>
+        <ul class="dot-list">
+          {% for add in additionals %}
+            <li>{{ add.additional_title }}</li>
+          {% empty %}
+            <li>English</li><li>French</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
+
+      <div class="name-block">
+        <h1>{{ header.full_name|default:"Adelin Palmerston" }}</h1>
+        <div class="profession">{{ header.profession|default:"Graphics Designer" }}</div>
+      </div>
+
+      <div class="r-sec">
+        <div class="r-title"><i class="fas fa-graduation-cap"></i> Education</div>
+        <div class="timeline">
+          {% for edu in educations %}
+          <div class="tl-item">
+            <div class="tl-date">({{ edu.start_year }} – {{ edu.end_year }})</div>
+            <div class="tl-title">{{ edu.institute_name }}</div>
+            <div class="tl-sub">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}{% if edu.gpa %}&nbsp;·&nbsp;GPA {{ edu.gpa }}{% endif %}</div>
+          </div>
+          {% empty %}
+          <div class="tl-item">
+            <div class="tl-date">(2011 – 2015)</div>
+            <div class="tl-title">Wardiere University</div>
+            <div class="tl-sub">Bachelor of Design &nbsp;·&nbsp; 3.65</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">(2014 – 2019)</div>
+            <div class="tl-title">Wardiere University</div>
+            <div class="tl-sub">Bachelor of Design &nbsp;·&nbsp; 3.99</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="r-sec">
+        <div class="r-title"><i class="fas fa-briefcase"></i> Experience</div>
+        <div class="timeline">
+          {% for exp in experiences %}
+          <div class="tl-item">
+            <div class="tl-date">({{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %})</div>
+            <div class="tl-title">{{ exp.job_title }}</div>
+            <div class="tl-sub">{{ exp.employer }}</div>
+            {% if exp.description %}
+            <ul class="tl-desc"><li>{{ exp.description }}</li></ul>
+            {% endif %}
+          </div>
+          {% empty %}
+          <div class="tl-item">
+            <div class="tl-date">(2020 – 2024)</div>
+            <div class="tl-title">Senior Graphic Designer</div>
+            <div class="tl-sub">Fauget Studio</div>
+            <ul class="tl-desc"><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet.</li></ul>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">(2017 – 2019)</div>
+            <div class="tl-title">Senior Graphic Designer</div>
+            <div class="tl-sub">Larana, Inc</div>
+            <ul class="tl-desc"><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet.</li></ul>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

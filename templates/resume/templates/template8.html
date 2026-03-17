@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Mulish:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #1b3a5c;
+  --blue: #2a6db5;
+  --sky:  #ddeaf7;
+  --mid:  #444;
+  --light:#777;
+  --rule: #b0c4d8;
+  --white:#fff;
+}
+
+body {
+  font-family: 'Mulish', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── SKY HEADER ── */
+.header {
+  background: var(--sky);
+  text-align: center;
+  padding: 28px 50px 22px;
+  position: relative;
+}
+.header-deco {
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; margin-bottom: 6px;
+}
+.deco-line {
+  flex: 1; height: 1px; background: var(--navy); max-width: 60px;
+}
+.deco-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--navy); }
+.header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 30px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--navy); line-height: 1.1;
+}
+.header .profession {
+  font-size: 12.5px; font-weight: 400;
+  color: var(--mid); letter-spacing: .1em;
+  margin-top: 5px;
+}
+
+/* ── BODY ── */
+.body {
+  display: flex;
+  flex: 1;
+  background: var(--white);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 36%;
+  background: var(--sky);
+  padding: 22px 18px 40px 24px;
+  display: flex; flex-direction: column; gap: 20px;
+  border-right: 2px solid var(--rule);
+}
+
+/* ── MAIN ── */
+.main {
+  width: 64%;
+  padding: 22px 28px 40px 22px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── SECTION LABELS ── */
+.sec-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--blue);
+  border-bottom: 1.5px solid var(--blue);
+  padding-bottom: 4px; margin-bottom: 10px;
+}
+
+/* ── CONTACT ── */
+.contact-list { list-style: none; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--mid); margin-bottom: 7px; line-height: 1.4;
+}
+.contact-list li i { color: var(--navy); width: 13px; font-size: 10px; margin-top: 2px; flex-shrink: 0; }
+
+/* ── EDU ── */
+.edu-item { margin-bottom: 13px; }
+.edu-item:last-child { margin-bottom: 0; }
+.edu-years { font-size: 10.5px; color: var(--light); }
+.edu-inst  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--navy); margin: 1px 0; }
+.edu-deg   { font-size: 11px; color: var(--mid); padding-left: 10px; position: relative; }
+.edu-deg::before { content: '•'; position: absolute; left: 0; color: var(--navy); }
+.edu-gpa   { font-size: 10.5px; color: var(--light); padding-left: 10px; position: relative; }
+.edu-gpa::before { content: '•'; position: absolute; left: 0; color: var(--navy); }
+
+/* ── SKILLS / LANGUAGES ── */
+.dot-list { list-style: none; }
+.dot-list li {
+  font-size: 11px; color: var(--mid);
+  padding-left: 12px; position: relative; margin-bottom: 5px;
+}
+.dot-list li::before { content: '•'; position: absolute; left: 0; color: var(--navy); font-weight: bold; }
+
+/* ── PROFILE SUMMARY ── */
+.summary-text { font-size: 11.5px; line-height: 1.72; color: var(--mid); text-align: justify; }
+
+/* ── WORK EXPERIENCE ── */
+.exp-item { margin-bottom: 16px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.exp-company { font-size: 12px; font-weight: 700; color: var(--navy); }
+.exp-dates   { font-size: 10.5px; color: var(--light); white-space: nowrap; flex-shrink: 0; text-transform: uppercase; }
+.exp-role    { font-size: 11px; color: var(--mid); font-style: italic; margin: 2px 0 7px; }
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 11px; color: var(--mid); line-height: 1.62;
+  padding-left: 12px; position: relative; margin-bottom: 4px; text-align: justify;
+}
+.exp-bullets li::before { content: '•'; position: absolute; left: 0; color: var(--navy); font-weight: bold; }
+.exp-divider { border: none; border-top: 1px solid var(--rule); margin: 14px 0 0; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-deco">
+      <div class="deco-line"></div><div class="deco-dot"></div>
+      <h1>{{ header.full_name|default:"Richard Sanchez" }}</h1>
+      <div class="deco-dot"></div><div class="deco-line"></div>
+    </div>
+    <div class="profession">{{ header.profession|default:"Marketing Manager" }}</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="sec-label">Contact</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+          <li><i class="fas fa-globe"></i> {{ header.website|default:"www.reallygreatsite.com" }}</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Education</div>
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="edu-years">{{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+          <div class="edu-inst">{{ edu.institute_name }}</div>
+          <div class="edu-deg">{{ edu.degree }}{% if edu.field_of_study %} of {{ edu.field_of_study }}{% endif %}</div>
+          {% if edu.gpa %}<div class="edu-gpa">GPA: {{ edu.gpa }}</div>{% endif %}
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="edu-years">2029 – 2030</div>
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-deg">Master of Business Management</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-years">2025 – 2029</div>
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-deg">Bachelor of Business Management</div>
+          <div class="edu-gpa">GPA: 3.8 / 4.0</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="sec-label">Skills</div>
+        <ul class="dot-list">
+          {% for skill in skills %}
+            <li>{{ skill.skill_name }}</li>
+          {% empty %}
+            <li>Project Management</li>
+            <li>Public Relations</li>
+            <li>Teamwork</li>
+            <li>Time Management</li>
+            <li>Leadership</li>
+            <li>Effective Communication</li>
+            <li>Critical Thinking</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Languages</div>
+        <ul class="dot-list">
+          {% for add in additionals %}
+            <li>{{ add.additional_title }}{% if add.additional_desc %}: {{ add.additional_desc }}{% endif %}</li>
+          {% empty %}
+            <li>English: Fluent</li>
+            <li>French: Fluent</li>
+            <li>German: Basics</li>
+            <li>Spanish: Intermediate</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <div>
+        <div class="sec-label">Profile Summary</div>
+        <p class="summary-text">{{ summary.summary|default:"Experienced and results-driven Marketing Manager with a proven track record in developing and executing successful marketing strategies. I am seeking a challenging role where I can contribute my skills in strategic planning, team leadership, and creative problem-solving to achieve business objectives." }}</p>
+      </div>
+
+      <div>
+        <div class="sec-label">Work Experience</div>
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-header">
+            <div class="exp-company">{{ exp.employer }}</div>
+            <div class="exp-dates">{{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}</div>
+          </div>
+          <div class="exp-role">{{ exp.job_title }}</div>
+          {% if exp.description %}
+          <ul class="exp-bullets"><li>{{ exp.description }}</li></ul>
+          {% endif %}
+          <hr class="exp-divider">
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-header">
+            <div class="exp-company">Borcelle Studio</div>
+            <div class="exp-dates">2030 – Present</div>
+          </div>
+          <div class="exp-role">Marketing Manager &amp; Specialist</div>
+          <ul class="exp-bullets">
+            <li>Led the development and implementation of comprehensive marketing strategies that resulted in a 20% increase in brand visibility and a 15% growth in sales within the first year.</li>
+            <li>Successfully launched and managed multiple cross-channel campaigns, including digital marketing, social media, and traditional advertising, resulting in improved customer acquisition and retention rates.</li>
+          </ul>
+          <hr class="exp-divider">
+        </div>
+        <div class="exp-item">
+          <div class="exp-header">
+            <div class="exp-company">Fauget Studio</div>
+            <div class="exp-dates">2025 – 2029</div>
+          </div>
+          <div class="exp-role">Marketing Manager &amp; Specialist</div>
+          <ul class="exp-bullets">
+            <li>Conducted market research to identify emerging trends and consumer preferences, providing valuable insights for product development and positioning.</li>
+            <li>Oversaw the creation of engaging content for various platforms, collaborating with internal teams and external agencies to ensure brand consistency and relevance.</li>
+          </ul>
+          <hr class="exp-divider">
+        </div>
+        <div class="exp-item">
+          <div class="exp-header">
+            <div class="exp-company">Studio Shodwe</div>
+            <div class="exp-dates">2024 – 2025</div>
+          </div>
+          <div class="exp-role">Marketing Manager &amp; Specialist</div>
+          <ul class="exp-bullets">
+            <li>Developed and executed targeted marketing campaigns, resulting in a 25% increase in lead generation.</li>
+            <li>Implemented SEO strategies that improved website traffic by 30%, enhancing online visibility and positioning the company.</li>
+            <li>Collaborated with sales teams to create effective sales collateral, presentations, and promotional materials.</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

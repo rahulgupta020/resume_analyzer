@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue-grey: #c9d0d8;
+  --sidebar-bg: #dde1e6;
+  --black: #1a1a1a;
+  --dark: #2e2e2e;
+  --mid: #4a4a4a;
+  --light: #777;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── A4 ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER BAND ── */
+.header {
+  background: var(--blue-grey);
+  padding: 44px 50px 36px;
+}
+.header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 46px; font-weight: 400;
+  color: var(--black); line-height: 1.1;
+  letter-spacing: -.5px;
+}
+.header .profession {
+  font-size: 14px; font-weight: 300;
+  color: var(--dark); margin-top: 8px;
+  letter-spacing: .02em;
+}
+
+/* ── BODY ── */
+.body {
+  display: flex;
+  flex: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 38%;
+  background: var(--sidebar-bg);
+  padding: 30px 26px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── MAIN ── */
+.main {
+  width: 62%;
+  background: var(--white);
+  padding: 30px 34px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* ── SECTION LABELS ── */
+.sec-label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,.15);
+  padding-bottom: 5px;
+}
+
+/* ── SIDEBAR TEXT ── */
+.sidebar p, .sidebar li {
+  font-size: 12px; line-height: 1.72;
+  color: var(--dark); font-weight: 300;
+}
+
+/* ── CONTACT ── */
+.contact-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.contact-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 12px; color: var(--dark); font-weight: 300; }
+.contact-list li i { font-size: 11px; color: var(--black); margin-top: 2px; width: 13px; flex-shrink: 0; }
+
+/* ── MAIN SECTIONS ── */
+.edu-item, .exp-item, .lang-block { margin-bottom: 12px; }
+.edu-item:last-child, .exp-item:last-child { margin-bottom: 0; }
+
+.inst-name {
+  font-size: 11.5px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--black); margin-bottom: 2px;
+}
+.inst-detail {
+  font-size: 11.5px; font-style: italic;
+  color: var(--mid); line-height: 1.5;
+}
+.inst-years {
+  font-size: 11px; color: var(--light); margin-top: 1px;
+}
+
+.exp-company {
+  font-size: 11.5px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--black); margin-bottom: 2px;
+}
+.exp-desc {
+  font-size: 11.5px; color: var(--mid); line-height: 1.6;
+}
+
+.lang-text, .skill-text {
+  font-size: 11.5px; color: var(--mid); line-height: 1.72;
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{ header.full_name|default:"Sebastian Bennett" }}</h1>
+    <div class="profession">{{ header.profession|default:"Student" }}</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="sec-label">Profile</div>
+        <p>{{ summary.summary|default:"Business Administration student. I consider my self a responsible and orderly person. I am looking foward for my first work experience." }}</p>
+      </div>
+
+      <div>
+        <div class="sec-label">Contact Me</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- Education -->
+      <div>
+        <div class="sec-label">Education</div>
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="inst-name">{{ edu.institute_name }}</div>
+          <div class="inst-detail">{{ edu.degree }}{% if edu.field_of_study %}, {{ edu.field_of_study }}{% endif %}{% if edu.currently_studying %}, in progress.{% endif %}</div>
+          {% if edu.start_year %}<div class="inst-years">{{ edu.start_year }}–{% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>{% endif %}
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="inst-name">Borcelle University</div>
+          <div class="inst-detail">Business Administration career, in progress.</div>
+        </div>
+        <div class="edu-item">
+          <div class="inst-name">Borcelle College</div>
+          <div class="inst-years">2017–2021</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Language -->
+      <div>
+        <div class="sec-label">Language</div>
+        {% for add in additionals %}
+        <div class="lang-text">{{ add.additional_title }}{% if add.additional_desc %} — {{ add.additional_desc }}{% endif %}</div>
+        {% empty %}
+        <div class="lang-text">Native English.<br>Advanced Spanish.</div>
+        {% endfor %}
+      </div>
+
+      <!-- Computer Skills / Skills -->
+      <div>
+        <div class="sec-label">Computer Skills</div>
+        {% for skill in skills %}
+        <div class="skill-text">{{ skill.skill_name }}.</div>
+        {% empty %}
+        <div class="skill-text">Text processor.<br>Spreadsheet.<br>Slide presentation.</div>
+        {% endfor %}
+      </div>
+
+      <!-- Work Experience -->
+      <div>
+        <div class="sec-label">Work Experience</div>
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-company">{{ exp.employer }}</div>
+          <div class="exp-desc">{{ exp.description }}</div>
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-company">Ingoude Company</div>
+          <div class="exp-desc">Participation in volunteer collections to distribute in low-income schools.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

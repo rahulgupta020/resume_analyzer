@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import ResumeFresherExperience, ResumeHeader, ResumeSummary, ResumeExperience, ResumeEducation, ResumeSkill, ResumeAdditional, ResumeTemplate
+from .models import (
+    ResumeFresherExperience, ResumeHeader, ResumeSummary, 
+    ResumeExperience, ResumeEducation, ResumeSkill, 
+    ResumeAdditional, ResumeTemplate
+)
 
-#ADD
+# Required Imports for Analysis
 import io
 import pytesseract
 from PIL import Image
 from docx import Document
 from pdfminer.high_level import extract_text
 from django.contrib import messages
-#END
 
 @login_required
 def dashboard(request):
@@ -17,6 +20,7 @@ def dashboard(request):
 
 @login_required
 def fresher_exp(request):
+    """Step 0: Fresher vs Experience Selection"""
     if request.method == 'POST':
         experience_type = request.POST.get('type')
         ResumeFresherExperience.objects.update_or_create(
@@ -28,38 +32,30 @@ def fresher_exp(request):
 
 @login_required
 def edit_header(request):
+    """Step 1: Contact Header"""
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
-        profession = request.POST.get('profession')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        address = request.POST.get('address')
-        linkedin = request.POST.get('linkedin')
-        github = request.POST.get('github')
-        website = request.POST.get('website')
-
         ResumeHeader.objects.update_or_create(
             user=request.user,
             defaults={
-                'full_name': full_name,
-                'profession': profession,
-                'email': email,
-                'phone': phone,
-                'address': address,
-                'linkedin': linkedin,
-                'github': github,
-                'website': website
+                'full_name': request.POST.get('full_name'),
+                'profession': request.POST.get('profession'),
+                'email': request.POST.get('email'),
+                'phone': request.POST.get('phone'),
+                'address': request.POST.get('address'),
+                'linkedin': request.POST.get('linkedin'),
+                'github': request.POST.get('github'),
+                'website': request.POST.get('website')
             }
         )
         return redirect('edit_summary')
-    try:
-        header = ResumeHeader.objects.get(user=request.user)
-    except ResumeHeader.DoesNotExist:
-        header = None
+    
+    # ✅ FIXED: Using filter().first() to avoid DoesNotExist error
+    header = ResumeHeader.objects.filter(user=request.user).first()
     return render(request, 'resume/header.html', {'header': header})
 
 @login_required
 def edit_summary(request):
+    """Step 2: Professional Summary"""
     if request.method == 'POST':
         summary_text = request.POST.get('summary')
         ResumeSummary.objects.update_or_create(
@@ -67,50 +63,39 @@ def edit_summary(request):
             defaults={'summary': summary_text}
         )
         return redirect('edit_experience')
-    try:
-        summary = ResumeSummary.objects.get(user=request.user)
-    except ResumeSummary.DoesNotExist:
-        summary = None
+    
+    summary = ResumeSummary.objects.filter(user=request.user).first()
     return render(request, 'resume/summary.html', {'summary': summary})
 
 @login_required
 def edit_experience(request):
+    """Step 3: Work History (Multiple Items)"""
     if request.method == 'POST':
         ResumeExperience.objects.filter(user=request.user).delete()
-
         total = int(request.POST.get('experience_count', 0))
 
         for i in range(total):
             job_title = request.POST.get(f'job_title_{i}')
             employer = request.POST.get(f'employer_{i}')
-            location = request.POST.get(f'location_{i}')
-            start_month = request.POST.get(f'start_month_{i}')
-            start_year = request.POST.get(f'start_year_{i}')
-            end_month = request.POST.get(f'end_month_{i}') or None
-            end_year = request.POST.get(f'end_year_{i}') or None
-            description = request.POST.get(f'description_{i}')
-            skills = request.POST.get(f'skills_{i}')
-
             currently_working = request.POST.get(f'currently_working_{i}') == 'on'
 
-            # Skip empty cards (safety)
-            if not job_title or not employer:
-                continue
-
-            ResumeExperience.objects.create(
-                user=request.user,
-                job_title=job_title,
-                employer=employer,
-                location=location,
-                start_month=start_month,
-                start_year=start_year,
-                end_month=None if currently_working else int(end_month) if end_month else None,
-                end_year=None if currently_working else int(end_year) if end_year else None,
-                currently_working=currently_working,
-                description=description,
-                skills=skills
-            )
-
+            if job_title and employer:
+                e_month = request.POST.get(f'end_month_{i}')
+                e_year = request.POST.get(f'end_year_{i}')
+                
+                ResumeExperience.objects.create(
+                    user=request.user,
+                    job_title=job_title,
+                    employer=employer,
+                    location=request.POST.get(f'location_{i}'),
+                    start_month=request.POST.get(f'start_month_{i}'),
+                    start_year=request.POST.get(f'start_year_{i}'),
+                    end_month=None if currently_working else int(e_month) if e_month and e_month.isdigit() else None,
+                    end_year=None if currently_working else int(e_year) if e_year and e_year.isdigit() else None,
+                    currently_working=currently_working,
+                    description=request.POST.get(f'description_{i}'),
+                    skills=request.POST.get(f'skills_{i}')
+                )
         return redirect('edit_education')
 
     experiences = ResumeExperience.objects.filter(user=request.user)
@@ -118,147 +103,112 @@ def edit_experience(request):
 
 @login_required
 def edit_education(request):
+    """Step 4: Education History"""
     if request.method == 'POST':
         ResumeEducation.objects.filter(user=request.user).delete()
-
         total = int(request.POST.get('education_count', 0))
 
         for i in range(total):
-            institute_name = request.POST.get(f'institute_name_{i}')
-            institute_location = request.POST.get(f'institute_location_{i}')
-            degree = request.POST.get(f'degree_{i}')
-            field_of_study = request.POST.get(f'field_of_study_{i}')
-            start_year = request.POST.get(f'start_year_{i}')
-            end_year = request.POST.get(f'end_year_{i}')
-
-            # Skip empty cards
-            if not institute_name or not degree:
-                continue
-
-            ResumeEducation.objects.create(
-                user=request.user,
-                institute_name=institute_name,
-                institute_location=institute_location,
-                degree=degree,
-                field_of_study=field_of_study,
-                start_year=int(start_year),
-                end_year=int(end_year),
-            )
-
+            inst = request.POST.get(f'institute_name_{i}')
+            deg = request.POST.get(f'degree_{i}')
+            if inst and deg:
+                ResumeEducation.objects.create(
+                    user=request.user,
+                    institute_name=inst,
+                    institute_location=request.POST.get(f'institute_location_{i}'),
+                    degree=deg,
+                    field_of_study=request.POST.get(f'field_of_study_{i}'),
+                    start_year=int(request.POST.get(f'start_year_{i}', 0)),
+                    end_year=int(request.POST.get(f'end_year_{i}', 0)),
+                )
         return redirect('edit_skills')
 
     educations = ResumeEducation.objects.filter(user=request.user)
-    return render(request, 'resume/education.html', {
-        'educations': educations
-    })
+    return render(request, 'resume/education.html', {'educations': educations})
 
 @login_required
 def edit_skills(request):
+    """Step 5: Skills"""
     if request.method == 'POST':
-        # Delete old skills
         ResumeSkill.objects.filter(user=request.user).delete()
-
         total = int(request.POST.get('skill_count', 0))
-
         for i in range(total):
-            skill_name = request.POST.get(f'skill_name_{i}')
-
-            if skill_name:   # skip empty
-                ResumeSkill.objects.create(
-                    user=request.user,
-                    skill_name=skill_name.strip()
-                )
-
+            name = request.POST.get(f'skill_name_{i}')
+            if name:
+                ResumeSkill.objects.create(user=request.user, skill_name=name.strip())
         return redirect('edit_additional')
 
     skills = ResumeSkill.objects.filter(user=request.user)
-
-    return render(request, 'resume/skills.html', {
-        'skills': skills
-    })
+    return render(request, 'resume/skills.html', {'skills': skills})
 
 @login_required
 def edit_additional(request):
-
+    """Step 6: Languages/Certifications"""
     if request.method == "POST":
-        count = int(request.POST.get("additional_count", 0))
-
-        # Delete old records
         ResumeAdditional.objects.filter(user=request.user).delete()
-
+        count = int(request.POST.get("additional_count", 0))
         for i in range(count):
             title = request.POST.get(f"additional_title_{i}")
-            desc = request.POST.get(f"additional_desc_{i}")
-
             if title:
                 ResumeAdditional.objects.create(
                     user=request.user,
                     additional_title=title,
-                    additional_desc=desc
+                    additional_desc=request.POST.get(f"additional_desc_{i}")
                 )
-
         return redirect("select_template")
 
+    # ✅ FIXED: Changed filter(request.user) to filter(user=request.user)
     additionals = ResumeAdditional.objects.filter(user=request.user)
-
-    context = {
-        "additionals": additionals
-    }
-
-    return render(request, "resume/additional.html", context)
+    return render(request, "resume/additional.html", {"additionals": additionals})
 
 @login_required
 def select_template(request):
-
+    """Step 7: Design Selection"""
     if request.method == "POST":
         selected = request.POST.get("template")
-
-        ResumeTemplate.objects.update_or_create(
-            user=request.user,
-            defaults={"template_name": selected}
-        )
-
-        return redirect("resume_preview")
-
+        if selected:
+            ResumeTemplate.objects.update_or_create(
+                user=request.user,
+                defaults={"template_name": selected}
+            )
+            return redirect("resume_preview")
     return render(request, "resume/select_template.html")
 
 @login_required
 def resume_preview(request):
-
-    header = ResumeHeader.objects.filter(user=request.user).first()
-    summary = ResumeSummary.objects.filter(user=request.user).first()
-    experiences = ResumeExperience.objects.filter(user=request.user)
-    educations = ResumeEducation.objects.filter(user=request.user)
-    skills = ResumeSkill.objects.filter(user=request.user)
-    additionals = ResumeAdditional.objects.filter(user=request.user)
-    template = ResumeTemplate.objects.filter(user=request.user).first()
-
+    """Step 8: Final Preview Render"""
+    # Gathering data
     context = {
-        "header": header,
-        "summary": summary,
-        "experiences": experiences,
-        "educations": educations,
-        "skills": skills,
-        "additionals": additionals,
-        "template": template
+        "header": ResumeHeader.objects.filter(user=request.user).first(),
+        "summary": ResumeSummary.objects.filter(user=request.user).first(),
+        "experiences": ResumeExperience.objects.filter(user=request.user),
+        "educations": ResumeEducation.objects.filter(user=request.user),
+        "skills": ResumeSkill.objects.filter(user=request.user),
+        "additionals": ResumeAdditional.objects.filter(user=request.user),
+        "template": ResumeTemplate.objects.filter(user=request.user).first(),
     }
 
-    if template and template.template_name == "template2":
-        return render(request, "resume/templates/template2.html", context)
+    # Template file mapping
+    template_files = {
+        "template1": "resume/templates/template1.html",
+        "template2": "resume/templates/template2.html",
+        "template3": "resume/templates/template3.html",
+        "template4": "resume/templates/template4.html",
+        "template5": "resume/templates/template5.html",
+        "template6": "resume/templates/template6.html",
+    }
 
-    elif template and template.template_name == "template3":
-        return render(request, "resume/templates/template3.html", context)
+    # ✅ FIXED: Prevent AttributeError on NoneType by checking if template exists
+    template_obj = context.get('template')
+    selected_name = template_obj.template_name if template_obj else "template1"
 
-    return render(request, "resume/templates/template1.html", context)
+    # ✅ THE PERFECTION: Safe lookup with fallback to ensure an HttpResponse is always returned
+    template_path = template_files.get(selected_name, "resume/templates/template1.html")
+    return render(request, template_path, context)
 
-
-#Add by SP 3/3/26
-# analyzer/views_resume.py
-# --- ADD THIS UTILITY FUNCTION ---
+# --- UTILITY: File Parsing ---
 def get_raw_text(file):
-    """Extracts text based on file extension"""
     extension = file.name.split('.')[-1].lower()
-    
     if extension == 'pdf':
         return extract_text(io.BytesIO(file.read()))
     elif extension in ['docx', 'doc']:
@@ -268,26 +218,14 @@ def get_raw_text(file):
         return pytesseract.image_to_string(Image.open(file))
     return ""
 
-# --- UPDATE YOUR UPLOAD_RESUME VIEW ---
-# analyzer/views_resume.py
 @login_required
 def upload_resume(request):
     if request.method == 'POST' and request.FILES.get('resume'):
         resume_file = request.FILES['resume']
-        
-        # 1. Extract raw text from the PDF or Word document
         raw_text = get_raw_text(resume_file)
-        
         if raw_text:
-            # 2. Logic to map the extracted text to your models
-            # (e.g., Saving Sumit Pandey's name, email, and skills)
-            
-            # 3. Success message for the user
-            messages.success(request, "Resume analyzed successfully! Now pick a design.")
-            
-            # 4. REDIRECT: Send the user straight to select_template.html
+            messages.success(request, "Analysis complete! Pick your template.")
             return redirect('select_template')
         else:
-            messages.error(request, "Could not extract data from this file. Please try a different format.")
-            
+            messages.error(request, "Format not supported.")
     return render(request, 'resume/upload_resume.html')

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0d2340;
+  --dark:  #1a2e45;
+  --mid:   #3a3a3a;
+  --muted: #555;
+  --light: #777;
+  --rule:  #b0b8c4;
+  --white: #fff;
+  --bg:    #f8f9fa;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── NAVY HEADER ── */
+.header {
+  background: var(--navy);
+  text-align: center;
+  padding: 30px 40px 22px;
+}
+.header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 42px; font-weight: 900;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--white); line-height: 1;
+}
+.header .contact-line {
+  font-size: 11px; color: rgba(255,255,255,.75);
+  margin-top: 8px; letter-spacing: .06em;
+}
+.header .contact-line span { margin: 0 6px; opacity: .5; }
+
+/* ── CONTENT ── */
+.content {
+  flex: 1;
+  padding: 24px 36px 36px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--navy);
+  border-bottom: 1.5px solid var(--rule);
+  padding-bottom: 4px; margin-bottom: 12px;
+}
+
+/* ── SUMMARY ── */
+.summary-text { font-size: 11.5px; line-height: 1.75; color: var(--muted); text-align: justify; }
+
+/* ── WORK EXPERIENCE ── */
+.exp-item { margin-bottom: 14px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-title  { font-size: 12.5px; font-weight: 700; color: var(--mid); }
+.exp-meta   { font-size: 11px; color: var(--light); margin: 2px 0 7px; }
+.exp-meta span { margin: 0 5px; }
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 11px; color: var(--muted); line-height: 1.65;
+  padding-left: 12px; position: relative; margin-bottom: 3px;
+}
+.exp-bullets li::before { content: '▪'; position: absolute; left: 0; color: var(--navy); font-size: 9px; top: 2px; }
+
+/* ── EDUCATION (2-col) ── */
+.edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+/*.edu-item {}*/
+.edu-degree { font-size: 12px; font-weight: 700; color: var(--mid); }
+.edu-org    { font-size: 11px; color: var(--muted); margin: 2px 0 4px; }
+.edu-bullet { font-size: 11px; color: var(--muted); padding-left: 12px; position: relative; margin-bottom: 4px; }
+.edu-bullet::before { content: '▪'; position: absolute; left: 0; color: var(--navy); font-size: 9px; top: 2px; }
+.edu-dates  { font-size: 11px; font-weight: 700; color: var(--mid); margin-top: 5px; }
+
+/* ── SKILLS + AWARDS (2-col) ── */
+.bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+
+.skills-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.skill-item, .award-item {
+  font-size: 11px; color: var(--muted);
+  padding-left: 12px; position: relative; margin-bottom: 5px;
+}
+.skill-item::before, .award-item::before {
+  content: '▪'; position: absolute; left: 0; color: var(--navy); font-size: 9px; top: 2px;
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- NAVY HEADER -->
+  <div class="header">
+    <h1>{{ header.full_name|default:"Emaa Warner" }}</h1>
+    <div class="contact-line">
+      {{ header.address|default:"123 Anywhere St., Any City" }}
+      <span>|</span>
+      {{ header.phone|default:"123-456-7890" }}
+      <span>|</span>
+      {{ header.email|default:"hello@reallygreatsite.com" }}
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- SUMMARY -->
+    <div>
+      <div class="sec-label">Summary</div>
+      <p class="summary-text">{{ summary.summary|default:"Highly motivated and detail-oriented Accounting Professional with strong experience in financial reporting, bookkeeping, and data analysis. Skilled in preparing financial statements, managing accounts payable/receivable, and performing reconciliations with a high level of accuracy. Known for strong analytical thinking, problem-solving abilities, and maintaining compliance with accounting standards." }}</p>
+    </div>
+
+    <!-- WORK EXPERIENCE -->
+    <div>
+      <div class="sec-label">Work Experience</div>
+      {% for exp in experiences %}
+      <div class="exp-item">
+        <div class="exp-title">{{ exp.job_title }}{% if exp.employer %}, {{ exp.employer }}{% endif %}</div>
+        <div class="exp-meta">{{ exp.employer }} <span>|</span> {{ exp.start_month|default:"" }} {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_month|default:"" }} {{ exp.end_year }}{% endif %}</div>
+        {% if exp.description %}
+        <ul class="exp-bullets"><li>{{ exp.description }}</li></ul>
+        {% endif %}
+      </div>
+      {% empty %}
+      <div class="exp-item">
+        <div class="exp-title">Accounting Executive</div>
+        <div class="exp-meta">Borcelle Industries <span>|</span> Jan 2024 – Present</div>
+        <ul class="exp-bullets">
+          <li>Implemented cost-control measures resulting in a 15% reduction in operational expenses.</li>
+          <li>Streamlined financial reporting processes, enhancing overall efficiency by 20%.</li>
+          <li>Led a team in successfully navigating a complex audit, ensuring compliance with industry regulations.</li>
+        </ul>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title">Accountant</div>
+        <div class="exp-meta">Timmerman Industries <span>|</span> Jun 2022 – Jan 2024</div>
+        <ul class="exp-bullets">
+          <li>Managed month-end close processes, reducing closing time by 25%.</li>
+          <li>Implemented a new financial forecasting system, improving accuracy by 18%.</li>
+          <li>Collaborated with cross-functional teams to develop and implement financial strategies, resulting in a 10% increase in revenue.</li>
+          <li>Spearheaded automation, decreasing manual workload by 30%.</li>
+        </ul>
+      </div>
+      <div class="exp-item">
+        <div class="exp-title">Junior Accountant, Borcelle Industries</div>
+        <div class="exp-meta">Timmerman Industries <span>|</span> Jan 2020 – Jun 2022</div>
+        <ul class="exp-bullets">
+          <li>Managed month-end close processes, reducing closing time by 25%.</li>
+          <li>Implemented a new financial forecasting system, improving accuracy by 18%.</li>
+          <li>Collaborated with cross-functional teams to develop and implement financial strategies, resulting in a 10% increase in revenue.</li>
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- EDUCATION -->
+    <div>
+      <div class="sec-label">Education</div>
+      <div class="edu-grid">
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="edu-degree">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
+          <div class="edu-org">{{ edu.institute_name }}</div>
+          {% if edu.gpa %}<div class="edu-bullet">Final CGPA: {{ edu.gpa }}</div>{% endif %}
+          <div class="edu-dates">{{ edu.start_month|default:"" }} {{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_month|default:"" }} {{ edu.end_year }}{% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="edu-degree">Bachelor of Business Administration</div>
+          <div class="edu-org">University of Business Excellence</div>
+          <div class="edu-bullet">Final CGPA: 3.90</div>
+          <div class="edu-dates">Jan 2019 – Feb 2021</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-degree">Foundation in Business Administration</div>
+          <div class="edu-org">Borcelle University</div>
+          <div class="edu-bullet">Final CGPA: 3.80</div>
+          <div class="edu-dates">Jan 2018 – Dec 2018</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- SKILLS + AWARDS -->
+    <div class="bottom-grid">
+
+      <div>
+        <div class="sec-label">Skills</div>
+        <div class="skills-cols">
+          <div>
+            {% for skill in skills %}
+              {% if forloop.counter <= forloop.parentloop.counter|default:skills|length|divisibleby:2 or forloop.counter <= skills|length|add:1|divisibleby:2 %}
+              <div class="skill-item">{{ skill.skill_name }}</div>
+              {% endif %}
+            {% empty %}
+            <div class="skill-item">Client Acquisition</div>
+            <div class="skill-item">B2B Sales</div>
+            <div class="skill-item">Negotiation</div>
+            <div class="skill-item">Relationship Management</div>
+            <div class="skill-item">Market Analysis</div>
+            <div class="skill-item">Sales Strategies</div>
+            {% endfor %}
+          </div>
+          <div>
+            {% if not skills %}
+            <div class="skill-item">Negotiation Skills</div>
+            <div class="skill-item">Problem-Solving</div>
+            <div class="skill-item">Time Management</div>
+            <div class="skill-item">Presentation Skills</div>
+            <div class="skill-item">Networking</div>
+            <div class="skill-item">Market Research</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-label">Awards</div>
+        {% for add in additionals %}
+        <div class="award-item">{{ add.additional_title }}</div>
+        {% empty %}
+        <div class="award-item">Licensed Real Estate Agent</div>
+        <div class="award-item">Certified Real Estate Negotiator</div>
+        <div class="award-item">Top Sales Agent Award 2020</div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

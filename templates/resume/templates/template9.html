@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:  #111111;
+  --dark:   #1c1c1c;
+  --panel:  #242424;
+  --white:  #ffffff;
+  --off:    #e8e8e8;
+  --muted:  #aaaaaa;
+  --mid:    #555;
+  --rule:   #333;
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── DARK HEADER ── */
+.header {
+  background: var(--dark);
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  align-items: center;
+  min-height: 120px;
+}
+.header-photo {
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px 10px 16px 18px;
+}
+.header-photo img,
+.header-photo .photo-placeholder {
+  width: 92px; height: 92px;
+  border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--white);
+  display: block;
+}
+.header-photo .photo-placeholder {
+  background: linear-gradient(135deg, #555, #222);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 2.4rem; font-family: 'Anton', sans-serif;
+}
+.header-info { padding: 0 28px 0 10px; }
+.header-info h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 34px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--white); line-height: 1.1;
+}
+.header-info .profession {
+  font-size: 11.5px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); margin-top: 6px;
+}
+
+/* ── BODY ── */
+.body { display: flex; flex: 1; }
+
+/* ── SIDEBAR (dark) ── */
+.sidebar {
+  width: 36%;
+  background: var(--panel);
+  padding: 22px 18px 40px 22px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ── MAIN (white) ── */
+.main {
+  width: 64%;
+  background: var(--white);
+  padding: 22px 28px 40px 22px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── SIDEBAR SECTION LABEL ── */
+.s-label {
+  font-family: 'Anton', sans-serif;
+  font-size: 13px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--white);
+  border-bottom: 1.5px solid #444;
+  padding-bottom: 5px; margin-bottom: 10px;
+}
+
+/* ── SIDEBAR CONTACT ── */
+.contact-list { list-style: none; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--muted); margin-bottom: 7px; line-height: 1.4;
+}
+.contact-list li i { color: var(--white); width: 12px; font-size: 10px; margin-top: 2px; flex-shrink: 0; }
+
+/* ── SIDEBAR EDU ── */
+.s-edu-item { margin-bottom: 12px; }
+.s-edu-item:last-child { margin-bottom: 0; }
+.s-edu-inst { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--white); }
+.s-edu-deg  { font-size: 11px; color: var(--muted); margin: 2px 0 1px; }
+.s-edu-yr   { font-size: 10.5px; color: #666; }
+
+/* ── SIDEBAR SKILLS ── */
+.s-dot-list { list-style: none; }
+.s-dot-list li {
+  font-size: 11px; color: var(--muted);
+  padding-left: 12px; position: relative; margin-bottom: 5px;
+}
+.s-dot-list li::before { content: '•'; position: absolute; left: 0; color: var(--white); font-weight: bold; }
+
+/* ── SIDEBAR CERTIFICATION ── */
+.cert-item { margin-bottom: 10px; }
+.cert-name  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--white); }
+.cert-meta  { font-size: 10.5px; color: #666; margin-top: 1px; }
+
+/* ── MAIN SECTION LABEL ── */
+.m-label {
+  font-family: 'Anton', sans-serif;
+  font-size: 15px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--black);
+  border-bottom: 2px solid var(--black);
+  padding-bottom: 4px; margin-bottom: 12px;
+}
+
+/* ── ABOUT ── */
+.about-text { font-size: 11.5px; line-height: 1.72; color: var(--mid); }
+
+/* ── WORK EXP ── */
+.exp-item { margin-bottom: 16px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-role    { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--black); }
+.exp-company { font-size: 11px; font-weight: 700; color: var(--mid); margin: 2px 0 1px; }
+.exp-dates   { font-size: 11px; color: var(--mid); margin-bottom: 7px; }
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 11px; color: var(--mid); line-height: 1.6;
+  padding-left: 12px; position: relative; margin-bottom: 3px;
+}
+.exp-bullets li::before { content: '•'; position: absolute; left: 0; color: var(--black); font-weight: bold; }
+
+/* ── MAIN EDU ── */
+.m-edu-item { margin-bottom: 10px; }
+.m-edu-deg  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--black); }
+.m-edu-org  { font-size: 11px; color: var(--mid); margin-top: 2px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-photo">
+      {% if header.profile_image %}
+        <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}">
+      {% else %}
+        <div class="photo-placeholder">{{ header.full_name|slice:":1"|default:"S" }}</div>
+      {% endif %}
+    </div>
+    <div class="header-info">
+      <h1>{{ header.full_name|default:"Samira Hadid" }}</h1>
+      <div class="profession">{{ header.profession|default:"Senior Graphic Designer" }}</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- DARK SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="s-label">Contact</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          <li><i class="fas fa-globe"></i> {{ header.website|default:"www.reallygreatsite.com" }}</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="s-label">Education</div>
+        {% for edu in educations %}
+        <div class="s-edu-item">
+          <div class="s-edu-inst">{{ edu.institute_name }}</div>
+          <div class="s-edu-deg">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
+          <div class="s-edu-yr">{{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="s-edu-item">
+          <div class="s-edu-inst">Borcelle University</div>
+          <div class="s-edu-deg">Bachelor of Science in Psychology</div>
+          <div class="s-edu-yr">2015 – 2018</div>
+        </div>
+        <div class="s-edu-item">
+          <div class="s-edu-inst">Fauget University</div>
+          <div class="s-edu-deg">Bachelor of Business Management</div>
+          <div class="s-edu-yr">2015 – 2018</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="s-label">Skills</div>
+        <ul class="s-dot-list">
+          {% for skill in skills %}
+            <li>{{ skill.skill_name }}</li>
+          {% empty %}
+            <li>Web Design</li><li>Design Thinking</li><li>Wireframe Creation</li>
+            <li>Front End Coding</li><li>Problem-Solving</li><li>Computer Literacy</li>
+            <li>Project Management Tools</li><li>Strong Communication</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="s-label">Certification</div>
+        {% for add in additionals %}
+        <div class="cert-item">
+          <div class="cert-name">{{ add.additional_title }}</div>
+          <div class="cert-meta">{{ add.additional_desc }}</div>
+        </div>
+        {% empty %}
+        <div class="cert-item">
+          <div class="cert-name">Marketing Summit 2018</div>
+          <div class="cert-meta">2017 – 2018<br>Borcelle Business Academy</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-name">Social Media Marketing Class</div>
+          <div class="cert-meta">2017 – 2018<br>Borcelle Business Academy</div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+    <!-- WHITE MAIN -->
+    <div class="main">
+
+      <div>
+        <div class="m-label">About Me</div>
+        <p class="about-text">{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent erat lacus, condimentum quis hendrerit at, convallis ac quam. Nam faucibus quis dui vel mollis. Cras tincidunt ligula nec nisi vulputate ornare. Quisque ac dapibus orci. Aliquam pretium tortor a imperdiet facilisis. Etiam luctus leo sed auctor iaculis." }}</p>
+      </div>
+
+      <div>
+        <div class="m-label">Work Experience</div>
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-role">{{ exp.job_title }}</div>
+          <div class="exp-company">{{ exp.employer }}</div>
+          <div class="exp-dates">{{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}</div>
+          {% if exp.description %}
+          <ul class="exp-bullets"><li>{{ exp.description }}</li></ul>
+          {% endif %}
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-role">Applications Developer</div>
+          <div class="exp-company">Really Great Company</div>
+          <div class="exp-dates">2016 – Present</div>
+          <ul class="exp-bullets">
+            <li>Database administration and website design</li>
+            <li>Built the logic for a streamlined ad-serving platform that scaled</li>
+            <li>Educational institutions and online classroom management</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-role">Web Content Manager</div>
+          <div class="exp-company">Really Great Company</div>
+          <div class="exp-dates">2014 – 2016</div>
+          <ul class="exp-bullets">
+            <li>Database administration and website design</li>
+            <li>Built the logic for a streamlined ad-serving platform that scaled</li>
+            <li>Educational institutions and online classroom management</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="m-label">Education</div>
+        {% for edu in educations %}
+        <div class="m-edu-item">
+          <div class="m-edu-deg">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
+          <div class="m-edu-org">{{ edu.institute_name }} | {{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="m-edu-item">
+          <div class="m-edu-deg">Masters in Graphic Design</div>
+          <div class="m-edu-org">Keithston and Partners | 2013 – 2015</div>
+        </div>
+        <div class="m-edu-item">
+          <div class="m-edu-deg">BA Graphic Design</div>
+          <div class="m-edu-org">Keithston and Partners | 2010 – 2013</div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

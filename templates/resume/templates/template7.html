@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #111;
+  --dark:  #2b2b2b;
+  --mid:   #4a4a4a;
+  --light: #777;
+  --rule:  #bbb;
+  --bg:    #e8e8e8;
+  --white: #fff;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  background: var(--bg);
+  min-height: 130px;
+}
+.header-photo { overflow: hidden; }
+.header-photo img {
+  width: 150px; height: 130px;
+  object-fit: cover; display: block;
+}
+.header-photo .photo-placeholder {
+  width: 150px; height: 130px;
+  background: linear-gradient(135deg, #888, #444);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 3rem; font-family: 'Raleway', sans-serif;
+}
+.header-info {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 20px 30px;
+}
+.header-info h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 30px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .04em;
+  color: var(--black); line-height: 1.1;
+}
+.header-info .profession {
+  font-size: 13px; font-weight: 300;
+  color: var(--mid); margin-top: 5px;
+}
+
+/* ── BODY ── */
+.body { display: flex; flex: 1; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 34%;
+  padding: 22px 20px 40px 28px;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ── MAIN ── */
+.main {
+  width: 66%;
+  padding: 22px 28px 40px 22px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--black);
+  border-bottom: 1.5px solid var(--black);
+  padding-bottom: 4px; margin-bottom: 10px;
+}
+
+/* ── CONTACT ── */
+.contact-list { list-style: none; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--mid); margin-bottom: 7px; line-height: 1.4;
+}
+.contact-list li i { color: var(--black); width: 13px; font-size: 10px; margin-top: 2px; flex-shrink: 0; }
+
+/* ── EDU ── */
+.edu-item { margin-bottom: 12px; }
+.edu-item:last-child { margin-bottom: 0; }
+.edu-inst { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--dark); }
+.edu-deg  { font-size: 11px; color: var(--mid); margin: 1px 0; }
+.edu-yr   { font-size: 10.5px; color: var(--light); }
+
+/* ── SKILLS / LANGUAGES (plain list) ── */
+.plain-list { list-style: none; }
+.plain-list li { font-size: 11.5px; color: var(--mid); margin-bottom: 5px; }
+
+/* ── ABOUT ── */
+.about p { font-size: 11.5px; line-height: 1.72; color: var(--mid); text-align: justify; }
+
+/* ── EXPERIENCE ── */
+.exp-item { margin-bottom: 16px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-row { display: grid; grid-template-columns: 52px 1fr; gap: 0 10px; }
+.exp-dates {
+  font-size: 10.5px; font-weight: 700; color: var(--dark);
+  line-height: 1.4; padding-top: 1px; text-align: right;
+}
+/*.exp-right {}*/
+.exp-company { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--dark); }
+.exp-role    { font-size: 11px; color: var(--mid); margin: 1px 0 6px; }
+.exp-desc    { font-size: 11px; color: var(--mid); line-height: 1.65; margin-bottom: 7px; }
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 11px; color: var(--mid); line-height: 1.55;
+  padding-left: 12px; position: relative; margin-bottom: 3px;
+}
+.exp-bullets li::before { content: '•'; position: absolute; left: 0; color: var(--black); font-weight: bold; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-photo">
+      {% if header.profile_image %}
+        <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}">
+      {% else %}
+        <div class="photo-placeholder">{{ header.full_name|slice:":1"|default:"R" }}</div>
+      {% endif %}
+    </div>
+    <div class="header-info">
+      <h1>{{ header.full_name|default:"Riaan Chandran" }}</h1>
+      <div class="profession">{{ header.profession|default:"Office Manager" }}</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="sec-label">Contact</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+          <li><i class="fas fa-globe"></i> {{ header.website|default:"www.reallygreatsite.com" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Education</div>
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="edu-inst">{{ edu.institute_name }}</div>
+          <div class="edu-deg">{{ edu.degree }}{% if edu.field_of_study %} — {{ edu.field_of_study }}{% endif %}</div>
+          <div class="edu-yr">{{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-deg">Lorem ipsum dolor</div>
+          <div class="edu-yr">2021 – 2024</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-deg">Lorem ipsum dolor</div>
+          <div class="edu-yr">2018 – 2021</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="sec-label">Skills</div>
+        <ul class="plain-list">
+          {% for skill in skills %}
+            <li>{{ skill.skill_name }}</li>
+          {% empty %}
+            <li>Organizational Skills</li>
+            <li>Leadership</li>
+            <li>Communication Skills</li>
+            <li>Problem-Solving Abilities</li>
+            <li>Time Management</li>
+            <li>Financial Management</li>
+            <li>Technological Proficiency</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Languages</div>
+        <ul class="plain-list">
+          {% for add in additionals %}
+            <li>{{ add.additional_title }}</li>
+          {% empty %}
+            <li>Hindi</li>
+            <li>English</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <div>
+        <div class="sec-label">About Me</div>
+        <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." }}</p>
+      </div>
+
+      <div>
+        <div class="sec-label">Work Experience</div>
+
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-row">
+            <div class="exp-dates">{% if exp.currently_working %}NOW–<br>{% endif %}{{ exp.end_year|default:exp.start_year }}{% if not exp.currently_working %}<br>{{ exp.start_year }}{% endif %}</div>
+            <div class="exp-right">
+              <div class="exp-company">{{ exp.employer }}</div>
+              <div class="exp-role">{{ exp.job_title }}</div>
+              {% if exp.description %}
+              <div class="exp-desc">{{ exp.description }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-row">
+            <div class="exp-dates">NOW–<br>2024</div>
+            <div class="exp-right">
+              <div class="exp-company">Timmerman Industries</div>
+              <div class="exp-role">Manager</div>
+              <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+              <ul class="exp-bullets">
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-row">
+            <div class="exp-dates">2023–<br>2022</div>
+            <div class="exp-right">
+              <div class="exp-company">Thynk Unlimited</div>
+              <div class="exp-role">Manager</div>
+              <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+              <ul class="exp-bullets">
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-row">
+            <div class="exp-dates">2021–<br>2020</div>
+            <div class="exp-right">
+              <div class="exp-company">Ingoude Company</div>
+              <div class="exp-role">Manager</div>
+              <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+              <ul class="exp-bullets">
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

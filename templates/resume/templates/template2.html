@@ -1,35 +1,287 @@
-<div style="display:flex">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div style="width:30%; background:#f4f4f4; padding:20px;">
-    <h2>{{ header.full_name }}</h2>
-    <p>{{ header.profession }}</p>
+:root {
+  --black: #111;
+  --dark:  #2b2b2b;
+  --mid:   #555;
+  --light: #888;
+  --rule:  #c8cdd4;
+  --bg:    #f4f5f7;
+  --white: #ffffff;
+  --border: #3a4a5c;
+}
 
-    <h4>Contact</h4>
-    <p>{{ header.email }}</p>
-    <p>{{ header.phone }}</p>
+body {
+  font-family: 'Jost', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
 
-    <h4>Skills</h4>
-    {% for skill in skills %}
-        <p>{{ skill.skill_name }}</p>
-    {% endfor %}
-</div>
+/* ── A4 ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--bg);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
 
-<div style="width:70%; padding:20px;">
+/* ── INNER CARD (white with border) ── */
+.card {
+  margin: 18px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 40px 40px;
+}
 
-    <h3>Summary</h3>
-    <p>{{ summary.summary }}</p>
+/* ── HEADER ── */
+.header { text-align: center; padding-bottom: 18px; }
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px; font-weight: 900;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: var(--black); line-height: 1.1;
+}
+.header .profession {
+  font-size: 12px; font-weight: 500;
+  color: var(--mid); letter-spacing: .25em;
+  text-transform: uppercase; margin-top: 6px;
+}
 
-    <h3>Experience</h3>
-    {% for exp in experiences %}
-        <h4>{{ exp.job_title }}</h4>
-        <p>{{ exp.employer }}</p>
-        <p>{{ exp.description }}</p>
-    {% endfor %}
+/* ── CONTACT BAR ── */
+.contact-bar {
+  display: flex; justify-content: center; align-items: center;
+  gap: 28px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 0;
+  margin-bottom: 22px;
+}
+.contact-bar span {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11.5px; color: var(--dark);
+}
+.contact-bar i { font-size: 12px; color: var(--border); }
 
-    <h3>Education</h3>
+/* ── SECTION ── */
+.sec { margin-bottom: 22px; }
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--black);
+  border-bottom: 1.5px solid var(--black);
+  padding-bottom: 5px;
+  margin-bottom: 14px;
+}
+
+/* ── ABOUT ── */
+.about p { font-size: 11.5px; line-height: 1.72; color: var(--mid); }
+
+/* ── EDU / EXP ROWS ── */
+.item-grid {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 0 20px;
+  margin-bottom: 14px;
+}
+.item-grid:last-child { margin-bottom: 0; }
+.item-left .dates { font-size: 11px; font-weight: 600; color: var(--dark); }
+.item-left .org   { font-size: 11px; color: var(--light); margin-top: 2px; }
+.item-right .role { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+.item-right .desc { font-size: 11px; color: var(--mid); line-height: 1.65; }
+
+/* ── SKILLS ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px 0;
+  list-style: none;
+}
+.skills-grid li {
+  font-size: 11.5px; color: var(--dark);
+  padding-left: 14px; position: relative;
+}
+.skills-grid li::before {
+  content: '•'; position: absolute; left: 0;
+  color: var(--border); font-weight: bold;
+}
+
+/* ── REFERENCES ── */
+.ref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 30px;
+}
+.ref-name { font-size: 12px; font-weight: 600; color: var(--dark); }
+.ref-role { font-size: 11px; color: var(--light); margin-bottom: 4px; }
+.ref-detail { font-size: 11px; color: var(--mid); display: flex; gap: 5px; align-items: center; margin-top: 2px; }
+.ref-detail strong { color: var(--dark); min-width: 40px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{ header.full_name|default:"Anaisha Parvati" }}</h1>
+    <div class="profession">{{ header.profession|default:"Head Manager" }}</div>
+  </div>
+
+  <!-- CONTACT BAR -->
+  <div class="contact-bar">
+    <span><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</span>
+    <span><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere Street., Any City" }}</span>
+    <span><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</span>
+  </div>
+
+  <!-- ABOUT ME -->
+  <div class="sec about">
+    <div class="sec-title">About Me</div>
+    <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." }}</p>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="sec">
+    <div class="sec-title">Education</div>
     {% for edu in educations %}
-        <p>{{ edu.degree }} - {{ edu.institute_name }}</p>
+    <div class="item-grid">
+      <div class="item-left">
+        <div class="dates">{{ edu.start_year }} – {% if edu.currently_studying %}Now{% else %}{{ edu.end_year }}{% endif %}</div>
+        <div class="org">{{ edu.institute_name }}</div>
+      </div>
+      <div class="item-right">
+        <div class="role">{{ edu.degree }}{% if edu.field_of_study %} of {{ edu.field_of_study }}{% endif %}</div>
+        <div class="desc">{{ edu.description|default:"" }}</div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="item-grid">
+      <div class="item-left">
+        <div class="dates">2020 – 2023</div>
+        <div class="org">Wardiere University</div>
+      </div>
+      <div class="item-right">
+        <div class="role">Master of Business Management</div>
+        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
+      </div>
+    </div>
+    <div class="item-grid">
+      <div class="item-left">
+        <div class="dates">2016 – 2020</div>
+        <div class="org">Borcelle University</div>
+      </div>
+      <div class="item-right">
+        <div class="role">Bachelor of Business Management</div>
+        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
+      </div>
+    </div>
     {% endfor %}
+  </div>
 
-</div>
-</div>
+  <!-- EXPERIENCE -->
+  <div class="sec">
+    <div class="sec-title">Experience</div>
+    {% for exp in experiences %}
+    <div class="item-grid">
+      <div class="item-left">
+        <div class="dates">{{ exp.start_year }} – {% if exp.currently_working %}Now{% else %}{{ exp.end_year }}{% endif %}</div>
+        <div class="org">{{ exp.employer }}</div>
+      </div>
+      <div class="item-right">
+        <div class="role">{{ exp.job_title }}</div>
+        <div class="desc">{{ exp.description }}</div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="item-grid">
+      <div class="item-left">
+        <div class="dates">2023 – Now</div>
+        <div class="org">Borcelle Studio</div>
+      </div>
+      <div class="item-right">
+        <div class="role">Head Manager</div>
+        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
+      </div>
+    </div>
+    <div class="item-grid">
+      <div class="item-left">
+        <div class="dates">2022 – 2023</div>
+        <div class="org">Liceria &amp; Co.</div>
+      </div>
+      <div class="item-right">
+        <div class="role">General Manager</div>
+        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- SKILLS -->
+  <div class="sec">
+    <div class="sec-title">Skills</div>
+    <ul class="skills-grid">
+      {% for skill in skills %}
+        <li>{{ skill.skill_name }}</li>
+      {% empty %}
+        <li>Leadership</li><li>Digital Marketing</li><li>Communication</li><li>Innovation</li>
+        <li>Analytics</li><li>Teamwork</li><li>Problem Solving</li><li>Collaboration</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="sec">
+    <div class="sec-title">References</div>
+    <div class="ref-grid">
+      {% for ref in references %}
+      <div>
+        <div class="ref-name">{{ ref.name }}</div>
+        <div class="ref-role">{{ ref.organization }}</div>
+        <div class="ref-detail"><strong>Phone:</strong> {{ ref.phone }}</div>
+        <div class="ref-detail"><strong>Social:</strong> {{ ref.social|default:ref.website }}</div>
+      </div>
+      {% empty %}
+      <div>
+        <div class="ref-name">Aarya Agarwal</div>
+        <div class="ref-role">CEO of Borcelle Company</div>
+        <div class="ref-detail"><strong>Phone:</strong> 123-456-7890</div>
+        <div class="ref-detail"><strong>Social:</strong> @reallygreatsite</div>
+      </div>
+      <div>
+        <div class="ref-name">Sharin Varma</div>
+        <div class="ref-role">HRD of Borcelle Company</div>
+        <div class="ref-detail"><strong>Phone:</strong> 123-456-7890</div>
+        <div class="ref-detail"><strong>Social:</strong> @reallygreatsite</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /page -->
+</body>
+</html>

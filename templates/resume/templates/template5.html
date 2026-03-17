@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0d1f3c;
+  --navy2: #132444;
+  --black: #1a1a1a;
+  --dark:  #2d2d2d;
+  --mid:   #4a4a4a;
+  --light: #777;
+  --rule:  #c0c5cc;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── A4 ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── NAVY HEADER ── */
+.header {
+  background: var(--navy);
+  padding: 30px 36px 26px;
+}
+.header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px; font-weight: 800;
+  color: var(--white); letter-spacing: .04em;
+  text-transform: uppercase; line-height: 1.1;
+}
+.header .profession {
+  font-size: 12.5px; font-weight: 600;
+  color: rgba(255,255,255,.7);
+  letter-spacing: .18em; text-transform: uppercase;
+  margin-top: 5px;
+}
+
+/* ── WHITE BODY ── */
+.body { flex: 1; display: flex; flex-direction: column; padding: 0 36px 36px; }
+
+/* ── ABOUT ME (full width) ── */
+.about { padding: 20px 0 14px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
+.sec-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--navy);
+  margin-bottom: 8px;
+}
+.about p { font-size: 11.5px; line-height: 1.7; color: var(--mid); }
+
+/* ── CONTACT ROW ── */
+.contact-row {
+  display: flex; gap: 30px; align-items: center;
+  padding-bottom: 16px; border-bottom: 1px solid var(--rule);
+  margin-bottom: 20px;
+}
+.contact-row span { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--dark); }
+.contact-row i { font-size: 11px; color: var(--navy); }
+
+/* ── TWO-COLUMN MIDDLE ── */
+.mid-grid { display: grid; grid-template-columns: 175px 1fr; gap: 0 28px; flex: 1; }
+
+/* ── LEFT COL ── */
+.col-left { padding-right: 10px; border-right: 1px solid var(--rule); }
+.left-sec { margin-bottom: 24px; }
+.left-sec .sec-label { border-bottom: 1px solid var(--rule); padding-bottom: 5px; margin-bottom: 10px; }
+
+.sub-title { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.dot-list { list-style: none; }
+.dot-list li {
+  font-size: 11.5px; color: var(--mid);
+  padding-left: 13px; position: relative; margin-bottom: 4px;
+}
+.dot-list li::before { content: '•'; position: absolute; left: 0; color: var(--navy); }
+
+/* ── RIGHT COL (Career) ── */
+.col-right { padding-left: 4px; }
+.col-right .sec-label { border-bottom: 1px solid var(--rule); padding-bottom: 5px; margin-bottom: 14px; }
+
+.exp-item { margin-bottom: 18px; }
+.exp-title { font-size: 13px; font-weight: 600; color: var(--dark); }
+.exp-meta  { font-size: 11px; color: var(--light); margin: 2px 0 7px; }
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 11px; color: var(--mid); line-height: 1.6;
+  padding-left: 13px; position: relative; margin-bottom: 3px;
+}
+.exp-bullets li::before { content: '•'; position: absolute; left: 0; color: var(--navy); }
+
+/* ── EDUCATION FOOTER (3-col) ── */
+.edu-footer {
+  border-top: 1px solid var(--rule);
+  padding-top: 14px; margin-top: 16px;
+}
+.edu-footer .sec-label { margin-bottom: 10px; }
+.edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 16px; }
+.edu-cell .edu-title { font-size: 11.5px; font-weight: 600; color: var(--dark); }
+.edu-cell .edu-sub   { font-size: 11px; color: var(--light); margin-top: 2px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{ header.full_name|default:"Juliana Tomassi" }}</h1>
+    <div class="profession">{{ header.profession|default:"Full Stack Developer" }}</div>
+  </div>
+
+  <div class="body">
+
+    <!-- ABOUT ME -->
+    <div class="about">
+      <div class="sec-label">About Me</div>
+      <p>{{ summary.summary|default:"I am a full-stack developer passionate about creating innovative and efficient solutions. I am looking to join a dynamic team at the company to contribute my technical skills and web development experience." }}</p>
+    </div>
+
+    <!-- CONTACT ROW -->
+    <div class="contact-row">
+      <span><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"Incredible City" }}</span>
+      <span><i class="fas fa-envelope"></i> {{ header.email|default:"hello@amazingsite.com" }}</span>
+      <span><i class="fas fa-phone-alt"></i> {{ header.phone|default:"(55) 1234-5678" }}</span>
+    </div>
+
+    <!-- MIDDLE: Skills | Career -->
+    <div class="mid-grid">
+
+      <!-- LEFT: Skills + Languages -->
+      <div class="col-left">
+
+        <div class="left-sec">
+          <div class="sec-label">Skills</div>
+
+          <div class="sub-title">Technical Skills</div>
+          <ul class="dot-list">
+            {% for skill in skills %}
+              <li>{{ skill.skill_name }}</li>
+            {% empty %}
+              <li>Skill 1</li><li>Skill 2</li><li>Skill 3</li><li>Skill 4</li>
+            {% endfor %}
+          </ul>
+
+          <div class="sub-title" style="margin-top:14px;">Personal Skills</div>
+          <ul class="dot-list">
+            {% for add in additionals if add.type == 'personal' %}
+              <li>{{ add.additional_title }}</li>
+            {% empty %}
+              <li>Open mind</li><li>Communicative</li><li>Sociable</li><li>Dedicated</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="left-sec">
+          <div class="sec-label">Languages</div>
+          <ul class="dot-list">
+            {% for add in additionals %}
+              <li>{{ add.additional_title }}{% if add.additional_desc %} ({{ add.additional_desc }}){% endif %}</li>
+            {% empty %}
+              <li>English (Advanced)</li>
+              <li>Spanish (Native)</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Career -->
+      <div class="col-right">
+        <div class="sec-label">Career</div>
+
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-title">{{ exp.job_title }}</div>
+          <div class="exp-meta">{{ exp.employer }} · {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}</div>
+          {% if exp.description %}
+          <ul class="exp-bullets"><li>{{ exp.description }}</li></ul>
+          {% endif %}
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-title">Senior Full Stack Developer</div>
+          <div class="exp-meta">Incredible Company 1 · 2020 – Present</div>
+          <ul class="exp-bullets">
+            <li>Lead a team of developers on web application projects.</li>
+            <li>Implement scalable solutions using state-of-the-art technologies.</li>
+            <li>Collaborate with designers and project managers to ensure the quality of the final product.</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-title">Full Stack Developer</div>
+          <div class="exp-meta">Incredible Company 2 · 2017 – 2019</div>
+          <ul class="exp-bullets">
+            <li>Development and maintenance of web applications using various technologies.</li>
+            <li>Integration of APIs and external services.</li>
+            <li>Optimizing application performance and security.</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-title">Junior Developer</div>
+          <div class="exp-meta">Incredible Company 3 · 2015 – 2017</div>
+          <ul class="exp-bullets">
+            <li>Development of front-end components using various programming languages.</li>
+            <li>Backend support with various technologies.</li>
+            <li>Collaboration in testing and debugging.</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- EDUCATION FOOTER -->
+    <div class="edu-footer">
+      <div class="sec-label">Education</div>
+      <div class="edu-grid">
+        {% for edu in educations %}
+        <div class="edu-cell">
+          <div class="edu-title">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
+          <div class="edu-sub">{{ edu.institute_name }}{% if edu.start_year %} ({{ edu.start_year }}–{% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}){% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="edu-cell">
+          <div class="edu-title">Bachelor's Degree in Systems Engineering</div>
+          <div class="edu-sub">University 1 (2010–2014)</div>
+        </div>
+        <div class="edu-cell">
+          <div class="edu-title">Full Stack Web Developer</div>
+          <div class="edu-sub">Incredible Certification (2017)</div>
+        </div>
+        <div class="edu-cell">
+          <div class="edu-title">Advanced Course</div>
+          <div class="edu-sub">Amazing Course (2018)</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /page -->
+</body>
+</html>

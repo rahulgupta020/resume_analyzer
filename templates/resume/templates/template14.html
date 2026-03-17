@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal:  #00897b;
+  --teal2: #00695c;
+  --sky:   #e0f4f2;
+  --black: #111;
+  --dark:  #222;
+  --mid:   #444;
+  --muted: #666;
+  --light: #999;
+  --rule:  #00897b;
+  --white: #fff;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 160px;
+}
+
+.header-photo {
+  background: var(--sky);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 0 0 0;
+  position: relative;
+}
+.header-photo img,
+.header-photo .photo-placeholder {
+  width: 160px; height: 160px;
+  border-radius: 50%; object-fit: cover;
+  border: 4px solid var(--white);
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  position: absolute; bottom: -30px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.header-photo .photo-placeholder {
+  background: linear-gradient(135deg, var(--teal), #004d40);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 3rem; font-weight: 700;
+}
+
+.header-info {
+  background: var(--sky);
+  display: flex; flex-direction: column; justify-content: flex-start;
+  padding: 22px 28px 0 16px;
+}
+.header-info .first-name {
+  font-size: 22px; font-weight: 600; color: var(--dark);
+}
+.header-info .last-name {
+  font-size: 46px; font-weight: 800; color: var(--black);
+  line-height: 1.05; letter-spacing: -.5px;
+}
+
+/* ── TEAL PROFESSION BAR ── */
+.profession-bar {
+  background: var(--teal);
+  grid-column: 1 / -1;
+  padding: 10px 28px 10px 216px;
+  margin-top: 30px;
+}
+.profession-bar span {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--white);
+}
+
+/* ── BODY ── */
+.body {
+  display: flex; flex: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 36%;
+  padding: 24px 18px 40px 24px;
+  border-right: 1px solid #e0e0e0;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ── MAIN ── */
+.main {
+  width: 64%;
+  padding: 24px 28px 40px 20px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── SECTION LABELS ── */
+.sec-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--black);
+  border-bottom: 2px solid var(--teal);
+  padding-bottom: 4px; margin-bottom: 11px;
+}
+
+/* ── CONTACT LIST ── */
+.contact-list { list-style: none; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.4;
+}
+.contact-list li i { color: var(--teal); width: 14px; font-size: 11px; margin-top: 1px; flex-shrink: 0; }
+
+/* ── PROFILE SUMMARY ── */
+.summary-text { font-size: 11px; line-height: 1.75; color: var(--muted); text-align: justify; }
+
+/* ── CHECK LIST (skills / languages) ── */
+.check-list { list-style: none; }
+.check-list li {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11.5px; color: var(--mid); margin-bottom: 7px;
+}
+.check-list li::before { content: '✓'; color: var(--teal); font-weight: 700; font-size: 12px; flex-shrink: 0; }
+
+/* ── EXPERIENCE ── */
+.exp-item { margin-bottom: 16px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-company { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--dark); }
+.exp-role    { font-size: 11px; color: var(--muted); margin: 1px 0 1px; }
+.exp-meta    { font-size: 10.5px; color: var(--light); margin-bottom: 7px; }
+.exp-bullets { list-style: disc; padding-left: 16px; }
+.exp-bullets li { font-size: 11px; color: var(--muted); line-height: 1.65; margin-bottom: 4px; }
+
+/* ── EDUCATION ── */
+.edu-item { margin-bottom: 12px; }
+.edu-item:last-child { margin-bottom: 0; }
+.edu-degree { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--dark); }
+.edu-org    { font-size: 11px; color: var(--muted); margin: 1px 0; }
+.edu-meta   { font-size: 10.5px; color: var(--light); }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER AREA (sky bg + photo + name) -->
+  <div style="display:grid; grid-template-columns: 200px 1fr; grid-template-rows: auto auto;">
+
+    <!-- Photo (sky bg, overlapping) -->
+    <div style="background:var(--sky); height:160px; position:relative;">
+      {% if header.profile_image %}
+        <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}"
+          style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid #fff;
+                 box-shadow:0 4px 16px rgba(0,0,0,.15);position:absolute;bottom:-28px;left:50%;
+                 transform:translateX(-50%);z-index:10;">
+      {% else %}
+        <div style="width:150px;height:150px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#004d40);
+                    display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem;font-weight:800;
+                    border:4px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.15);position:absolute;bottom:-28px;
+                    left:50%;transform:translateX(-50%);z-index:10;">
+          {{ header.full_name|slice:":1"|default:"S" }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Name (sky bg) -->
+    <div style="background:var(--sky); padding:22px 28px 0 16px; display:flex; flex-direction:column; justify-content:flex-start;">
+      {% if header.full_name %}
+        {% with parts=header.full_name.split %}
+          <div style="font-size:22px;font-weight:600;color:var(--dark);">{{ parts.0 }}</div>
+          <div style="font-size:44px;font-weight:800;color:var(--black);line-height:1.05;letter-spacing:-.5px;">{{ parts.1 }}</div>
+        {% endwith %}
+      {% else %}
+        <div style="font-size:22px;font-weight:600;color:var(--dark);">Sally</div>
+        <div style="font-size:44px;font-weight:800;color:var(--black);line-height:1.05;">Branders</div>
+      {% endif %}
+    </div>
+
+    <!-- Teal profession bar (spans full width) -->
+    <div style="grid-column:1/-1;background:var(--teal);padding:9px 28px 9px 28px;margin-top:28px;">
+      <span style="font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#fff;">
+        {{ header.profession|default:"Job Title" }}
+      </span>
+    </div>
+
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="sec-label">Contacto</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"sally.branders@gmail.com" }}</li>
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+1 232 555 55 55" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"NY, USA" }}</li>
+          {% if header.linkedin %}<li><i class="fab fa-linkedin"></i> {{ header.linkedin }}</li>{% else %}<li><i class="fab fa-linkedin"></i> linkedin/sally.branders</li>{% endif %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Profile Summary</div>
+        <p class="summary-text">{{ summary.summary|default:"Business development manager looking to obtain a challenging position in a organization, utilizing my proven track record in driving revenue growth and forging strategic partnerships to achieve business objectives." }}</p>
+      </div>
+
+      <div>
+        <div class="sec-label">Skills</div>
+        <ul class="check-list">
+          {% for skill in skills %}
+            <li>{{ skill.skill_name }}</li>
+          {% empty %}
+            <li>Excel</li><li>PowerPoint</li><li>CRM</li>
+            <li>Problem-Solving</li><li>Team Leadership</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Languages</div>
+        <ul class="check-list">
+          {% for add in additionals %}
+            <li>{{ add.additional_title }}{% if add.additional_desc %}: {{ add.additional_desc }}{% endif %}</li>
+          {% empty %}
+            <li>English: Native</li>
+            <li>Spanish: Intermediate</li>
+            <li>French: Beginner</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <div>
+        <div class="sec-label">Professional Experience</div>
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-company">{{ exp.employer }}</div>
+          <div class="exp-role">{{ exp.job_title }}</div>
+          <div class="exp-meta">{{ exp.location|default:"NY, USA" }} | {{ exp.start_month|default:"00" }}/{{ exp.start_year|default:"0000" }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_month|default:"00" }}/{{ exp.end_year|default:"0000" }}{% endif %}</div>
+          {% if exp.description %}<ul class="exp-bullets"><li>{{ exp.description }}</li></ul>{% endif %}
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-company">XYZ Consulting Firm</div>
+          <div class="exp-role">Business Development Manager</div>
+          <div class="exp-meta">NY, USA | 00/0000 – 00/0000</div>
+          <ul class="exp-bullets">
+            <li>Developed and executed a comprehensive sales strategy, resulting in a 40% increase in annual revenue within one year.</li>
+            <li>Identified and pursued new business opportunities through market research.</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-company">ABC Corporation</div>
+          <div class="exp-role">Sales Representative</div>
+          <div class="exp-meta">NY, USA | 00/0000 – 00/0000</div>
+          <ul class="exp-bullets">
+            <li>Achieved consistent sales targets by successfully prospecting and closing new business opportunities in a competitive market.</li>
+            <li>Conducted product demonstrations and presentations to potential clients.</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-company">DEF Research Agency</div>
+          <div class="exp-role">Market Research Analyst</div>
+          <div class="exp-meta">NY, USA | 00/0000 – 00/0000</div>
+          <ul class="exp-bullets">
+            <li>Conducted in-depth market research and competitor analysis, providing valuable insights to guide strategic decision-making.</li>
+            <li>Developed comprehensive market reports.</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="sec-label">Education</div>
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="edu-degree">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
+          <div class="edu-org">{{ edu.institute_name }}</div>
+          <div class="edu-meta">{{ edu.location|default:"NY, USA" }} | {{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="edu-degree">Master of Business Administration</div>
+          <div class="edu-org">NYU</div>
+          <div class="edu-meta">NY, USA | 20XX – 20XX</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-degree">Bachelor of Commerce in Marketing</div>
+          <div class="edu-org">NYU</div>
+          <div class="edu-meta">NY, USA | 20XX – 20XX</div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

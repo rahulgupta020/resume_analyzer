@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #111;
+  --dark:  #222;
+  --mid:   #444;
+  --light: #777;
+  --rule:  #ccc;
+  --white: #fff;
+  --dot:   #111;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  min-height: 140px;
+  align-items: stretch;
+}
+.header-photo {
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px 10px 16px 20px;
+  background: var(--white);
+}
+.header-photo img,
+.header-photo .photo-placeholder {
+  width: 120px; height: 120px;
+  border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--black);
+  display: block;
+}
+.header-photo .photo-placeholder {
+  background: linear-gradient(135deg, #666, #222);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 2.8rem;
+  font-family: 'Playfair Display', serif;
+}
+.header-info {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 16px 24px 0 10px;
+}
+.header-info h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: .03em;
+  color: var(--black); line-height: 1.08;
+}
+.header-profession-bar {
+  background: var(--black);
+  margin-top: 8px;
+  padding: 6px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-profession-bar span {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; color: var(--white);
+}
+.header-profession-bar .bar-accent {
+  width: 18px; height: 26px; background: #666;
+}
+
+/* ── BODY ── */
+.body { display: flex; flex: 1; border-top: 2px solid var(--black); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 36%;
+  padding: 20px 16px 40px 22px;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── MAIN ── */
+.main {
+  width: 64%;
+  padding: 20px 26px 40px 20px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* ── SECTION LABEL (both cols) ── */
+.sec-label {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--black);
+  margin-bottom: 10px;
+}
+.sec-label::before {
+  content: '•'; color: var(--black); font-size: 14px; line-height: 1;
+}
+
+/* ── CONTACT ── */
+.contact-list { list-style: none; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--mid); margin-bottom: 7px; line-height: 1.4;
+}
+.contact-list li i { color: var(--black); width: 12px; font-size: 10px; margin-top: 2px; flex-shrink: 0; }
+
+/* ── LANGUAGE / SKILL LISTS ── */
+.bullet-list { list-style: none; }
+.bullet-list li {
+  font-size: 11px; color: var(--mid);
+  padding-left: 12px; position: relative; margin-bottom: 5px;
+}
+.bullet-list li::before { content: '•'; position: absolute; left: 0; color: var(--black); }
+
+.sub-title { font-size: 11.5px; font-weight: 700; color: var(--dark); margin: 10px 0 6px; }
+.plain-list { list-style: none; }
+.plain-list li { font-size: 11px; color: var(--mid); margin-bottom: 4px; }
+
+/* ── PROFILE TEXT ── */
+.profile-text { font-size: 11.5px; line-height: 1.72; color: var(--mid); }
+
+/* ── EDU / EXP ── */
+.item { margin-bottom: 14px; }
+.item:last-child { margin-bottom: 0; }
+.item-meta   { font-size: 10.5px; color: var(--light); margin-bottom: 3px; }
+.item-title  { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.item-desc   { font-size: 11px; color: var(--mid); line-height: 1.65; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-photo">
+      {% if header.profile_image %}
+        <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}">
+      {% else %}
+        <div class="photo-placeholder">{{ header.full_name|slice:":1"|default:"J" }}</div>
+      {% endif %}
+    </div>
+    <div class="header-info">
+      <h1>{{ header.full_name|default:"Jacqueline Thompson" }}</h1>
+      <div class="header-profession-bar">
+        <span>{{ header.profession|default:"Professional Accountant" }}</span>
+        <div class="bar-accent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="sec-label">Contact</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+          <li><i class="fas fa-globe"></i> {{ header.website|default:"reallygreatsite.com" }}</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Languages</div>
+        <ul class="bullet-list">
+          {% for add in additionals %}
+            <li>{{ add.additional_title }}{% if add.additional_desc %} – {{ add.additional_desc }}{% endif %}</li>
+          {% empty %}
+            <li>English – Fluent</li>
+            <li>Spanish – Fluent</li>
+            <li>French – Proficient</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Skills</div>
+        {% if skills %}
+          <div class="sub-title">Professional</div>
+          <ul class="plain-list">
+            {% for skill in skills %}
+              {% if skill.type == 'professional' or not skill.type %}
+                <li>{{ skill.skill_name }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          <div class="sub-title">Personal</div>
+          <ul class="plain-list">
+            {% for skill in skills %}
+              {% if skill.type == 'personal' %}
+                <li>{{ skill.skill_name }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="sub-title">Professional</div>
+          <ul class="plain-list">
+            <li>Auditing</li><li>Financial Accounting</li><li>Financial Reporting</li>
+            <li>Expense Reporting</li><li>Managerial Accounting</li>
+            <li>Accounts Receivable</li><li>Accounts Payable</li>
+          </ul>
+          <div class="sub-title">Personal</div>
+          <ul class="plain-list">
+            <li>Leadership</li><li>Management Skills</li><li>Time Management</li>
+            <li>Communication Skills</li><li>Critical Thinking</li><li>Negotiation</li>
+          </ul>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <div>
+        <div class="sec-label">Profile</div>
+        <p class="profile-text">{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." }}</p>
+      </div>
+
+      <div>
+        <div class="sec-label">Education</div>
+        {% for edu in educations %}
+        <div class="item">
+          <div class="item-meta">{{ edu.institute_name }} | {{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+          <div class="item-title">{{ edu.degree }}{% if edu.field_of_study %} of {{ edu.field_of_study }}{% endif %}</div>
+          {% if edu.description %}<div class="item-desc">{{ edu.description }}</div>{% endif %}
+        </div>
+        {% empty %}
+        <div class="item">
+          <div class="item-meta">Borcelle University | 2027 – 2030</div>
+          <div class="item-title">Master of Business Administration</div>
+          <div class="item-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</div>
+        </div>
+        <div class="item">
+          <div class="item-meta">Borcelle University | 2024 – 2027</div>
+          <div class="item-title">Master of Business Administration</div>
+          <div class="item-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="sec-label">Work Experience</div>
+        {% for exp in experiences %}
+        <div class="item">
+          <div class="item-meta">{{ exp.employer }} | {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}</div>
+          <div class="item-title">{{ exp.job_title }}</div>
+          {% if exp.description %}<div class="item-desc">{{ exp.description }}</div>{% endif %}
+        </div>
+        {% empty %}
+        <div class="item">
+          <div class="item-meta">Salford &amp; Co. | 2032 – 2035</div>
+          <div class="item-title">Senior Accountant</div>
+          <div class="item-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+        </div>
+        <div class="item">
+          <div class="item-meta">Salford &amp; Co. | 2030 – 2032</div>
+          <div class="item-title">Financial Accountant</div>
+          <div class="item-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

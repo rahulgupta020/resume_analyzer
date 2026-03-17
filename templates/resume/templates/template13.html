@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:  #2a6db5;
+  --black: #111;
+  --dark:  #222;
+  --mid:   #444;
+  --muted: #666;
+  --light: #999;
+  --rule:  #ddd;
+  --dot-rule: #ccc;
+  --white: #fff;
+  --bg:    #f9f9f9;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── TOP HEADER (full width) ── */
+.header {
+  padding: 26px 32px 16px;
+  border-bottom: 2px solid var(--black);
+}
+.header h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 34px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: .04em;
+  color: var(--black); line-height: 1.1;
+}
+.header .tagline {
+  font-size: 12px; font-weight: 600; color: var(--blue);
+  margin-top: 5px; letter-spacing: .01em;
+}
+.header .meta-row {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 8px; flex-wrap: wrap;
+}
+.header .meta-row span {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--muted);
+}
+.header .meta-row i { color: var(--blue); font-size: 10px; }
+
+/* ── BODY (two columns) ── */
+.body {
+  display: flex;
+  flex: 1;
+}
+
+/* ── LEFT MAIN ── */
+.col-left {
+  width: 58%;
+  padding: 20px 24px 36px 32px;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── RIGHT SIDEBAR ── */
+.col-right {
+  width: 42%;
+  padding: 20px 28px 36px 20px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* ── SECTION LABELS ── */
+.sec-label {
+  font-family: 'Merriweather', serif;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--black);
+  border-bottom: 2px solid var(--black);
+  padding-bottom: 4px; margin-bottom: 12px;
+}
+
+/* ── SUMMARY ── */
+.summary-text { font-size: 11px; line-height: 1.75; color: var(--muted); text-align: justify; }
+
+/* ── EXPERIENCE ── */
+.exp-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--dot-rule); }
+.exp-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.exp-job    { font-size: 13px; font-weight: 600; color: var(--dark); }
+.exp-org    { font-size: 12px; font-weight: 600; color: var(--blue); margin: 2px 0 5px; }
+.exp-meta   { display: flex; gap: 14px; font-size: 10.5px; color: var(--light); margin-bottom: 8px; flex-wrap: wrap; }
+.exp-meta span { display: flex; align-items: center; gap: 4px; }
+.exp-meta i { font-size: 10px; }
+.exp-bullets { list-style: disc; padding-left: 16px; }
+.exp-bullets li { font-size: 11px; color: var(--muted); line-height: 1.65; margin-bottom: 4px; }
+
+/* ── LANGUAGES ── */
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 10px; }
+.lang-item .lang-name  { font-size: 11.5px; font-weight: 700; color: var(--dark); }
+.lang-item .lang-level { font-size: 10.5px; color: var(--light); }
+.lang-bars { display: flex; gap: 3px; margin-top: 5px; }
+.lang-bar  { width: 10px; height: 14px; background: var(--blue); border-radius: 1px; }
+.lang-bar.empty { background: #ddd; }
+
+/* ── KEY ACHIEVEMENTS ── */
+.ach-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--dot-rule); }
+.ach-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.ach-title { font-size: 11.5px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+.ach-desc  { font-size: 10.5px; color: var(--muted); line-height: 1.65; }
+
+/* ── SKILLS ── */
+.skills-text { font-size: 11px; color: var(--muted); line-height: 1.75; }
+
+/* ── EDUCATION ── */
+.edu-item { margin-bottom: 10px; }
+.edu-degree { font-size: 12px; font-weight: 600; color: var(--dark); }
+.edu-org    { font-size: 11px; font-weight: 600; color: var(--blue); margin: 2px 0; }
+.edu-meta   { display: flex; gap: 12px; font-size: 10.5px; color: var(--light); flex-wrap: wrap; }
+.edu-meta span { display: flex; align-items: center; gap: 4px; }
+
+/* ── TRAINING ── */
+.train-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--dot-rule); }
+.train-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.train-title { font-size: 11.5px; font-weight: 600; color: var(--blue); margin-bottom: 3px; }
+.train-desc  { font-size: 10.5px; color: var(--muted); line-height: 1.65; }
+
+/* ── INTERESTS ── */
+.interest-item { margin-bottom: 10px; }
+.interest-title { font-size: 11.5px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+.interest-desc  { font-size: 10.5px; color: var(--muted); line-height: 1.6; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 8px 32px;
+  display: flex; justify-content: space-between;
+  font-size: 9.5px; color: var(--light);
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{ header.full_name|default:"Ethan Smith" }}</h1>
+    <div class="tagline">{{ header.profession|default:"Chief Experience Officer | Customer-Centric Strategies | Digital Transformation" }}</div>
+    <div class="meta-row">
+      {% if header.email %}<span><i class="fas fa-at"></i> {{ header.email }}</span>{% endif %}
+      {% if header.website %}<span><i class="fas fa-link"></i> {{ header.website|default:"LinkedIn" }}</span>{% endif %}
+      {% if header.address %}<span><i class="fas fa-map-marker-alt"></i> {{ header.address }}</span>{% endif %}
+      {% if not header.email %}
+      <span><i class="fas fa-at"></i> e.smith@enhancv.com</span>
+      <span><i class="fas fa-link"></i> LinkedIn</span>
+      <span><i class="fas fa-map-marker-alt"></i> Indianapolis, Indiana</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
+
+      <!-- Summary -->
+      <div>
+        <div class="sec-label">Summary</div>
+        <p class="summary-text">{{ summary.summary|default:"With over 15 years in customer experience management, I excel in creating impactful strategies that enhance journeys. Proven record includes achieving a 30% increase in customer satisfaction through innovative initiatives, all backed by strong analytical skills and leadership in dynamic environments." }}</p>
+      </div>
+
+      <!-- Experience -->
+      <div>
+        <div class="sec-label">Experience</div>
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-job">{{ exp.job_title }}</div>
+          <div class="exp-org">{{ exp.employer }}</div>
+          <div class="exp-meta">
+            <span><i class="fas fa-calendar-alt"></i> {{ exp.start_month|default:"" }} {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_month|default:"" }} {{ exp.end_year }}{% endif %}</span>
+            {% if exp.location %}<span><i class="fas fa-map-marker-alt"></i> {{ exp.location }}</span>{% endif %}
+          </div>
+          {% if exp.description %}<ul class="exp-bullets"><li>{{ exp.description }}</li></ul>{% endif %}
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-job">Chief Experience Officer</div>
+          <div class="exp-org">TechForward Solutions</div>
+          <div class="exp-meta">
+            <span><i class="fas fa-calendar-alt"></i> 01/2020 – Present</span>
+            <span><i class="fas fa-map-marker-alt"></i> Indianapolis, IN</span>
+          </div>
+          <ul class="exp-bullets">
+            <li>Developed and implemented an extensive customer experience strategy that achieved a 40% increase in Net Promoter Score within the first year.</li>
+            <li>Led a cross-functional team to enhance customer journey mappings, increasing conversion rates by 25% through informed insights.</li>
+            <li>Collaborated closely with product and marketing teams, resulting in a 30% reduction in customer complaints.</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-job">Director of Customer Experience</div>
+          <div class="exp-org">VisionaryTech Innovations</div>
+          <div class="exp-meta">
+            <span><i class="fas fa-calendar-alt"></i> 06/2015 – 12/2019</span>
+            <span><i class="fas fa-map-marker-alt"></i> Chicago, IL</span>
+          </div>
+          <ul class="exp-bullets">
+            <li>Oversaw the re-design of the customer feedback loop, leading to a 35% improvement in customer satisfaction ratings.</li>
+            <li>Facilitated workshops to empower teams on customer-centric thinking, improving retention rates by 18%.</li>
+            <li>Implemented predictive analytics models that decreased churn by 15%.</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-job">Customer Experience Manager</div>
+          <div class="exp-org">InnovativeDigital Corp.</div>
+          <div class="exp-meta">
+            <span><i class="fas fa-calendar-alt"></i> 05/2010 – 05/2015</span>
+            <span><i class="fas fa-map-marker-alt"></i> Louisville, KY</span>
+          </div>
+          <ul class="exp-bullets">
+            <li>Launched a customer journey optimization project that improved user feedback scores significantly.</li>
+            <li>Coordinated with IT to improve CRM systems, resulting in a 20% increase in efficiency.</li>
+            <li>Trained and mentored a team of customer service representatives, driving up engagement scores by 25%.</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Languages -->
+      <div>
+        <div class="sec-label">Languages</div>
+        <div class="lang-grid">
+          {% for add in additionals %}
+          <div class="lang-item">
+            <div class="lang-name">{{ add.additional_title }}</div>
+            <div class="lang-level">{{ add.additional_desc|default:"Fluent" }}</div>
+            <div class="lang-bars">
+              <div class="lang-bar"></div><div class="lang-bar"></div><div class="lang-bar"></div>
+              <div class="lang-bar {% if add.additional_desc == 'Advanced' or add.additional_desc == 'Native' %}{% else %}empty{% endif %}"></div>
+              <div class="lang-bar {% if add.additional_desc == 'Native' %}{% else %}empty{% endif %}"></div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="lang-item">
+            <div class="lang-name">English</div>
+            <div class="lang-level">Native</div>
+            <div class="lang-bars">
+              <div class="lang-bar"></div><div class="lang-bar"></div><div class="lang-bar"></div><div class="lang-bar"></div><div class="lang-bar"></div>
+            </div>
+          </div>
+          <div class="lang-item">
+            <div class="lang-name">Spanish</div>
+            <div class="lang-level">Advanced</div>
+            <div class="lang-bars">
+              <div class="lang-bar"></div><div class="lang-bar"></div><div class="lang-bar"></div><div class="lang-bar empty"></div><div class="lang-bar empty"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
+
+      <!-- Key Achievements -->
+      <div>
+        <div class="sec-label">Key Achievements</div>
+        {% for ach in achievements %}
+        <div class="ach-item">
+          <div class="ach-title">{{ ach.title }}</div>
+          <div class="ach-desc">{{ ach.description }}</div>
+        </div>
+        {% empty %}
+        <div class="ach-item">
+          <div class="ach-title">Revamped Customer Feedback System</div>
+          <div class="ach-desc">Introduced an innovative feedback system at TechForward Solutions that enhanced response rates by 50%, leading to actionable insights that drove initiatives to improve satisfaction.</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-title">Increased Customer Retention</div>
+          <div class="ach-desc">Successfully designed a customer loyalty program at VisionaryTech Innovations that increased retention by 20%, significantly improving overall profitability for the year.</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-title">Elevated Service Quality</div>
+          <div class="ach-desc">Implemented a new training curriculum at InnovativeDigital Corp. that increased customer service quality ratings by 30% within six months.</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-title">Achieved Industry Recognition</div>
+          <div class="ach-desc">Under my leadership, TechForward Solutions received a national award for best customer experience, acknowledging the significant improvements achieved through our strategic initiatives.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Skills -->
+      <div>
+        <div class="sec-label">Skills</div>
+        <p class="skills-text">
+          {% for skill in skills %}{{ skill.skill_name }}{% if not forloop.last %}, {% endif %}{% empty %}Customer Experience Strategy, Data Analysis &amp; Interpretation, Journey Mapping Techniques, CRM Software Expertise, Team Leadership &amp; Mentoring, Analytical Thinking, Effective Communication, Problem-Solving{% endfor %}
+        </p>
+      </div>
+
+      <!-- Education -->
+      <div>
+        <div class="sec-label">Education</div>
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="edu-degree">{{ edu.degree }}{% if edu.field_of_study %} ({{ edu.field_of_study }}){% endif %}</div>
+          <div class="edu-org">{{ edu.institute_name }}</div>
+          <div class="edu-meta">
+            <span><i class="fas fa-calendar-alt"></i> {{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</span>
+            {% if edu.location %}<span><i class="fas fa-map-marker-alt"></i> {{ edu.location }}</span>{% endif %}
+          </div>
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="edu-degree">Master of Business Administration (MBA)</div>
+          <div class="edu-org">University of Chicago</div>
+          <div class="edu-meta">
+            <span><i class="fas fa-calendar-alt"></i> 2012 – 2014</span>
+            <span><i class="fas fa-map-marker-alt"></i> Chicago, IL</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Training / Courses -->
+      <div>
+        <div class="sec-label">Training / Courses</div>
+        {% for course in courses %}
+        <div class="train-item">
+          <div class="train-title">{{ course.title }}</div>
+          <div class="train-desc">{{ course.description }}</div>
+        </div>
+        {% empty %}
+        <div class="train-item">
+          <div class="train-title">Customer Experience Management</div>
+          <div class="train-desc">An in-depth program by Coursera focused on strategic customer experience improvements, delivered by leading industry experts.</div>
+        </div>
+        <div class="train-item">
+          <div class="train-title">Data-Driven Decisions</div>
+          <div class="train-desc">This Excel-based course provided by edX teaches how to make informed strategic decisions based on customer data analysis.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Interests -->
+      <div>
+        <div class="sec-label">Interests</div>
+        {% for interest in interests %}
+        <div class="interest-item">
+          <div class="interest-title">{{ interest.title }}</div>
+          <div class="interest-desc">{{ interest.description }}</div>
+        </div>
+        {% empty %}
+        <div class="interest-item">
+          <div class="interest-title">Enhancing Customer Journeys</div>
+          <div class="interest-desc">I have a deep passion for transforming customer journeys through technology and strategic insight, focusing on improving user experience.</div>
+        </div>
+        <div class="interest-item">
+          <div class="interest-title">Mentoring Future Leaders</div>
+          <div class="interest-desc">Committing time to mentor aspiring professionals is a passion of mine, as I believe in nurturing the next generation of customer experience leaders.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>{{ header.website|default:"www.enhancv.com" }}</span>
+    <span>Powered by Enhancv</span>
+  </div>
+
+</div>
+</body>
+</html>
