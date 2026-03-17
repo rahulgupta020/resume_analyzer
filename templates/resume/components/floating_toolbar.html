@@ -1,0 +1,205 @@
+<!-- FLOATING ACTION BAR FOR PREVIEW -->
+<style>
+.floating-action-bar {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.fab-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    background: linear-gradient(135deg, #1a73e8, #0b50bd);
+    text-decoration: none;
+}
+
+.fab-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.fab-btn::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 75px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+    transform: translateX(10px);
+}
+
+.fab-btn:hover::before {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.fab-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.fab-menu.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.fab-item {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    transition: all 0.2s;
+    position: relative;
+    text-decoration: none;
+}
+
+.fab-item:hover {
+    transform: scale(1.1);
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.fab-item::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 65px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s;
+    transform: translateX(5px);
+}
+
+.fab-item:hover::before {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Colors for specific buttons */
+.btn-print { background: linear-gradient(135deg, #FF9800, #F57C00); }
+.btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+.btn-linkedin { background: linear-gradient(135deg, #0077B5, #005E93); }
+.btn-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+.btn-edit { background: linear-gradient(135deg, #607D8B, #455A64); }
+
+/* Hide floating bar when actually printing */
+@media print {
+    .floating-action-bar {
+        display: none !important;
+    }
+}
+</style>
+
+<div class="floating-action-bar">
+    <div class="fab-menu" id="fabMenu">
+        <a href="{% url 'edit_header' %}" class="fab-item btn-edit" data-tooltip="Edit Resume">
+            <i class="fas fa-pen"></i>
+        </a>
+        <button onclick="window.print()" class="fab-item btn-print" data-tooltip="Print / Save PDF (Ctrl+P)">
+            <i class="fas fa-print"></i>
+        </button>
+        <a href="#" onclick="shareWhatsApp(event)" class="fab-item btn-whatsapp" data-tooltip="Share on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="#" onclick="shareLinkedIn(event)" class="fab-item btn-linkedin" data-tooltip="Share on LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" onclick="shareInstagram(event)" class="fab-item btn-instagram" data-tooltip="Share on Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+    <button class="fab-btn" id="fabMainBtn" data-tooltip="Actions" onclick="toggleFabMenu()">
+        <i class="fas fa-share-alt"></i>
+    </button>
+</div>
+
+<script>
+function toggleFabMenu() {
+    const menu = document.getElementById('fabMenu');
+    const icon = document.querySelector('#fabMainBtn i');
+    menu.classList.toggle('active');
+    
+    if (menu.classList.contains('active')) {
+        icon.classList.remove('fa-share-alt');
+        icon.classList.add('fa-times');
+    } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-share-alt');
+    }
+}
+
+// Ensure FontAwesome is loaded since some templates might not have it
+document.addEventListener('DOMContentLoaded', function() {
+    if (!document.querySelector('link[href*="font-awesome"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        document.head.appendChild(link);
+    }
+});
+
+const currentUrl = encodeURIComponent(window.location.href);
+const title = encodeURIComponent("Check out my professional resume!");
+
+function shareWhatsApp(e) {
+    e.preventDefault();
+    window.open(`https://api.whatsapp.com/send?text=${title} ${currentUrl}`, '_blank');
+}
+
+function shareLinkedIn(e) {
+    e.preventDefault();
+    // LinkedIn share URL format
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`, '_blank');
+}
+
+function shareInstagram(e) {
+    e.preventDefault();
+    // Instagram doesn't have a direct share link like others, 
+    // typically it involves copying link or opening the app
+    alert("To share on Instagram, download your resume as a PDF/Image or copy the URL below:\n\n" + window.location.href);
+}
+</script>

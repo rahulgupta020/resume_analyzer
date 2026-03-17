@@ -189,22 +189,30 @@ def resume_preview(request):
     }
 
     # Template file mapping
-    template_files = {
-        "template1": "resume/templates/template1.html",
-        "template2": "resume/templates/template2.html",
-        "template3": "resume/templates/template3.html",
-        "template4": "resume/templates/template4.html",
-        "template5": "resume/templates/template5.html",
-        "template6": "resume/templates/template6.html",
-    }
+    # Fallback to template1 if not explicitly found in the requested template name
+    selected_name = context.get('template').template_name if context.get('template') else "template1"
+    
+    # We dynamically construct the template path to support all 20 templates
+    template_path = f"resume/templates/{selected_name}.html"
+    
+    from django.template.loader import render_to_string
+    from django.http import HttpResponse
 
-    # ✅ FIXED: Prevent AttributeError on NoneType by checking if template exists
-    template_obj = context.get('template')
-    selected_name = template_obj.template_name if template_obj else "template1"
+    try:
+        # Render the template to string
+        html_content = render_to_string(template_path, context, request)
+    except Exception as e:
+        # Fallback if template doesn't exist
+        html_content = render_to_string("resume/templates/template1.html", context, request)
 
-    # ✅ THE PERFECTION: Safe lookup with fallback to ensure an HttpResponse is always returned
-    template_path = template_files.get(selected_name, "resume/templates/template1.html")
-    return render(request, template_path, context)
+    # Inject the floating toolbar before the closing </body> tag
+    toolbar_html = render_to_string("resume/components/floating_toolbar.html", {}, request)
+    if '</body>' in html_content:
+        html_content = html_content.replace('</body>', f'{toolbar_html}</body>')
+    else:
+        html_content += toolbar_html
+
+    return HttpResponse(html_content)
 
 # --- UTILITY: File Parsing ---
 def get_raw_text(file):
