@@ -4,6 +4,7 @@ from django.conf.urls.static import static # ADDED: To serve files in developmen
 from .views_auth import *
 from .views_resume import *
 from .views import *
+from .views_resume import ats_analyze
 
 urlpatterns = [
     path('', dashboard, name='home'),
@@ -27,6 +28,8 @@ urlpatterns = [
     path('resume/additional/', edit_additional, name='edit_additional'),
     path('resume/templates/', select_template, name='select_template'),
     path('resume/preview/', resume_preview, name='resume_preview'),
+    path('resume/render_template/', render_resume_template, name='render_resume_template'),
+    path('resume/ats-analyze/', ats_analyze, name='ats_analyze'),
 ]
 
 # --- ADDED: Development Helpers ---

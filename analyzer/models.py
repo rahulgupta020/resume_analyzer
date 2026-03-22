@@ -16,6 +16,7 @@ class ResumeHeader(models.Model):
     linkedin = models.URLField(blank=True)
     github = models.URLField(blank=True)
     website = models.URLField(blank=True)
+    profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
 
 class ResumeSummary(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='resume_summary')

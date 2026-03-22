@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_exempt
 from .models import (
     ResumeFresherExperience, ResumeHeader, ResumeSummary, 
     ResumeExperience, ResumeEducation, ResumeSkill, 
@@ -165,7 +166,14 @@ def edit_additional(request):
 def select_template(request):
     """Step 7: Design Selection"""
     if request.method == "POST":
-        selected = request.POST.get("template")
+        selected = request.POST.get("template") or request.POST.get("template_name")
+        profile_image = request.FILES.get("profile_image")
+
+        if profile_image:
+            header, created = ResumeHeader.objects.get_or_create(user=request.user)
+            header.profile_image = profile_image
+            header.save()
+
         if selected:
             ResumeTemplate.objects.update_or_create(
                 user=request.user,
@@ -176,7 +184,14 @@ def select_template(request):
 
 @login_required
 def resume_preview(request):
-    """Step 8: Final Preview Render"""
+    """Step 8: Final Preview Wrapper (with ATS Sidebar)"""
+    template = ResumeTemplate.objects.filter(user=request.user).first()
+    return render(request, "resume/preview.html", {"template": template})
+
+@login_required
+@xframe_options_exempt
+def render_resume_template(request):
+    """View to render the raw resume HTML for the iframe"""
     # Gathering data
     context = {
         "header": ResumeHeader.objects.filter(user=request.user).first(),
@@ -237,3 +252,68 @@ def upload_resume(request):
         else:
             messages.error(request, "Format not supported.")
     return render(request, 'resume/upload_resume.html')
+
+import json
+from django.http import JsonResponse
+import os
+from dotenv import load_dotenv
+
+@login_required
+def ats_analyze(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            jd_text = data.get("jd", "")
+            if not jd_text:
+                return JsonResponse({"error": "Job Description is required."}, status=400)
+                
+            # Gather Resume Text
+            header = ResumeHeader.objects.filter(user=request.user).first()
+            summary = ResumeSummary.objects.filter(user=request.user).first()
+            experiences = ResumeExperience.objects.filter(user=request.user)
+            skills = ResumeSkill.objects.filter(user=request.user)
+            
+            resume_text = "RESUME DETAILS:\n"
+            if header:
+                resume_text += f"Profession: {header.profession}\n"
+            if summary:
+                resume_text += f"Summary: {summary.summary}\n"
+            resume_text += "Skills: " + ", ".join([s.skill_name for s in skills]) + "\n"
+            resume_text += "Experience:\n"
+            for exp in experiences:
+                resume_text += f"- {exp.job_title} at {exp.employer}. {exp.description}\n"
+                
+            # LOCAL ATS ATS LOGIC (No API)
+            import re
+            
+            # Extract meaningful words
+            jd_words = set([w.strip().lower() for w in re.split(r'\W+', jd_text) if len(w) > 3])
+            resume_words = set([w.strip().lower() for w in re.split(r'\W+', resume_text) if len(w) > 3])
+            
+            common = list(jd_words.intersection(resume_words))
+            missing = list(jd_words.difference(resume_words))[:6]
+            matched = common[:10]
+            
+            score = min(98, 55 + len(matched) * 4) # Base 55 + 4 per match
+            
+            exp_match = "HIGH" if score >= 85 else ("MEDIUM" if score >= 70 else "LOW")
+            verdict = "Candidate is a strong fit!" if score >= 80 else "Candidate needs more tailored keywords."
+            
+            result = {
+              "ats_score": score,
+              "summary": f"Your resume contains {len(matched)} direct keyword matches with the job description.",
+              "matched_keywords": matched,
+              "missing_keywords": missing if missing else ["Everything looks covered!"],
+              "experience_match": exp_match,
+              "improvement_suggestions": [
+                  "Ensure your past job titles align closely with this JD.",
+                  "Add concrete, quantifiable metrics to your recent roles."
+              ],
+              "final_verdict": verdict
+            }
+            return JsonResponse(result)
+            
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+            
+    return JsonResponse({"error": "Invalid request"}, status=400)

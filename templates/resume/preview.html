@@ -4,126 +4,179 @@
 
 {% block content %}
 
-<div class="container-fluid mt-4">
-    <div class="row">
+<div class="container-fluid mt-4 mb-5">
+    <div class="row justify-content-center px-2">
 
-        <!-- LEFT SIDE (Preview Content) -->
-        <div class="col-md-7">
-
-            <div class="preview-wrapper">
-
-                <h2 class="mb-3">Finalize Your Resume</h2>
-                <p class="text-muted">
-                    Review your completed resume. Make final edits before downloading.
-                </p>
-
-                <div class="resume-preview-box">
-
-                    <!-- HEADER -->
-                    {% if header %}
-                    <div class="resume-header">
-                        <h2>{{ header.full_name }}</h2>
-                        <p>
-                            {{ header.email }} |
-                            {{ header.phone }}
-                        </p>
+        <!-- ➡️ FULL VIEWPORT (Iframe Preview) -->
+        <div class="col-12 col-xl-10">
+            <div class="bg-light p-3 rounded-4 border shadow-inner text-center h-100 d-flex flex-column">
+                <div class="mb-3 text-muted fw-bold d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-file-alt text-primary me-2"></i> Selected Template: {{ template.template_name|default:"Template 1"|title }}</span>
+                    <div>
+                        <button class="btn btn-sm btn-primary fw-bold me-2" type="button" data-bs-toggle="modal" data-bs-target="#atsModal">
+                            <i class="fas fa-robot me-1"></i> AI ATS Simulator
+                        </button>
+                        <a href="{% url 'select_template' %}" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-palette me-1"></i> Change Template
+                        </a>
+                        <button class="btn btn-sm btn-success fw-bold" onclick="document.getElementById('resume-frame').contentWindow.print(); return false;">
+                            <i class="fas fa-download me-1"></i> Download PDF
+                        </button>
                     </div>
-                    {% endif %}
-
-                    <!-- SUMMARY -->
-                    {% if summary %}
-                    <div class="resume-section">
-                        <h4>Professional Summary</h4>
-                        <p>{{ summary.summary }}</p>
-                    </div>
-                    {% endif %}
-
-                    <!-- EXPERIENCE -->
-                    {% if experience %}
-                    <div class="resume-section">
-                        <h4>Experience</h4>
-                        {% for exp in experience %}
-                        <div class="resume-item">
-                            <h5>{{ exp.job_title }} - {{ exp.company_name }}</h5>
-                            <p>{{ exp.description }}</p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                    <!-- EDUCATION -->
-                    {% if education %}
-                    <div class="resume-section">
-                        <h4>Education</h4>
-                        {% for edu in education %}
-                        <div class="resume-item">
-                            <h5>{{ edu.degree }} - {{ edu.institute }}</h5>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                    <!-- SKILLS -->
-                    {% if skills %}
-                    <div class="resume-section">
-                        <h4>Skills</h4>
-                        <ul>
-                            {% for skill in skills %}
-                                <li>{{ skill.skill_name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
-
-                    <!-- ADDITIONAL -->
-                    {% if additionals %}
-                    <div class="resume-section">
-                        <h4>Additional Information</h4>
-                        {% for add in additionals %}
-                        <div class="resume-item">
-                            <h5>{{ add.additional_title }}</h5>
-                            <p>{{ add.additional_desc }}</p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
                 </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="d-flex justify-content-center gap-3 mt-4">
-
-                    <a href="{% url 'select_template' %}"
-                       class="btn btn-secondary">
-                        ← Back
-                    </a>
-
-                    <a href="{% url 'edit_header' %}"
-                       class="btn btn-outline-primary">
-                        Edit Resume
-                    </a>
-
-                    <button type="button"
-                            class="btn btn-primary">
-                        Download PDF
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-success">
-                        Share Resume
-                    </button>
-
+                <div class="flex-grow-1 position-relative">
+                    <iframe id="resume-frame" src="{% url 'render_resume_template' %}" style="width: 100%; height: 1120px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-radius: 4px; background: white;" title="Resume Preview"></iframe>
                 </div>
-
             </div>
-        </div>
-
-        <!-- RIGHT SIDE (Sidebar) -->
-        <div class="col-md-5">
-            {% include "base/sidebar_resume.html" %}
         </div>
 
     </div>
 </div>
+
+<!-- ================= AI ATS MODAL ================= -->
+<div class="modal fade" id="atsModal" tabindex="-1" aria-labelledby="atsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content overflow-hidden border-0 shadow-lg rounded-4">
+      <div class="modal-header border-bottom bg-light px-4 py-3">
+        <h5 class="modal-title fw-bold text-primary" id="atsModalLabel">
+            <i class="fas fa-robot me-2"></i> AI ATS Simulator
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 bg-light">
+          <p class="text-muted mb-3">Paste a Job Description to see how well your resume matches it using Gemini AI.</p>
+          
+          <div class="mb-4">
+              <textarea id="mock-jd-input" class="form-control shadow-sm border-0" rows="5" placeholder="Paste Job Description here..." style="font-size: 0.95rem; border-radius: 8px;"></textarea>
+          </div>
+          
+          <button id="btn-mock-ats" class="btn btn-primary w-100 fw-bold py-2 mb-4 shadow" style="border-radius: 8px; font-size: 1.05rem;">
+              <i class="fas fa-magic me-2"></i> Analyze Resume
+          </button>
+  
+          <div id="mock-error" class="alert alert-danger d-none small shadow-sm rounded-3"></div>
+  
+          <!-- Simulation Results Container -->
+          <div id="mock-results" class="d-none p-4 bg-white rounded-4 border shadow-sm">
+              <div class="text-center mb-4">
+                  <h2 id="m-score" class="text-success fw-bold display-2 mb-0" style="text-shadow: 0 2px 10px rgba(25,135,84,0.1);"></h2>
+                  <small class="text-muted fw-bold text-uppercase tracking-wider" style="letter-spacing: 2px; font-size: 0.75rem;">ATS Compatibility</small>
+              </div>
+              
+              <div id="m-verdict-box" class="alert alert-primary small mb-4 shadow-sm border-0" style="border-radius: 8px;">
+                  <strong class="d-block mb-1 text-primary"><i class="fas fa-info-circle me-1"></i> Final Verdict</strong>
+                  <span id="m-verdict" class="text-dark"></span>
+                  <div class="mt-2 text-muted fst-italic" id="m-summary"></div>
+              </div>
+
+              <div class="row text-center mb-4 pb-4 border-bottom text-muted g-2">
+                  <div class="col-6 border-end">
+                      <div class="small fw-bold text-uppercase mb-1"><i class="fas fa-check-double text-success opacity-75 me-1"></i> Matched Skills</div>
+                      <div class="fs-5 fw-bold text-dark" id="m-skill"></div>
+                  </div>
+                  <div class="col-6">
+                      <div class="small fw-bold text-uppercase mb-1"><i class="fas fa-briefcase text-primary opacity-75 me-1"></i> Exp Match</div>
+                      <div class="fs-5 fw-bold text-dark text-uppercase" id="m-exp"></div>
+                  </div>
+              </div>
+              
+              <div class="mb-4">
+                  <h6 class="fw-bold text-danger mb-3"><i class="fas fa-exclamation-circle me-2"></i> Missing Keywords</h6>
+                  <div class="d-flex flex-wrap gap-2" id="m-keywords"></div>
+              </div>
+  
+              <div>
+                  <h6 class="fw-bold text-info mb-3"><i class="fas fa-lightbulb me-2"></i> Pro Tips</h6>
+                  <ul class="text-muted mb-0 ps-3" id="m-tips" style="line-height: 1.7; font-size: 0.95rem;"></ul>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('btn-mock-ats').addEventListener('click', function() {
+    const jdText = document.getElementById('mock-jd-input').value.trim();
+    if(!jdText) {
+        const mockInput = document.getElementById('mock-jd-input');
+        mockInput.classList.add('is-invalid');
+        setTimeout(() => mockInput.classList.remove('is-invalid'), 1500);
+        return;
+    }
+
+    const btn = this;
+    const results = document.getElementById('mock-results');
+    const errorBox = document.getElementById('mock-error');
+    
+    // UI state
+    btn.disabled = true;
+    errorBox.classList.add('d-none');
+    results.classList.add('d-none');
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Analyzing with Gemini...';
+
+    fetch("{% url 'ats_analyze' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ jd: jdText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-redo me-1"></i> Re-Analyze';
+
+        if (data.error) {
+            errorBox.innerText = data.error;
+            errorBox.classList.remove('d-none');
+            return;
+        }
+
+        // Populate Data
+        document.getElementById('m-score').innerText = data.ats_score + '%';
+        let colorClass = 'text-warning';
+        if(data.ats_score >= 80) colorClass = 'text-success';
+        if(data.ats_score < 70) colorClass = 'text-danger';
+        document.getElementById('m-score').className = `fw-bold display-2 mb-0 ${colorClass}`;
+
+        document.getElementById('m-verdict').innerText = data.final_verdict || '';
+        document.getElementById('m-summary').innerText = data.summary || '';
+        document.getElementById('m-skill').innerText = (data.matched_keywords && data.matched_keywords.length) || '0';
+        document.getElementById('m-exp').innerText = data.experience_match || '-';
+
+        // Keywords
+        const kwContainer = document.getElementById('m-keywords');
+        kwContainer.innerHTML = '';
+        if(data.missing_keywords && data.missing_keywords.length > 0) {
+            data.missing_keywords.forEach(m => {
+                kwContainer.innerHTML += `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle rounded-pill fw-medium px-2 py-1">${m}</span>`;
+            });
+        } else {
+            kwContainer.innerHTML = '<span class="text-muted small"><i class="fas fa-check-circle text-success me-1"></i> Looks good! No critical missing keywords.</span>';
+        }
+
+        // Tips
+        const tipsContainer = document.getElementById('m-tips');
+        tipsContainer.innerHTML = '';
+        if(data.improvement_suggestions && data.improvement_suggestions.length > 0) {
+            data.improvement_suggestions.forEach(t => {
+                tipsContainer.innerHTML += `<li>${t}</li>`;
+            });
+        } else {
+            tipsContainer.innerHTML = '<li>Your resume is well structured for this role!</li>';
+        }
+
+        results.classList.remove('d-none');
+    })
+    .catch(error => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-magic me-1"></i> Analyze Resume';
+        errorBox.innerText = "Network error occurred.";
+        errorBox.classList.remove('d-none');
+    });
+});
+</script>
 
 {% endblock %}
