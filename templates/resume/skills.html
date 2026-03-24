@@ -1,83 +1,131 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}Skills{% endblock %}
+{% block title %}Skills - ResumeIQ{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/skills.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
 
-    <h2 class="mb-3">Skills</h2>
-    <p class="text-muted">Add your skills with optional descriptions.</p>
+    <h2 class="fw-bold mb-3">Skills</h2>
+    <p class="text-muted">Add your professional skills with optional descriptions.</p>
 
-    <form method="post" action="{% url 'edit_skills' %}" id="skills-form">
+    <form method="post" action="{% url 'edit_skills' %}">
         {% csrf_token %}
 
         <div id="skills-container">
 
-            <!-- ✅ Skill Row -->
-            <div class="row skill-entry mb-3">
+            {% if skills %}
+                {% for skill in skills %}
+                <div class="skill-entry shadow-sm">
+                    <button type="button" class="btn-remove-skill"
+                        onclick="removeSkill(this)"
+                        {% if forloop.first %}style="display:none;"{% endif %}>
+                        ×
+                    </button>
 
-                <div class="col-md-6">
-                    <label>Skill</label>
-                    <input type="text" name="skill_name_0" class="form-control" placeholder="e.g. Python" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>Skill Name</label>
+                            <input type="text"
+                                   name="skill_name_{{ forloop.counter0 }}"
+                                   value="{{ skill.skill_name|default:'' }}"
+                                   class="form-control"
+                                   placeholder="e.g. Python"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label>Description (Optional)</label>
+                            <input type="text"
+                                   name="skill_desc_{{ forloop.counter0 }}"
+                                   value="{{ skill.skill_desc|default:'' }}"
+                                   class="form-control"
+                                   placeholder="e.g. 3 years experience">
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
+            {% else %}
+                <div class="skill-entry shadow-sm">
+                    <button type="button" class="btn-remove-skill" style="display:none;" onclick="removeSkill(this)">×</button>
 
-                <div class="col-md-6">
-                    <label>Description (Optional)</label>
-                    <input type="text" name="skill_desc_0" class="form-control" placeholder="e.g. Intermediate, 2 years">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>Skill Name</label>
+                            <input type="text" name="skill_name_0" class="form-control" placeholder="e.g. Python" required>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label>Description (Optional)</label>
+                            <input type="text" name="skill_desc_0" class="form-control" placeholder="e.g. Expert level">
+                        </div>
+                    </div>
                 </div>
-
-            </div>
+            {% endif %}
 
         </div>
 
-        <input type="hidden" name="skill_count" id="skill-count" value="1">
+        <input type="hidden" id="skill-count" name="skill_count"
+               value="{{ skills|length|default:1 }}">
 
-        <!-- ✅ Add Button -->
-        <button type="button" class="btn btn-secondary mb-3" onclick="addSkill()">
-            + Add Skill
-        </button>
+        <button type="button" id="btn-add-skill" onclick="addSkill()">+ Add Skill</button>
 
-        <!-- ✅ Navigation -->
-        <div class="d-flex justify-content-between">
-            <a href="{% url 'edit_education' %}" class="btn btn-secondary">
+        <div class="d-flex justify-content-between mt-5 pt-3 border-top">
+            <a href="{% url 'edit_education' %}" class="btn btn-outline-secondary px-4">
                 ← Back
             </a>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary px-5">
                 Save & Continue →
             </button>
         </div>
 
     </form>
-
 </div>
 
-<!-- ✅ JS for dynamic rows -->
 <script>
-let skillCount = 1;
+// Start the count based on what the backend sent
+let skillCount = parseInt(document.getElementById('skill-count').value);
 
 function addSkill() {
     const container = document.getElementById('skills-container');
+    const entry = document.createElement('div');
+    entry.classList.add('skill-entry', 'shadow-sm');
 
-    const row = document.createElement('div');
-    row.classList.add('row', 'skill-entry', 'mb-3');
+    // Create a new skill row with the perfect "X" button
+    entry.innerHTML = `
+        <button type="button" class="btn-remove-skill" onclick="removeSkill(this)">×</button>
 
-    row.innerHTML = `
-        <div class="col-md-6">
-            <label>Skill</label>
-            <input type="text" name="skill_name_${skillCount}" class="form-control" required>
-        </div>
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label>Skill Name</label>
+                <input type="text" name="skill_name_${skillCount}" class="form-control" placeholder="e.g. Java" required>
+            </div>
 
-        <div class="col-md-6">
-            <label>Description (Optional)</label>
-            <input type="text" name="skill_desc_${skillCount}" class="form-control">
+            <div class="col-md-6 mb-2">
+                <label>Description (Optional)</label>
+                <input type="text" name="skill_desc_${skillCount}" class="form-control">
+            </div>
         </div>
     `;
 
-    container.appendChild(row);
+    container.appendChild(entry);
 
     skillCount++;
     document.getElementById('skill-count').value = skillCount;
 }
-</script>
 
+function removeSkill(button) {
+    const card = button.closest('.skill-entry');
+    // Add fade-out for smooth UX
+    card.classList.add('fade-out');
+    setTimeout(() => {
+        card.remove();
+        // We don't decrement skillCount to avoid ID collisions
+    }, 300);
+}
+</script>
 {% endblock %}

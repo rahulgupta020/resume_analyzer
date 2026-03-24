@@ -238,24 +238,6 @@
                         </div>
                     </div>
 
-                    <div class="template-card">
-                        <div class="template-image-wrapper">
-                            <img src="{% static 'images/T15WP.png' %}" alt="Template 19">
-                        </div>
-                        <div class="template-hover-overlay">
-                            <button type="submit" name="template" value="template119" class="use-template-btn">Use this template</button>
-                        </div>
-                    </div>
-
-                    <div class="template-card">
-                        <div class="template-image-wrapper">
-                            <img src="{% static 'images/T14WP.png' %}" alt="Template 20">
-                        </div>
-                        <div class="template-hover-overlay">
-                            <button type="submit" name="template" value="template20" class="use-template-btn">Use this template</button>
-                        </div>
-                    </div>
-
                 </div>
 
                 <div class="d-flex justify-content-between mt-5">
@@ -269,19 +251,7 @@
     <form method="POST">
     {% csrf_token %}
     
-    <div class="template-card">
-        <img src="{% static 'images/thumb1.png' %}" alt="Modern Timeline">
-        <button type="submit" name="template_name" value="template1" class="btn">
-            Select Modern Timeline
-        </button>
-    </div>
-
-    <div class="template-card">
-        <img src="{% static 'images/thumb2.png' %}" alt="Classic">
-        <button type="submit" name="template_name" value="template2" class="btn">
-            Select Classic Professional
-        </button>
-    </div>
+    
 </form>
 </div>
 

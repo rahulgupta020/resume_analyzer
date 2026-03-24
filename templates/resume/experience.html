@@ -1,125 +1,162 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}Experience{% endblock %}
+{% block title %}Experience - ResumeIQ{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/experience.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-
-    <h2 class="mb-3">Work Experience</h2>
-    <p class="text-muted">Add your work experience details.</p>
+    <h2 class="fw-bold">Work Experience</h2>
+    <p class="text-muted">Add your work experience details. Your data is saved automatically.</p>
 
     <form method="post" id="experience-form">
         {% csrf_token %}
 
-        <!-- Hidden counter -->
-        <input type="hidden" name="experience_count" id="experience_count" value="1">
+        <input type="hidden" name="experience_count" id="experience_count" value="{{ experiences|length|default:1 }}">
 
         <div id="experience-container">
+            {% if experiences %}
+                {% for exp in experiences %}
+                <div class="experience-entry shadow-sm">
+                    <button type="button" class="btn-remove-entry" 
+                            onclick="removeExperience(this)"
+                            {% if forloop.first %}style="display: none;"{% endif %}>×</button>
 
-            <!-- Experience Card -->
-            <div class="experience-entry border p-3 mb-3 rounded">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Job Title</label>
+                            <input type="text" name="job_title_{{ forloop.counter0 }}" value="{{ exp.job_title|default:'' }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Company / Employer</label>
+                            <input type="text" name="employer_{{ forloop.counter0 }}" value="{{ exp.employer|default:'' }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Location</label>
+                            <input type="text" name="location_{{ forloop.counter0 }}" value="{{ exp.location|default:'' }}" class="form-control" placeholder="City, Country">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Start Month</label>
+                            <input type="number" name="start_month_{{ forloop.counter0 }}" value="{{ exp.start_month|default:'' }}" class="form-control" min="1" max="12" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Start Year</label>
+                            <input type="number" name="start_year_{{ forloop.counter0 }}" value="{{ exp.start_year|default:'' }}" class="form-control" required>
+                        </div>
 
-                <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="d-flex align-items-center gap-2" style="text-transform: none; cursor: pointer;">
+                                <input type="checkbox" name="currently_working_{{ forloop.counter0 }}" 
+                                       class="current-check" onchange="toggleEndDate(this)" 
+                                       {% if exp.currently_working %}checked{% endif %}>
+                                <span>Currently Working Here</span>
+                            </label>
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label>Job Title</label>
-                        <input type="text" name="job_title_0" class="form-control" required>
+                        <div class="col-md-3 mb-3 end-date-group" {% if exp.currently_working %}style="display:none;"{% endif %}>
+                            <label>End Month</label>
+                            <input type="number" name="end_month_{{ forloop.counter0 }}" value="{{ exp.end_month|default:'' }}" class="form-control" min="1" max="12">
+                        </div>
+                        <div class="col-md-3 mb-3 end-date-group" {% if exp.currently_working %}style="display:none;"{% endif %}>
+                            <label>End Year</label>
+                            <input type="number" name="end_year_{{ forloop.counter0 }}" value="{{ exp.end_year|default:'' }}" class="form-control">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label>Description</label>
+                            <textarea name="description_{{ forloop.counter0 }}" class="form-control" rows="4" required>{{ exp.description|default:'' }}</textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label>Skills / Technologies Used</label>
+                            <input type="text" name="skills_{{ forloop.counter0 }}" value="{{ exp.skills|default:'' }}" class="form-control" placeholder="e.g. Python, AWS, Project Management">
+                        </div>
                     </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label>Company</label>
-                        <input type="text" name="employer_0" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label>Location</label>
-                        <input type="text" name="location_0" class="form-control">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>Start Month</label>
-                        <input type="number" name="start_month_0" class="form-control" min="1" max="12">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>Start Year</label>
-                        <input type="number" name="start_year_0" class="form-control">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>End Month</label>
-                        <input type="number" name="end_month_0" class="form-control">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>End Year</label>
-                        <input type="number" name="end_year_0" class="form-control">
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        <label>
-                            <input type="checkbox" name="currently_working_0">
-                            Currently Working
-                        </label>
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        <label>Description</label>
-                        <textarea name="description_0" class="form-control" rows="3"></textarea>
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        <label>Skills Used</label>
-                        <input type="text" name="skills_0" class="form-control">
-                    </div>
-
                 </div>
-
-            </div>
-
+                {% endfor %}
+            {% else %}
+                <div class="experience-entry shadow-sm">
+                    <button type="button" class="btn-remove-entry" style="display: none;" onclick="removeExperience(this)">×</button>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label>Job Title</label><input type="text" name="job_title_0" class="form-control" required></div>
+                        <div class="col-md-6 mb-3"><label>Company</label><input type="text" name="employer_0" class="form-control" required></div>
+                        <div class="col-md-6 mb-3"><label>Location</label><input type="text" name="location_0" class="form-control"></div>
+                        <div class="col-md-3 mb-3"><label>Start Month</label><input type="number" name="start_month_0" class="form-control" min="1" max="12" required></div>
+                        <div class="col-md-3 mb-3"><label>Start Year</label><input type="number" name="start_year_0" class="form-control" required></div>
+                        <div class="col-md-12 mb-3">
+                            <label class="d-flex align-items-center gap-2" style="text-transform: none;">
+                                <input type="checkbox" name="currently_working_0" class="current-check" onchange="toggleEndDate(this)"> Currently Working
+                            </label>
+                        </div>
+                        <div class="col-md-3 mb-3 end-date-group"><label>End Month</label><input type="number" name="end_month_0" class="form-control"></div>
+                        <div class="col-md-3 mb-3 end-date-group"><label>End Year</label><input type="number" name="end_year_0" class="form-control"></div>
+                        <div class="col-md-12 mb-3"><label>Description</label><textarea name="description_0" class="form-control" rows="4" required></textarea></div>
+                        <div class="col-md-12 mb-3"><label>Skills Used</label><input type="text" name="skills_0" class="form-control"></div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
-        <!-- Add Button -->
-        <button type="button" class="btn btn-secondary mb-3" onclick="addExperience()">
+        <button type="button" class="btn-secondary-dashed" id="add-btn-trigger">
             + Add More Experience
         </button>
 
-        <!-- Navigation -->
-        <div class="d-flex justify-content-between">
-            <a href="{% url 'edit_summary' %}" class="btn btn-secondary">
-                ← Back
-            </a>
-
-            <button type="submit" class="btn btn-primary">
-                Save & Continue →
-            </button>
+        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+            <a href="{% url 'edit_summary' %}" class="btn btn-outline-secondary px-4">← Back</a>
+            <button type="submit" class="btn btn-primary px-5">Save & Continue →</button>
         </div>
-
     </form>
-
 </div>
 
 <script>
-let count = 1;
+let count = parseInt(document.getElementById('experience_count').value);
 
-function addExperience() {
+document.getElementById('add-btn-trigger').addEventListener('click', function() {
     const container = document.getElementById('experience-container');
-
-    const newBlock = document.querySelector('.experience-entry').cloneNode(true);
+    const firstEntry = document.querySelector('.experience-entry');
+    
+    const newBlock = firstEntry.cloneNode(true);
 
     newBlock.querySelectorAll('input, textarea').forEach(el => {
         let name = el.name;
         if (name) {
-            el.name = name.replace('_0', '_' + count);
+            el.name = name.replace(/_\d+$/, '_' + count);
             el.value = '';
+            if (el.type === 'checkbox') el.checked = false;
         }
     });
 
-    container.appendChild(newBlock);
+    // Reset visibility of end date fields for the new clone
+    newBlock.querySelectorAll('.end-date-group').forEach(div => div.style.display = 'block');
 
+    const removeBtn = newBlock.querySelector('.btn-remove-entry');
+    if (removeBtn) removeBtn.style.display = 'flex';
+
+    container.appendChild(newBlock);
     count++;
     document.getElementById('experience_count').value = count;
+});
+
+function removeExperience(buttonElement) {
+    const card = buttonElement.closest('.experience-entry');
+    card.classList.add('fade-out');
+    setTimeout(() => {
+        card.remove();
+        const currentCount = document.querySelectorAll('.experience-entry').length;
+        document.getElementById('experience_count').value = currentCount;
+    }, 300);
+}
+
+// Logic to hide/show End Dates
+function toggleEndDate(checkbox) {
+    const card = checkbox.closest('.experience-entry');
+    const endDates = card.querySelectorAll('.end-date-group');
+    endDates.forEach(div => {
+        div.style.display = checkbox.checked ? 'none' : 'block';
+    });
 }
 </script>
-
 {% endblock %}

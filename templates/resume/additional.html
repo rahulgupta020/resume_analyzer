@@ -3,6 +3,10 @@
 
 {% block title %}Additional Information - ResumeIQ{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/additional.css' %}">
+{% endblock %}
+
 {% block content %}
 <section class="form-page-wrapper">
     <div class="container py-4">
@@ -24,31 +28,43 @@
                     <div id="additional-container">
                         {% if additionals %}
                             {% for additional in additionals %}
-                            <div class="additional-entry-card p-4 mb-4 rounded-3 border">
+                            <div class="additional-entry-card p-4 mb-4 rounded-3 border position-relative">
+                                <button type="button" class="btn-remove-card" onclick="removeAdditional(this)" 
+                                        {% if forloop.first %}style="display:none;"{% endif %}>×</button>
+                                
                                 <div class="form-group mb-3">
-                                    <label class="form-label fw-bold">Title of Project / Award</label>
+                                    <label class="form-label fw-bold">
+                                        Title of Project / Award <span class="optional-text">(Optional)</span>
+                                    </label>
                                     <input type="text" name="additional_title_{{ forloop.counter0 }}" 
-                                           value="{{ additional.additional_title }}" class="form-control" 
-                                           placeholder="e.g. Portfolio Website" required>
+                                           value="{{ additional.additional_title|default:'' }}" class="form-control" 
+                                           placeholder="e.g. Portfolio Website">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label fw-bold">Description</label>
+                                    <label class="form-label fw-bold">
+                                        Description <span class="optional-text">(Optional)</span>
+                                    </label>
                                     <textarea name="additional_desc_{{ forloop.counter0 }}" class="form-control" 
-                                              rows="4" placeholder="Describe your contribution and results...">{{ additional.additional_desc }}</textarea>
+                                              rows="4" placeholder="Describe your contribution and results...">{{ additional.additional_desc|default:'' }}</textarea>
                                 </div>
                             </div>
                             {% endfor %}
                         {% else %}
-                            <div class="additional-entry-card p-4 mb-4 rounded-3 border">
+                            <div class="additional-entry-card p-4 mb-4 rounded-3 border position-relative">
+                                <button type="button" class="btn-remove-card" style="display:none;" onclick="removeAdditional(this)">×</button>
                                 <div class="form-group mb-3">
-                                    <label class="form-label fw-bold">Title of Project / Award</label>
+                                    <label class="form-label fw-bold">
+                                        Title of Project / Award <span class="optional-text">(Optional)</span>
+                                    </label>
                                     <input type="text" name="additional_title_0" class="form-control" 
-                                           placeholder="e.g. ResumeIQ Platform" required>
+                                           placeholder="e.g. ResumeIQ Platform">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label fw-bold">Description</label>
+                                    <label class="form-label fw-bold">
+                                        Description <span class="optional-text">(Optional)</span>
+                                    </label>
                                     <textarea name="additional_desc_0" class="form-control" rows="4" 
-                                              placeholder="e.g. Built a full-stack application using Django and SQLite..."></textarea>
+                                              placeholder="e.g. Built a full-stack application using Django..."></textarea>
                                 </div>
                             </div>
                         {% endif %}
@@ -72,39 +88,43 @@
                 </form>
             </div>
         </div>
-
-        <div class="advantages-footer py-5 border-top">
-            <div class="row align-items-center">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    
-                </div>
-            </div>
-        </div>
-
     </div>
 </section>
 
 <script>
 function addAdditional() {
     const container = document.getElementById('additional-container');
-    let count = parseInt(document.getElementById('additional-count').value);
+    let countInput = document.getElementById('additional-count');
+    let count = parseInt(countInput.value);
 
     const div = document.createElement('div');
-    div.className = 'additional-entry-card p-4 mb-4 rounded-3 border bg-light-hover';
+    div.className = 'additional-entry-card p-4 mb-4 rounded-3 border position-relative shadow-sm';
 
+    // Merging the specific "X" button logic
     div.innerHTML = `
+        <button type="button" class="btn-remove-card" onclick="removeAdditional(this)">×</button>
         <div class="form-group mb-3">
-            <label class="form-label fw-bold">Title Of Project / Award</label>
-            <input type="text" name="additional_title_${count}" class="form-control" required>
+            <label class="form-label fw-bold">Title Of Project / Award <span class="optional-text">(Optional)</span></label>
+            <input type="text" name="additional_title_${count}" class="form-control" placeholder="e.g. Hackathon Winner">
         </div>
         <div class="form-group">
-            <label class="form-label fw-bold">Description</label>
+            <label class="form-label fw-bold">Description <span class="optional-text">(Optional)</span></label>
             <textarea name="additional_desc_${count}" class="form-control" rows="4"></textarea>
         </div>
     `;
 
     container.appendChild(div);
-    document.getElementById('additional-count').value = count + 1;
+    countInput.value = count + 1;
+}
+
+function removeAdditional(button) {
+    const card = button.closest('.additional-entry-card');
+    card.classList.add('fade-out'); // Animation
+    setTimeout(() => {
+        card.remove();
+        // Note: We don't necessarily decrement count to avoid name collisions 
+        // with existing inputs, but you can if your backend logic prefers it.
+    }, 300);
 }
 </script>
 {% endblock %}

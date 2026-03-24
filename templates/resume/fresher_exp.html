@@ -1,89 +1,60 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-{% block title %}Select Experience Level - ResumeIQ{% endblock %}
+{% block title %}Experience Level - Resume IQ{% endblock %}
 
-{% block sidebar %}{% endblock %}
-{% block content_class %}col-md-12{% endblock %}
+{% block sidebar %}{% endblock %} {% block content_class %}col-md-12{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
 
-{% block content %}
-<section class="experience-selection-page">
-    <div class="container py-5">
+<section class="experience-selection-wrapper py-5">
+    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-75">
         
-        <div class="selection-wrapper mx-auto">
-            <div class="experience-card shadow-lg">
-                <h2 class="text-center fw-bold mb-2">Select Your Experience Level</h2>
-                <p class="text-center text-muted mb-4">
-                    This helps ResumeIQ customize your resume structure for maximum impact.
-                </p>
-
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="experience-options">
-                        <label class="experience-option">
-                            <input type="radio" name="type" value="fresher" required>
-                            <div class="option-box">
-                                <div class="icon-circle fresher-icon">
-                                    <i class="fas fa-user-graduate"></i>
-                                </div>
-                                <h4>Fresher</h4>
-                                <p>Student or Entry-level</p>
-                            </div>
-                        </label>
-
-                        <label class="experience-option">
-                            <input type="radio" name="type" value="experienced">
-                            <div class="option-box">
-                                <div class="icon-circle exp-icon">
-                                    <i class="fas fa-briefcase"></i>
-                                </div>
-                                <h4>Experienced</h4>
-                                <p>2+ years of work history</p>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div class="text-center mt-5">
-                        <button type="submit" class="btn btn-primary btn-hero-main px-5 py-3">
-                            Continue to Builder →
-                        </button>
-                    </div>
-                </form>
-            </div>
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-navy mb-2">Select Your Experience Level</h1>
+            <p class="text-muted fs-5">This helps <span class="text-primary fw-bold">Resume IQ</span> customize your resume structure.</p>
         </div>
 
-        <div class="advantages-section mt-5 pt-5 border-top">
-            <div class="row text-center mb-5">
-                <div class="col-md-6 mb-4">
-                    <div class="stat-highlight">
-                        <span class="stat-arrow">↑ 30%</span>
-                        <p>higher chance of getting a job*</p>
-                    </div>
+        <form method="post" class="w-100" style="max-width: 900px;">
+            {% csrf_token %}
+            
+            <div class="row g-4 justify-content-center mb-5">
+                
+                <div class="col-md-5">
+                    <label class="exp-card-label w-100">
+                        <input type="radio" name="type" value="fresher" required>
+                        <div class="selection-card p-5 text-center">
+                            <div class="icon-circle fresher-icon mb-4">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h3 class="fw-bold">Fresher</h3>
+                            <p class="text-muted small">Student or Entry-level</p>
+                            <div class="check-mark"><i class="fas fa-check-circle"></i></div>
+                        </div>
+                    </label>
                 </div>
-                <div class="col-md-6 mb-4">
-                    <div class="stat-highlight">
-                        <span class="stat-arrow">↑ 42%</span>
-                        <p>higher response rate from recruiters*</p>
-                    </div>
+
+                <div class="col-md-5">
+                    <label class="exp-card-label w-100">
+                        <input type="radio" name="type" value="experienced">
+                        <div class="selection-card p-5 text-center">
+                            <div class="icon-circle exp-icon mb-4">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3 class="fw-bold">Experienced</h3>
+                            <p class="text-muted small">2+ years of work history</p>
+                            <div class="check-mark"><i class="fas fa-check-circle"></i></div>
+                        </div>
+                    </label>
                 </div>
+
             </div>
 
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4">
-                    <h3 class="fw-bold mb-4">Why build with ResumeIQ?</h3>
-                    <ul class="benefit-list list-unstyled">
-                        <li><span class="step-num">1</span> <strong>Enhance your resume with expert content</strong></li>
-                        <li><span class="step-num">2</span> <strong>Resume and cover letter in one place</strong></li>
-                        <li><span class="step-num">3</span> <strong>Professionally designed templates</strong></li>
-                        <li><span class="step-num">4</span> <strong>Expert tips & guidance throughout</strong></li>
-                    </ul>
-                </div>
-                <div class="col-lg-6 text-center">
-                    <img src="{% static 'images/logo/trust_logo.png' %}" alt="Hired At" class="img-fluid grayscale-logos">
-                    <p class="small text-muted mt-2">Our users have been hired at: TCS, Amazon, Paytm, Infosys</p>
-                </div>
+            <div class="text-center">
+                <button type="submit" class="btn-hero-main px-5 py-3 border-0">
+                    Continue to Builder <i class="fas fa-arrow-right ms-2"></i>
+                </button>
             </div>
-        </div>
+        </form>
 
     </div>
 </section>

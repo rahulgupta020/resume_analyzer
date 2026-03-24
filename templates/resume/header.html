@@ -1,93 +1,148 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Personal Information - ResumeIQ{% endblock %}
+{% block title %}Experience - ResumeIQ{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/experience.css' %}">
+{% endblock %}
 
 {% block content %}
-<section class="form-page-wrapper">
-    <div class="container py-4">
-        
-        <div class="card form-card shadow-lg border-0 mb-5">
-            <div class="card-body p-4 p-md-5">
-                <div class="form-header mb-4">
-                    <h2 class="fw-bold mb-1">Personal Information</h2>
-                    <p class="text-muted">Fill your basic details to start your resume.</p>
-                </div>
+<div class="container mt-4">
+    <h2 class="fw-bold mb-1">Work Experience</h2>
+    <p class="text-muted mb-4">Add your work history. Your data is saved as you progress.</p>
 
-                <form method="post">
-                    {% csrf_token %}
+    <form method="post" action="{% url 'edit_experience' %}" id="experience-form">
+        {% csrf_token %}
+
+        <div id="experience-container">
+            {% if experiences %}
+                {% for exp in experiences %}
+                <div class="experience-entry shadow-sm">
+                    <button type="button" class="btn-remove-card" 
+                            onclick="removeExperience(this)" 
+                            {% if forloop.first %}style="display:none;"{% endif %}>×</button>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="full_name" class="form-control"
-                                   placeholder="e.g. Nelle Knapp" value="{{ header.full_name|default:'' }}" required> </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Profession</label>
-                            <input type="text" name="profession" class="form-control"
-                                   placeholder="e.g. Software Engineer" value="{{ header.profession|default:'' }}" required>
+                            <label>Job Title</label>
+                            <input type="text" name="job_title_{{ forloop.counter0 }}" 
+                                   value="{{ exp.job_title|default:'' }}" class="form-control" placeholder="e.g. Software Engineer" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" name="email" class="form-control"
-                                   placeholder="nelle@example.com" value="{{ header.email|default:'' }}" required>
+                            <label>Company</label>
+                            <input type="text" name="employer_{{ forloop.counter0 }}" 
+                                   value="{{ exp.employer|default:'' }}" class="form-control" placeholder="e.g. Google" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Phone Number</label>
-                            <input type="text" name="phone" class="form-control"
-                                   placeholder="+1 (968) 484-4537" value="{{ header.phone|default:'' }}" required>
+                            <label>Location</label>
+                            <input type="text" name="location_{{ forloop.counter0 }}" 
+                                   value="{{ exp.location|default:'' }}" class="form-control" placeholder="e.g. Mumbai, India">
                         </div>
-
+                        <div class="col-md-3 mb-3">
+                            <label>Start Month</label>
+                            <input type="number" name="start_month_{{ forloop.counter0 }}" 
+                                   value="{{ exp.start_month|default:'' }}" class="form-control" min="1" max="12">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label>Start Year</label>
+                            <input type="number" name="start_year_{{ forloop.counter0 }}" 
+                                   value="{{ exp.start_year|default:'' }}" class="form-control">
+                        </div>
                         <div class="col-md-12 mb-3">
-                            <label class="form-label">Address</label>
-                            <input type="text" name="address" class="form-control"
-                                   placeholder="City, State, Country" value="{{ header.address|default:'' }}">
+                            <label class="currently-working-label">
+                                <input type="checkbox" name="currently_working_{{ forloop.counter0 }}" 
+                                       {% if exp.currently_working %}checked{% endif %} onchange="toggleEndDate(this)">
+                                <span>Currently Working</span>
+                            </label>
                         </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label"><i class="fab fa-linkedin text-primary me-1"></i> LinkedIn</label>
-                            <input type="url" name="linkedin" class="form-control"
-                                   placeholder="linkedin.com/in/user" value="{{ header.linkedin|default:'' }}">
+                        <div class="col-md-3 mb-3 end-date-field" {% if exp.currently_working %}style="display:none;"{% endif %}>
+                            <label>End Month</label>
+                            <input type="number" name="end_month_{{ forloop.counter0 }}" 
+                                   value="{{ exp.end_month|default:'' }}" class="form-control">
                         </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label"><i class="fab fa-github text-dark me-1"></i> GitHub</label>
-                            <input type="url" name="github" class="form-control"
-                                   placeholder="github.com/user" value="{{ header.github|default:'' }}">
+                        <div class="col-md-3 mb-3 end-date-field" {% if exp.currently_working %}style="display:none;"{% endif %}>
+                            <label>End Year</label>
+                            <input type="number" name="end_year_{{ forloop.counter0 }}" 
+                                   value="{{ exp.end_year|default:'' }}" class="form-control">
                         </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label"><i class="fas fa-globe text-success me-1"></i> Website</label>
-                            <input type="url" name="website" class="form-control"
-                                   placeholder="portfolio.com" value="{{ header.website|default:'' }}">
+                        <div class="col-md-12 mb-3">
+                            <label>Description</label>
+                            <textarea name="description_{{ forloop.counter0 }}" class="form-control" rows="3">{{ exp.description|default:'' }}</textarea>
                         </div>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
-                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary px-4">
-                            <i class="fas fa-arrow-left me-2"></i> Back
-                        </a>
-                        <button type="submit" class="btn btn-primary px-5 py-2">
-                            Save & Continue <i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="advantages-footer py-5 border-top">
-            <div class="row align-items-center">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    <div class="d-flex align-items-center mb-3">
-                       
-               
                     </div>
                 </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <div class="experience-entry shadow-sm">
+                    <button type="button" class="btn-remove-card" style="display:none;" onclick="removeExperience(this)">×</button>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label>Job Title</label><input type="text" name="job_title_0" class="form-control" required></div>
+                        <div class="col-md-6 mb-3"><label>Company</label><input type="text" name="employer_0" class="form-control" required></div>
+                        <div class="col-md-12 mb-3"><label class="currently-working-label"><input type="checkbox" name="currently_working_0" onchange="toggleEndDate(this)"> <span>Currently Working</span></label></div>
+                        <div class="col-md-12 mb-3"><label>Description</label><textarea name="description_0" class="form-control" rows="3"></textarea></div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
-    </div>
-</section>
+        <input type="hidden" id="experience_count" name="experience_count" value="{{ experiences|length|default:1 }}">
+
+        <button type="button" id="btn-add-experience" onclick="addExperience()">
+            + Add More Experience
+        </button>
+
+        <div class="d-flex justify-content-between mt-5 pt-3 border-top">
+            <a href="{% url 'edit_summary' %}" class="btn btn-outline-secondary px-4">← Back</a>
+            <button type="submit" class="btn btn-primary px-5">Save & Continue →</button>
+        </div>
+    </form>
+</div>
+
+<script>
+// Initialize count from the backend data length
+let expCount = parseInt(document.getElementById('experience_count').value);
+
+function addExperience() {
+    const container = document.getElementById('experience-container');
+    const firstCard = document.querySelector('.experience-entry');
+    const newCard = firstCard.cloneNode(true);
+
+    // 1. Reset all inputs
+    newCard.querySelectorAll('input, textarea').forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+        
+        // 2. Update the indexed name (e.g., job_title_0 -> job_title_1)
+        if (el.name) {
+            el.name = el.name.replace(/_\d+$/, '_' + expCount);
+        }
+    });
+
+    // 3. Ensure "End Date" fields are visible in the new clone
+    newCard.querySelectorAll('.end-date-field').forEach(el => el.style.display = 'block');
+
+    // 4. Show the "X" button for the new card
+    const removeBtn = newCard.querySelector('.btn-remove-card');
+    removeBtn.style.display = 'flex';
+
+    container.appendChild(newCard);
+    expCount++;
+    document.getElementById('experience_count').value = expCount;
+}
+
+function removeExperience(btn) {
+    const card = btn.closest('.experience-entry');
+    card.classList.add('fade-out');
+    setTimeout(() => { card.remove(); }, 300);
+}
+
+function toggleEndDate(checkbox) {
+    const card = checkbox.closest('.experience-entry');
+    const endDates = card.querySelectorAll('.end-date-field');
+    endDates.forEach(div => {
+        div.style.display = checkbox.checked ? 'none' : 'block';
+    });
+}
+</script>
 {% endblock %}
