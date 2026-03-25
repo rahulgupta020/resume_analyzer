@@ -35,16 +35,16 @@
 
 <!-- ================= AI ATS MODAL ================= -->
 <div class="modal fade" id="atsModal" tabindex="-1" aria-labelledby="atsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content overflow-hidden border-0 shadow-lg rounded-4">
+ <div class="modal-dialog modal-dialog-centered custom-modal-size">    <div class="modal-content overflow-hidden border-0 shadow-lg rounded-4">
       <div class="modal-header border-bottom bg-light px-4 py-3">
         <h5 class="modal-title fw-bold text-primary" id="atsModalLabel">
             <i class="fas fa-robot me-2"></i> ATS Simulator by JD
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+        <button type="button" class="custom-close-btn" data-bs-dismiss="modal">X</button>
       </div>
       <div class="modal-body p-4 bg-light">
-          <p class="text-muted mb-3">Paste a Job Description to see how well your resume matches it using Gemini AI.</p>
+          <p class="text-muted mb-3">Paste job description to check resume match.</p>
           
           <div class="mb-4">
               <textarea id="mock-jd-input" class="form-control shadow-sm border-0" rows="5" placeholder="Paste Job Description here..." style="font-size: 0.95rem; border-radius: 8px;"></textarea>

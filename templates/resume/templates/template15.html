@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:  #0d2257;
+  --blue:  #1a3a8f;
+  --mid-blue: #2a52b0;
+  --bar:   #1a3a8f;
+  --white: #ffffff;
+  --off:   #f4f6fb;
+  --dark:  #1a1a2e;
+  --mid:   #333;
+  --muted: #555;
+  --light: #888;
+  --rule:  #d0d8ea;
+  --tl:    #1a3a8f;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  overflow: hidden;
+}
+
+/* ══════════════════════
+   LEFT SIDEBAR (navy)
+══════════════════════ */
+.sidebar {
+  width: 38%;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Photo area */
+.photo-area {
+  padding: 28px 20px 18px;
+  display: flex;
+  justify-content: center;
+}
+.photo-area img,
+.photo-area .photo-placeholder {
+  width: 120px; height: 120px;
+  border-radius: 50%; object-fit: cover;
+  border: 4px solid rgba(255,255,255,.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  display: block;
+}
+.photo-area .photo-placeholder {
+  background: linear-gradient(135deg, var(--mid-blue), #0a1845);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 2.8rem; font-family: 'Raleway', sans-serif; font-weight: 900;
+}
+
+/* Name block */
+.name-block {
+  background: var(--blue);
+  padding: 16px 20px 14px;
+  text-align: left;
+}
+.name-block h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 22px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: .05em;
+  color: var(--white); line-height: 1.1;
+}
+.name-block .profession {
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(255,255,255,.65); margin-top: 4px;
+}
+
+/* Sidebar sections */
+.s-section { padding: 16px 20px; }
+.s-section + .s-section { border-top: 1px solid rgba(255,255,255,.1); }
+
+.s-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px; font-weight: 800;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 10px;
+}
+
+/* Contact */
+.s-contact-list { list-style: none; }
+.s-contact-list li {
+  font-size: 10.5px; color: rgba(255,255,255,.8);
+  margin-bottom: 7px; line-height: 1.5;
+}
+
+/* References */
+.ref-item { margin-bottom: 13px; }
+.ref-item:last-child { margin-bottom: 0; }
+.ref-name  { font-size: 11px; font-weight: 700; color: var(--white); }
+.ref-role  { font-size: 10px; color: rgba(255,255,255,.55); margin: 1px 0 1px; }
+.ref-org   { font-size: 10px; color: rgba(255,255,255,.55); }
+.ref-email { font-size: 10px; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+/* ══════════════════════
+   RIGHT MAIN
+══════════════════════ */
+.main {
+  width: 62%;
+  background: var(--white);
+  padding: 24px 26px 36px 22px;
+  display: flex; flex-direction: column; gap: 0;
+}
+
+/* Section header with icon */
+.m-section { margin-bottom: 20px; }
+.m-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.m-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.m-icon i { font-size: 12px; color: var(--white); }
+.m-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--navy);
+  border-bottom: 2px solid var(--navy);
+  flex: 1; padding-bottom: 4px;
+}
+
+/* Timeline */
+.timeline {
+  margin-left: 14px;
+  padding-left: 18px;
+  border-left: 2px solid var(--rule);
+}
+.tl-item { position: relative; margin-bottom: 14px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-item::before {
+  content: '';
+  position: absolute; left: -25px; top: 5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--blue);
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 2px var(--blue);
+}
+.tl-date    { font-size: 10px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.tl-company { font-size: 11.5px; font-weight: 700; color: var(--dark); }
+.tl-role    { font-size: 10.5px; color: var(--muted); font-style: italic; margin: 1px 0 5px; }
+.tl-bullets { list-style: none; }
+.tl-bullets li {
+  font-size: 10.5px; color: var(--muted); line-height: 1.6;
+  padding-left: 12px; position: relative; margin-bottom: 3px;
+}
+.tl-bullets li::before { content: '–'; position: absolute; left: 0; color: var(--blue); }
+
+/* Education single item */
+.edu-single {
+  margin-left: 14px;
+  padding-left: 18px;
+  border-left: 2px solid var(--rule);
+  position: relative;
+}
+.edu-single::before {
+  content: '';
+  position: absolute; left: -7px; top: 5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--blue);
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 2px var(--blue);
+}
+.edu-date   { font-size: 10px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.edu-school { font-size: 11.5px; font-weight: 700; color: var(--dark); }
+.edu-deg    { font-size: 10.5px; color: var(--muted); font-style: italic; }
+
+/* Skills bars */
+.skills-grid { display: flex; flex-direction: column; gap: 6px; }
+.skill-row   { display: flex; align-items: center; gap: 8px; }
+.skill-name  { font-size: 10.5px; color: var(--mid); min-width: 110px; text-align: right; }
+.skill-track { flex: 1; height: 6px; background: #e0e6f0; border-radius: 3px; overflow: hidden; }
+.skill-fill  { height: 100%; background: var(--navy); border-radius: 3px; }
+
+/* Clubs timeline */
+.clubs-tl { margin-left: 14px; padding-left: 18px; border-left: 2px solid var(--rule); }
+.club-item { position: relative; margin-bottom: 10px; }
+.club-item:last-child { margin-bottom: 0; }
+.club-item::before {
+  content: '';
+  position: absolute; left: -25px; top: 5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--blue);
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 2px var(--blue);
+}
+.club-date { font-size: 10px; font-weight: 700; color: var(--blue); }
+.club-name { font-size: 11px; font-weight: 700; color: var(--dark); }
+.club-role { font-size: 10.5px; color: var(--muted); font-style: italic; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ LEFT SIDEBAR ═══ -->
+  <div class="sidebar">
+
+    <div class="photo-area">
+      {% if header.profile_image %}
+        <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}">
+      {% else %}
+        <div class="photo-placeholder">{{ header.full_name|slice:":1"|default:"J" }}</div>
+      {% endif %}
+    </div>
+
+    <div class="name-block">
+      <h1>{{ header.full_name|default:"Jenny Cruz" }}</h1>
+      <div class="profession">{{ header.profession|default:"Marketing Specialist" }}</div>
+    </div>
+
+    <div class="s-section">
+      <div class="s-label">Contact</div>
+      <ul class="s-contact-list">
+        <li>{{ header.phone|default:"555-555-5555" }}</li>
+        <li>{{ header.address|default:"788 Walden Road, Langdon, NY" }}</li>
+        <li>{{ header.email|default:"jcruz@uny.com" }}</li>
+      </ul>
+    </div>
+
+    <div class="s-section">
+      <div class="s-label">References</div>
+      {% for ref in references %}
+      <div class="ref-item">
+        <div class="ref-name">{{ ref.name }}</div>
+        <div class="ref-role">{{ ref.title }}</div>
+        <div class="ref-org">{{ ref.organization }}</div>
+        <div class="ref-email">{{ ref.email }}</div>
+      </div>
+      {% empty %}
+      <div class="ref-item">
+        <div class="ref-name">Anthony Taverni</div>
+        <div class="ref-role">Brand Management</div>
+        <div class="ref-org">Professor, UNY</div>
+        <div class="ref-email">ataverni@uny.com</div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-name">Jaqueline Bonssar</div>
+        <div class="ref-role">Conversion Copywriting</div>
+        <div class="ref-org">Professor, UNY</div>
+        <div class="ref-email">jbonssar@uny.com</div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <!-- ═══ RIGHT MAIN ═══ -->
+  <div class="main">
+
+    <!-- Education -->
+    <div class="m-section">
+      <div class="m-header">
+        <div class="m-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div class="m-label">Education</div>
+      </div>
+      {% for edu in educations %}
+      <div class="edu-single" style="margin-bottom:10px;">
+        <div class="edu-date">{{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+        <div class="edu-school">{{ edu.institute_name }}</div>
+        <div class="edu-deg">{{ edu.degree }}{% if edu.field_of_study %}, {{ edu.field_of_study }}{% endif %}</div>
+      </div>
+      {% empty %}
+      <div class="edu-single">
+        <div class="edu-date">2020 – 2024</div>
+        <div class="edu-school">University of New York</div>
+        <div class="edu-deg">Marketing Specialization</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Co-op / Experience -->
+    <div class="m-section">
+      <div class="m-header">
+        <div class="m-icon"><i class="fas fa-briefcase"></i></div>
+        <div class="m-label">Co-op Placement Experience</div>
+      </div>
+      <div class="timeline">
+        {% for exp in experiences %}
+        <div class="tl-item">
+          <div class="tl-date">{{ exp.start_year }}{% if exp.end_year %} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}{% endif %}</div>
+          <div class="tl-company">{{ exp.employer }}</div>
+          <div class="tl-role">{{ exp.job_title }}</div>
+          {% if exp.description %}<ul class="tl-bullets"><li>{{ exp.description }}</li></ul>{% endif %}
+        </div>
+        {% empty %}
+        <div class="tl-item">
+          <div class="tl-date">2023 – 2024</div>
+          <div class="tl-company">Marketing Boon</div>
+          <div class="tl-role">Market Researcher</div>
+          <ul class="tl-bullets">
+            <li>Conducted content audits, competitor analyses, SWOT analyses, market readiness reports</li>
+            <li>Interviewed clients and customer segments, created user persona guides and marketing strategy outlines</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2024 – Present</div>
+          <div class="tl-company">Nimble App</div>
+          <div class="tl-role">Conversion Copywriter</div>
+          <ul class="tl-bullets">
+            <li>Improved conversion copy on landing pages</li>
+            <li>Increased registration from landing pages by 9%</li>
+            <li>Increased business user registration by 11%</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Skills & Expertise -->
+    <div class="m-section">
+      <div class="m-header">
+        <div class="m-icon"><i class="fas fa-star"></i></div>
+        <div class="m-label">Skills &amp; Expertise</div>
+      </div>
+      <div class="skills-grid">
+        {% for skill in skills %}
+        <div class="skill-row">
+          <div class="skill-name">{{ skill.skill_name }}</div>
+          <div class="skill-track"><div class="skill-fill" style="width:{{ skill.level|default:75 }}%"></div></div>
+        </div>
+        {% empty %}
+        <div class="skill-row"><div class="skill-name">Market Research</div><div class="skill-track"><div class="skill-fill" style="width:92%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Blog Writing</div><div class="skill-track"><div class="skill-fill" style="width:85%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Copywriting</div><div class="skill-track"><div class="skill-fill" style="width:80%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Keyword Research</div><div class="skill-track"><div class="skill-fill" style="width:70%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Technical SEO</div><div class="skill-track"><div class="skill-fill" style="width:65%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Data Analysis</div><div class="skill-track"><div class="skill-fill" style="width:75%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Mbasenet</div><div class="skill-track"><div class="skill-fill" style="width:60%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Sheets</div><div class="skill-track"><div class="skill-fill" style="width:88%"></div></div></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Clubs & Associations -->
+    <div class="m-section">
+      <div class="m-header">
+        <div class="m-icon"><i class="fas fa-users"></i></div>
+        <div class="m-label">Clubs &amp; Associations</div>
+      </div>
+      <div class="clubs-tl">
+        {% for add in additionals %}
+        <div class="club-item">
+          <div class="club-date">{{ add.year|default:"" }}</div>
+          <div class="club-name">{{ add.additional_title }}</div>
+          <div class="club-role">{{ add.additional_desc }}</div>
+        </div>
+        {% empty %}
+        <div class="club-item">
+          <div class="club-date">2021 – 2024</div>
+          <div class="club-name">Dragon Boxing Club</div>
+          <div class="club-role">Boxer</div>
+        </div>
+        <div class="club-item">
+          <div class="club-date">2022 – 2023</div>
+          <div class="club-name">Helping Baby Corner</div>
+          <div class="club-role">Writing Guide</div>
+        </div>
+        <div class="club-item">
+          <div class="club-date">2021 – 2023</div>
+          <div class="club-name">Students for Mental Health</div>
+          <div class="club-role">Speaker</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

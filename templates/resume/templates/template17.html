@@ -1,1 +1,289 @@
-template14.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #111;
+  --dark:  #1a1a1a;
+  --mid:   #333;
+  --muted: #555;
+  --light: #888;
+  --rule:  #ccc;
+  --white: #fff;
+}
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── TOP HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 1fr 6px;
+  padding: 28px 0 22px 32px;
+  border-bottom: 2px solid var(--black);
+  gap: 0;
+}
+.header-text {}
+.header h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 34px; font-weight: 900;
+  color: var(--black); line-height: 1.1;
+}
+.header .profession {
+  font-size: 11.5px; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--mid); margin-top: 6px;
+}
+.header .meta-line {
+  font-size: 11px; color: var(--light);
+  margin-top: 8px; letter-spacing: .02em;
+}
+.header-bar {
+  background: var(--black);
+  width: 6px;
+  align-self: stretch;
+}
+
+/* ── CONTENT ── */
+.content {
+  flex: 1;
+  padding: 0 32px 36px;
+  display: flex; flex-direction: column; gap: 0;
+}
+
+/* ── BLACK BAND SECTION LABEL ── */
+.sec-band {
+  background: var(--black);
+  padding: 7px 10px;
+  margin: 18px -32px 12px;
+}
+.sec-band span {
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--white);
+}
+
+/* ── EXPERIENCE ITEM ── */
+.exp-item { margin-bottom: 14px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-header {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+}
+.exp-title  { font-size: 12.5px; font-weight: 700; color: var(--dark); }
+.exp-dates  { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.exp-bullets { list-style: disc; padding-left: 18px; margin-top: 5px; }
+.exp-bullets li { font-size: 11px; color: var(--muted); line-height: 1.65; margin-bottom: 3px; }
+
+/* ── SKILLS (2-col grid) ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+.skills-grid ul { list-style: disc; padding-left: 18px; }
+.skills-grid ul li { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+
+/* ── EDUCATION ITEM ── */
+.edu-item { margin-bottom: 12px; }
+.edu-item:last-child { margin-bottom: 0; }
+.edu-header {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+}
+.edu-title  { font-size: 12.5px; font-weight: 700; color: var(--dark); }
+.edu-dates  { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.edu-bullets { list-style: disc; padding-left: 18px; margin-top: 5px; }
+.edu-bullets li { font-size: 11px; color: var(--muted); line-height: 1.65; margin-bottom: 3px; }
+
+/* ── INTERESTS (2-col) ── */
+.two-col-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+.two-col-list ul { list-style: disc; padding-left: 18px; }
+.two-col-list ul li { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+
+/* ── AWARDS ── */
+.awards-list { list-style: disc; padding-left: 18px; }
+.awards-list li { font-size: 11px; color: var(--muted); line-height: 1.65; margin-bottom: 4px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-text">
+      <h1>{{ header.full_name|default:"Sebastian Bennett" }}</h1>
+      <div class="profession">{{ header.profession|default:"Chemical Engineer" }}</div>
+      <div class="meta-line">
+        {{ header.address|default:"Address" }} | {{ header.email|default:"Mail" }} | {{ header.website|default:"Website" }}
+      </div>
+    </div>
+    <div class="header-bar"></div>
+  </div>
+
+  <div class="content">
+
+    <!-- WORK EXPERIENCE -->
+    <div class="sec-band"><span>Work Experience</span></div>
+    {% for exp in experiences %}
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-title">{{ exp.job_title }} | {{ exp.employer }}</div>
+        <div class="exp-dates">{{ exp.start_month|default:"" }} {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_month|default:"" }} {{ exp.end_year }}{% endif %}</div>
+      </div>
+      {% if exp.description %}<ul class="exp-bullets"><li>{{ exp.description }}</li></ul>{% endif %}
+    </div>
+    {% empty %}
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-title">Policy Manager | Lexramax Inc</div>
+        <div class="exp-dates">Oct 2020 – Present</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Formulate and review policies as regards Industry Improvement</li>
+        <li>Create a functional and technical application of set policies</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-title">Quality Control Engineer | KrystaPointe Water</div>
+        <div class="exp-dates">Jan 2019 – Sept 2020</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Collect and Analyse water samples from different stages of Production</li>
+        <li>Make Recommendations on Improvement based on my analysis</li>
+        <li>Supervise Implementations of Recommendations</li>
+      </ul>
+    </div>
+    {% endfor %}
+
+    <!-- SKILLS -->
+    <div class="sec-band"><span>Skills</span></div>
+    {% if skills %}
+    <div class="skills-grid">
+      <ul>
+        {% for skill in skills %}{% if forloop.counter <= skills|length|add:1|divisibleby:2 %}<li>{{ skill.skill_name }}</li>{% endif %}{% endfor %}
+      </ul>
+      <ul>
+        {% for skill in skills %}{% if not forloop.counter <= skills|length|add:1|divisibleby:2 %}<li>{{ skill.skill_name }}</li>{% endif %}{% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <div class="skills-grid">
+      <ul>
+        <li>Critical Thinking</li>
+        <li>Communication Skills</li>
+        <li>Process Flows</li>
+      </ul>
+      <ul>
+        <li>Management Skills</li>
+        <li>Digital Marketing</li>
+        <li>Negotiation</li>
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- EDUCATION -->
+    <div class="sec-band"><span>Education</span></div>
+    {% for edu in educations %}
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-title">{{ edu.degree }} | {{ edu.institute_name }}</div>
+        <div class="edu-dates">{{ edu.start_month|default:"" }} {{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_month|default:"" }} {{ edu.end_year }}{% endif %}</div>
+      </div>
+      {% if edu.description %}<ul class="edu-bullets"><li>{{ edu.description }}</li></ul>{% endif %}
+      {% if edu.gpa %}<ul class="edu-bullets"><li>GPA: {{ edu.gpa }}</li></ul>{% endif %}
+    </div>
+    {% empty %}
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-title">MAsc Process Engineering | Dandilton</div>
+        <div class="edu-dates">Oct 2017 – Sept 2018</div>
+      </div>
+      <ul class="edu-bullets">
+        <li>Studied Process planning, coordination, and efficiency</li>
+        <li>Worked with various industries on launching efficient Process Systems</li>
+      </ul>
+    </div>
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-title">BEng Chemical Engineering | Royal Clickton</div>
+        <div class="edu-dates">Jan 2012 – Sept 2016</div>
+      </div>
+      <ul class="edu-bullets">
+        <li>GPA: 3.19</li>
+        <li>Minor in Process Management</li>
+        <li>Thesis in Modelling and Analysis of Process Efficiency in a Cement Plant</li>
+      </ul>
+    </div>
+    {% endfor %}
+
+    <!-- INTERESTS -->
+    <div class="sec-band"><span>Interests</span></div>
+    {% if additionals %}
+    <div class="two-col-list">
+      <ul>{% for add in additionals %}{% if forloop.counter <= 3 %}<li>{{ add.additional_title }}</li>{% endif %}{% endfor %}</ul>
+      <ul>{% for add in additionals %}{% if forloop.counter > 3 %}<li>{{ add.additional_title }}</li>{% endif %}{% endfor %}</ul>
+    </div>
+    {% else %}
+    <div class="two-col-list">
+      <ul>
+        <li>Simulation Design</li>
+        <li>Chess</li>
+        <li>Volunteer Work</li>
+      </ul>
+      <ul>
+        <li>International Affairs</li>
+        <li>Particulate Matters</li>
+        <li>Football</li>
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- AWARDS -->
+    <div class="sec-band"><span>Awards</span></div>
+    {% if achievements %}
+    <ul class="awards-list">
+      {% for ach in achievements %}<li>{{ ach.title }}{% if ach.description %} — {{ ach.description }}{% endif %}</li>{% endfor %}
+    </ul>
+    {% else %}
+    <ul class="awards-list">
+      <li>Most Innovative Employee of the Year, LexraMax (2020)</li>
+      <li>Overall Best Employee of the Year, CrystaPointe (2019)</li>
+      <li>Project Leader, Dandilton (2018)</li>
+    </ul>
+    {% endif %}
+
+  </div>
+</div>
+</body>
+</html>

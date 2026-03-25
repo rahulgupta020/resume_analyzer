@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Karla:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #111;
+  --dark:  #222;
+  --mid:   #444;
+  --muted: #666;
+  --light: #999;
+  --rule:  #ccc;
+  --bg:    #f2f2f2;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'Karla', sans-serif;
+  background: #525659;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER (light grey bg) ── */
+.header {
+  background: var(--bg);
+  text-align: center;
+  padding: 32px 40px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.header h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 40px; font-weight: 700;
+  color: var(--black); line-height: 1.1;
+  letter-spacing: -.3px;
+}
+.header .profession {
+  font-size: 14px; font-weight: 300;
+  color: var(--muted); margin-top: 6px;
+  letter-spacing: .04em;
+}
+
+/* ── BODY (two columns) ── */
+.body {
+  display: flex;
+  flex: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 34%;
+  padding: 26px 20px 40px 26px;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 22px;
+}
+
+/* ── MAIN ── */
+.main {
+  width: 66%;
+  padding: 26px 28px 40px 24px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ── SECTION LABELS ── */
+.sec-label {
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--dark);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 5px; margin-bottom: 12px;
+}
+
+/* ── CONTACT ── */
+.contact-list { list-style: none; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11.5px; color: var(--muted);
+  margin-bottom: 8px; line-height: 1.4;
+}
+.contact-list li i { color: var(--dark); font-size: 11px; width: 14px; margin-top: 2px; flex-shrink: 0; }
+
+/* ── SKILLS ── */
+.dot-list { list-style: none; }
+.dot-list li {
+  font-size: 11.5px; color: var(--muted);
+  padding-left: 14px; position: relative; margin-bottom: 6px;
+}
+.dot-list li::before { content: '•'; position: absolute; left: 0; color: var(--dark); }
+
+/* ── EDUCATION ── */
+.edu-item { margin-bottom: 13px; }
+.edu-item:last-child { margin-bottom: 0; }
+.edu-inst  { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--dark); line-height: 1.3; }
+.edu-years { font-size: 11px; color: var(--light); margin: 2px 0 3px; }
+.edu-deg   { font-size: 11px; color: var(--muted); }
+
+/* ── PROFILE ── */
+.profile-text { font-size: 11.5px; line-height: 1.75; color: var(--muted); }
+
+/* ── EXPERIENCE ── */
+.exp-item { margin-bottom: 16px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-title  { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--dark); }
+.exp-company{ font-size: 11.5px; font-weight: 500; color: var(--mid); margin: 2px 0 6px; font-style: italic; }
+.exp-bullets { list-style: disc; padding-left: 16px; }
+.exp-bullets li { font-size: 11px; color: var(--muted); line-height: 1.65; margin-bottom: 3px; }
+
+/* ── REFERENCES ── */
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+.ref-name  { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--dark); }
+.ref-role  { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.ref-detail{ font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+.ref-detail strong { color: var(--dark); }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .page { box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{ header.full_name|default:"Lorna Alvarado" }}</h1>
+    <div class="profession">{{ header.profession|default:"Web Development" }}</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div>
+        <div class="sec-label">Contact:</div>
+        <ul class="contact-list">
+          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
+          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Skills:</div>
+        <ul class="dot-list">
+          {% for skill in skills %}
+            <li>{{ skill.skill_name }}</li>
+          {% empty %}
+            <li>Web Design</li>
+            <li>Design Thinking</li>
+            <li>Wireframe Creation</li>
+            <li>Front End Coding</li>
+            <li>Backend Tech</li>
+            <li>Problem-Solving</li>
+            <li>Computer Literacy</li>
+            <li>Project Management Tools</li>
+            <li>Strong Communication</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sec-label">Education:</div>
+        {% for edu in educations %}
+        <div class="edu-item">
+          <div class="edu-inst">{{ edu.institute_name }}</div>
+          <div class="edu-years">{{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+          <div class="edu-deg">{{ edu.degree }}{% if edu.field_of_study %}, {{ edu.field_of_study }}{% endif %}</div>
+        </div>
+        {% empty %}
+        <div class="edu-item">
+          <div class="edu-inst">University of Really Great</div>
+          <div class="edu-years">2014 – 2016</div>
+          <div class="edu-deg">Bachelor of IT, Major in Technology</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-inst">Really Great Academy</div>
+          <div class="edu-years">2013 – 2014</div>
+          <div class="edu-deg">Bachelor of IT, Major in Technology</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <div class="sec-label">Language:</div>
+        <ul class="dot-list">
+          {% for add in additionals %}
+            <li>{{ add.additional_title }}</li>
+          {% empty %}
+            <li>English</li>
+            <li>Spanish</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <div>
+        <div class="sec-label">Profile:</div>
+        <p class="profile-text">{{ summary.summary|default:"I am a qualified and professional web development with five years of experience in database administration and website design. Strong creative and analytical skills. Team player with an eye for detail." }}</p>
+      </div>
+
+      <div>
+        <div class="sec-label">Experience:</div>
+        {% for exp in experiences %}
+        <div class="exp-item">
+          <div class="exp-title">{{ exp.job_title }} | {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}</div>
+          <div class="exp-company">{{ exp.employer }}</div>
+          {% if exp.description %}<ul class="exp-bullets"><li>{{ exp.description }}</li></ul>{% endif %}
+        </div>
+        {% empty %}
+        <div class="exp-item">
+          <div class="exp-title">Applications Developer | 2016 – Present</div>
+          <div class="exp-company">Really Great Company</div>
+          <ul class="exp-bullets">
+            <li>Database administration and website design</li>
+            <li>Built the logic for a streamlined ad-serving platform that scaled</li>
+            <li>Educational institutions and Blackboard online classroom management</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-title">Web Content Manager | 2014 – 2016</div>
+          <div class="exp-company">Really Great Company</div>
+          <ul class="exp-bullets">
+            <li>Database administration and website design</li>
+            <li>Built the logic for a streamlined ad-serving platform that scaled</li>
+            <li>Educational institutions and Blackboard online classroom management</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <div class="exp-title">Web Content Manager | 2014 – 2012</div>
+          <div class="exp-company">Really Great Company</div>
+          <ul class="exp-bullets">
+            <li>Database administration and website design</li>
+            <li>Built the logic for a streamlined ad-serving platform that scaled</li>
+            <li>Educational institutions and Blackboard online classroom management</li>
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

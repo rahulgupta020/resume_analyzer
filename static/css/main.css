@@ -1228,3 +1228,36 @@ hr {
         transform: scale(0.6);
     }
 }
+
+.custom-close-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.custom-close-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+/* SIZE OF ATS SImulator */
+.custom-modal-size {
+    max-width: 700px;   /* perfect balanced width */
+    width: 100%;         /* responsive for smaller screens */
+}
+
+@media (max-width: 768px) {
+    .custom-modal-size {
+        max-width: 95%;
+    }
+}
