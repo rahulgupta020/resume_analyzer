@@ -23,7 +23,7 @@
                     </span>
                 </div>
 
-                <form method="post">
+                <form method="post" id="additional-form">
                     {% csrf_token %}
                     <div id="additional-container">
                         {% if additionals %}
@@ -33,19 +33,13 @@
                                         {% if forloop.first %}style="display:none;"{% endif %}>×</button>
                                 
                                 <div class="form-group mb-3">
-                                    <label class="form-label fw-bold">
-                                        Title of Project / Award <span class="optional-text">(Optional)</span>
-                                    </label>
+                                    <label class="form-label fw-bold">Title of Project / Award</label>
                                     <input type="text" name="additional_title_{{ forloop.counter0 }}" 
-                                           value="{{ additional.additional_title|default:'' }}" class="form-control" 
-                                           placeholder="e.g. Portfolio Website">
+                                           value="{{ additional.additional_title|default:'' }}" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label fw-bold">
-                                        Description <span class="optional-text">(Optional)</span>
-                                    </label>
-                                    <textarea name="additional_desc_{{ forloop.counter0 }}" class="form-control" 
-                                              rows="4" placeholder="Describe your contribution and results...">{{ additional.additional_desc|default:'' }}</textarea>
+                                    <label class="form-label fw-bold">Description</label>
+                                    <textarea name="additional_desc_{{ forloop.counter0 }}" class="form-control" rows="4">{{ additional.additional_desc|default:'' }}</textarea>
                                 </div>
                             </div>
                             {% endfor %}
@@ -53,18 +47,12 @@
                             <div class="additional-entry-card p-4 mb-4 rounded-3 border position-relative">
                                 <button type="button" class="btn-remove-card" style="display:none;" onclick="removeAdditional(this)">×</button>
                                 <div class="form-group mb-3">
-                                    <label class="form-label fw-bold">
-                                        Title of Project / Award <span class="optional-text">(Optional)</span>
-                                    </label>
-                                    <input type="text" name="additional_title_0" class="form-control" 
-                                           placeholder="e.g. ResumeIQ Platform">
+                                    <label class="form-label fw-bold">Title of Project / Award</label>
+                                    <input type="text" name="additional_title_0" class="form-control" placeholder="e.g. ResumeIQ Platform">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label fw-bold">
-                                        Description <span class="optional-text">(Optional)</span>
-                                    </label>
-                                    <textarea name="additional_desc_0" class="form-control" rows="4" 
-                                              placeholder="e.g. Built a full-stack application using Django..."></textarea>
+                                    <label class="form-label fw-bold">Description</label>
+                                    <textarea name="additional_desc_0" class="form-control" rows="4" placeholder="e.g. Built a full-stack application..."></textarea>
                                 </div>
                             </div>
                         {% endif %}
@@ -80,6 +68,11 @@
                             <button type="button" class="btn btn-outline-primary px-4 me-2" onclick="addAdditional()">
                                 <i class="fas fa-plus me-1"></i> Add More
                             </button>
+
+                            <button type="button" class="btn btn-outline-info px-4 me-2" data-bs-toggle="modal" data-bs-target="#customFieldModal">
+                                <i class="fas fa-user-edit me-1"></i> Add Your Own
+                            </button>
+
                             <button type="submit" class="btn btn-primary px-5 py-2">
                                 Save & Continue <i class="fas fa-arrow-right ms-2"></i>
                             </button>
@@ -91,8 +84,33 @@
     </div>
 </section>
 
+<div class="modal fade" id="customFieldModal" tabindex="-1" aria-labelledby="customFieldModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title fw-bold" id="customFieldModalLabel">Add Custom Section</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label for="customTitle" class="form-label fw-bold">Title</label>
+                    <input type="text" class="form-control" id="customTitle" placeholder="e.g. Certifications, Languages, Hobbies">
+                </div>
+                <div class="mb-3">
+                    <label for="customDesc" class="form-label fw-bold">Description</label>
+                    <textarea class="form-control" id="customDesc" rows="4" placeholder="Enter details here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-info text-white fw-bold px-4" onclick="saveCustomField()">Add to Resume</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-function addAdditional() {
+function addAdditional(preTitle = '', preDesc = '') {
     const container = document.getElementById('additional-container');
     let countInput = document.getElementById('additional-count');
     let count = parseInt(countInput.value);
@@ -100,16 +118,15 @@ function addAdditional() {
     const div = document.createElement('div');
     div.className = 'additional-entry-card p-4 mb-4 rounded-3 border position-relative shadow-sm';
 
-    // Merging the specific "X" button logic
     div.innerHTML = `
         <button type="button" class="btn-remove-card" onclick="removeAdditional(this)">×</button>
         <div class="form-group mb-3">
-            <label class="form-label fw-bold">Title Of Project / Award <span class="optional-text">(Optional)</span></label>
-            <input type="text" name="additional_title_${count}" class="form-control" placeholder="e.g. Hackathon Winner">
+            <label class="form-label fw-bold">Title Of Project / Award</label>
+            <input type="text" name="additional_title_${count}" class="form-control" value="${preTitle}" placeholder="e.g. Hackathon Winner">
         </div>
         <div class="form-group">
-            <label class="form-label fw-bold">Description <span class="optional-text">(Optional)</span></label>
-            <textarea name="additional_desc_${count}" class="form-control" rows="4"></textarea>
+            <label class="form-label fw-bold">Description</label>
+            <textarea name="additional_desc_${count}" class="form-control" rows="4">${preDesc}</textarea>
         </div>
     `;
 
@@ -117,14 +134,30 @@ function addAdditional() {
     countInput.value = count + 1;
 }
 
+function saveCustomField() {
+    const titleInput = document.getElementById('customTitle');
+    const descInput = document.getElementById('customDesc');
+
+    if (!titleInput.value.trim()) {
+        alert("Please enter a title for your custom section.");
+        return;
+    }
+
+    // Call addAdditional with the data from the modal
+    addAdditional(titleInput.value, descInput.value);
+
+    // Clear inputs and close modal
+    titleInput.value = '';
+    descInput.value = '';
+    const modalElement = document.getElementById('customFieldModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
+}
+
 function removeAdditional(button) {
     const card = button.closest('.additional-entry-card');
-    card.classList.add('fade-out'); // Animation
-    setTimeout(() => {
-        card.remove();
-        // Note: We don't necessarily decrement count to avoid name collisions 
-        // with existing inputs, but you can if your backend logic prefers it.
-    }, 300);
+    card.classList.add('fade-out');
+    setTimeout(() => { card.remove(); }, 300);
 }
 </script>
 {% endblock %}
