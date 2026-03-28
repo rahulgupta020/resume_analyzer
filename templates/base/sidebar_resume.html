@@ -1,9 +1,8 @@
 <div class="resume-sidebar">
 
     <ul class="steps">
-        <br>
-        <br>
-        <br>
+
+        <br><br><br>
 
         <li class="{% if request.resolver_match.url_name == 'edit_header' %}active-blink{% endif %}">
             <div class="step-circle">1</div>
@@ -19,43 +18,45 @@
             </div>
         </li>
 
+        {% if exp_type == "experienced" %}
         <li class="{% if request.resolver_match.url_name == 'edit_experience' %}active-blink{% endif %}">
             <div class="step-circle">3</div>
             <div class="step-text">
                 <a href="{% url 'edit_experience' %}">Experience</a>
             </div>
         </li>
+        {% endif %}
 
         <li class="{% if request.resolver_match.url_name == 'edit_education' %}active-blink{% endif %}">
-            <div class="step-circle">4</div>
+            <div class="step-circle">{% if exp_type == "experienced" %}4{% else %}3{% endif %}</div>
             <div class="step-text">
                 <a href="{% url 'edit_education' %}">Education</a>
             </div>
         </li>
 
         <li class="{% if request.resolver_match.url_name == 'edit_skills' %}active-blink{% endif %}">
-            <div class="step-circle">5</div>
+            <div class="step-circle">{% if exp_type == "experienced" %}5{% else %}4{% endif %}</div>
             <div class="step-text">
                 <a href="{% url 'edit_skills' %}">Skills</a>
             </div>
         </li>
 
         <li class="{% if request.resolver_match.url_name == 'edit_additional' %}active-blink{% endif %}">
-            <div class="step-circle">6</div>
+            <div class="step-circle">{% if exp_type == "experienced" %}6{% else %}5{% endif %}</div>
             <div class="step-text">
                 <a href="{% url 'edit_additional' %}">Additional</a>
             </div>
         </li>
 
         <li class="{% if request.resolver_match.url_name == 'select_template' %}active-blink{% endif %}">
-            <div class="step-circle">7</div>
+            <div class="step-circle">{% if exp_type == "experienced" %}7{% else %}6{% endif %}</div>
             <div class="step-text">
                 <a href="{% url 'select_template' %}">Template</a>
             </div>
         </li>
 
         <li class="{% if request.resolver_match.url_name == 'resume_preview' %}active-blink{% endif %}">
-            <div class="step-circle">8</div>
+            <div class="step-circle">{% if exp_type == "experienced" %}8{% else %}7{% endif %}</div>
             <div class="step-text">
                 <a href="{% url 'resume_preview' %}">Preview</a>
             </div>
@@ -63,5 +64,4 @@
 
     </ul>
 
-    
 </div>

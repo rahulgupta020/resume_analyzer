@@ -9,7 +9,7 @@
             
             <a href="{% url 'my_accounts' %}" class="nav-item">My Account</a>
             
-            <span class="nav-user">Hello {{ request.user.username }}</span>
+            <span class="nav-user">Hello, {{ request.user.first_name.split.0 }}</span>
             <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
         {% else %}
             <a href="{% url 'login' %}" class="nav-item">Login</a>

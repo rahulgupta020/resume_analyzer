@@ -1,15 +1,7 @@
 from .models import ResumeFresherExperience
 
-def resume_experience_context(request):
+def experience_type(request):
     if request.user.is_authenticated:
-        try:
-            obj = ResumeFresherExperience.objects.get(user=request.user)
-            return {
-                'experience_type': obj.type
-            }
-        except ResumeFresherExperience.DoesNotExist:
-            return {
-                'experience_type': None
-            }
-
-    return {}
+        exp = ResumeFresherExperience.objects.filter(user=request.user).first()
+        return {"exp_type": exp.type if exp else None}
+    return {"exp_type": None}

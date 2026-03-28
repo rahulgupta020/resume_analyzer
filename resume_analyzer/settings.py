@@ -65,7 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'analyzer.context_processors.resume_experience_context',
+                'analyzer.context_processors.experience_type',
             ],
         },
     },

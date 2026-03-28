@@ -1,3 +1,4 @@
+from django import views
 from django.urls import path
 from django.conf import settings # ADDED: To access MEDIA/STATIC settings
 from django.conf.urls.static import static # ADDED: To serve files in development
@@ -22,6 +23,8 @@ urlpatterns = [
     path('myaccounts/', my_accounts, name='my_accounts'),    
     path('resume/header/', edit_header, name='edit_header'),
     path('resume/summary/', edit_summary, name='edit_summary'),
+    path("ai/generate-summary/", ai_generate_summary),
+    path("ai/optimize-summary/", ai_optimize_summary),
     path('resume/experience/', edit_experience, name='edit_experience'),
     path('resume/education/', edit_education, name='edit_education'),
     path('resume/skills/', edit_skills, name='edit_skills'),

@@ -280,6 +280,9 @@ body {
    ============================================================ */
 
 /* --- Global Auth Centering --- */
+
+/* Password field with eye icon */
+
 .auth-section {
     background-color: var(--bg-color); /* Adapts to your theme mode */
     min-height: 90vh; /* Takes full height minus navbar */
@@ -334,6 +337,33 @@ body {
 .text-link:hover {
     text-decoration: underline;
 }
+
+.password-wrapper{
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input{
+    width: 100%;
+    padding-right: 45px; /* space for icon */
+}
+
+.toggle-password{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 16px;
+    z-index: 5; /* IMPORTANT */
+}
+
+.toggle-password:hover{
+    color: #000;
+}
+
+
 /*Dashboard*/
 /* ============================================================
    5. DASHBOARD STYLES
@@ -342,9 +372,13 @@ body {
 
 .hero-dashboard {
     background: linear-gradient(135deg, #0b1f3a 0%, #1e3a5f 100%);
-    padding: 80px 50px;
+    padding: 60px 50px;
     border-radius: 28px;
     color: white;
+
+    min-height: calc(100vh - 100px); /* full screen minus navbar */
+    display: flex;
+    align-items: center;
 }
 
 /* Slogan Style */
@@ -387,6 +421,7 @@ body {
 
 /* Floating Animation */
 .floating-hero-img {
+    max-width: 300px;
     animation: float 5s ease-in-out infinite;
 }
 
@@ -504,6 +539,78 @@ hr {
    ============================================================ */
 
 /* --- Summary Page Specifics --- */
+
+.ai-buttons{
+    position:absolute;
+    right:10px;
+    top: -40px;
+    display:flex;
+    gap:10px;
+}
+
+/* ============================================================
+   AI BUTTON ANIMATION
+   ============================================================ */
+
+.ai-buttons button{
+    font-weight:600;
+    border-radius:10px;
+    padding:6px 14px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow:hidden;
+}
+
+/* Gradient glow effect */
+.ai-buttons button::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.6),
+        transparent
+    );
+    transition:0.5s;
+}
+
+/* hover animation */
+.ai-buttons button:hover::before{
+    left:100%;
+}
+
+/* hover lift */
+.ai-buttons button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* special glow for generate */
+#generateSummary{
+    background: linear-gradient(135deg,#3b82f6,#6366f1);
+    color:white;
+    border:none;
+}
+
+#generateSummary:hover{
+    box-shadow:0 10px 25px rgba(99,102,241,0.5);
+}
+
+/* special glow for optimize */
+#optimizeSummary{
+    background: linear-gradient(135deg,#10b981,#22c55e);
+    color:white;
+    border:none;
+}
+
+#optimizeSummary:hover{
+    box-shadow:0 10px 25px rgba(34,197,94,0.5);
+}
+
 .summary-textarea {
     border-radius: 12px;
     padding: 20px;
@@ -1014,6 +1121,53 @@ hr {
    13. EXPERIENCE SELECTION STYLES (fresher_exp.html)
    ============================================================ */
 /* --- Experience Page Background --- */
+
+/* Hide default radio */
+.exp-card-label input {
+    display: none;
+}
+
+/* Card style */
+.selection-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 18px;
+    background: white;
+    transition: 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.selection-card:hover {
+    transform: translateY(-5px);
+    border-color: #3498db;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* Large radio circle */
+.radio-indicator {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid #cbd5e1;
+    transition: 0.3s;
+}
+
+/* Selected state */
+.exp-card-label input:checked + .selection-card {
+    border-color: #3498db;
+    background: rgba(52,152,219,0.05);
+}
+
+/* Selected radio */
+.exp-card-label input:checked + .selection-card .radio-indicator {
+    border-color: #3498db;
+    background: #3498db;
+}
+
 .experience-selection-page {
     background: linear-gradient(135deg, var(--bg-color) 0%, #eef2f7 100%);
     min-height: 100vh;
@@ -1056,6 +1210,8 @@ hr {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.05);
 }
+
+
 
 /* Advantage Stats Styling */
 .stat-highlight {

@@ -8,41 +8,54 @@
 
 <section class="experience-selection-wrapper py-5">
     <div class="container d-flex flex-column align-items-center justify-content-center min-vh-75">
-        
+
         <div class="text-center mb-5">
             <h1 class="display-5 fw-bold text-navy mb-2">Select Your Experience Level</h1>
-            <p class="text-muted fs-5">This helps <span class="text-primary fw-bold">Resume IQ</span> customize your resume structure.</p>
+            <p class="text-muted fs-5">This helps <span class="text-primary fw-bold">Resume IQ</span> customize your
+                resume structure.</p>
         </div>
 
         <form method="post" class="w-100" style="max-width: 900px;">
             {% csrf_token %}
-            
+
             <div class="row g-4 justify-content-center mb-5">
-                
+
                 <div class="col-md-5">
                     <label class="exp-card-label w-100">
-                        <input type="radio" name="type" value="fresher" required>
+                        <input type="radio" name="type" value="fresher"
+                        {% if exp_type == "fresher" %}checked{% endif %} required>
                         <div class="selection-card p-5 text-center">
+
+                            <div class="radio-indicator"></div>
+
                             <div class="icon-circle fresher-icon mb-4">
                                 <i class="fas fa-user-graduate"></i>
                             </div>
+
                             <h3 class="fw-bold">Fresher</h3>
                             <p class="text-muted small">Student or Entry-level</p>
-                            <div class="check-mark"><i class="fas fa-check-circle"></i></div>
+
                         </div>
                     </label>
                 </div>
 
+
+
                 <div class="col-md-5">
                     <label class="exp-card-label w-100">
-                        <input type="radio" name="type" value="experienced">
+                        <input type="radio" name="type" value="experienced"
+                        {% if exp_type == "experienced" %}checked{% endif %} required>
                         <div class="selection-card p-5 text-center">
-                            <div class="icon-circle exp-icon mb-4">
+
+                            <div class="radio-indicator"></div>
+
+                            <div class="icon-circle fresher-icon mb-4">
                                 <i class="fas fa-briefcase"></i>
                             </div>
+
                             <h3 class="fw-bold">Experienced</h3>
-                            <p class="text-muted small">2+ years of work history</p>
-                            <div class="check-mark"><i class="fas fa-check-circle"></i></div>
+                            <p class="text-muted small">1+ years of work history</p>
+
                         </div>
                     </label>
                 </div>

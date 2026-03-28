@@ -15,6 +15,11 @@ from docx import Document
 from pdfminer.high_level import extract_text
 from django.contrib import messages
 
+import ollama
+import json
+from django.http import JsonResponse
+
+
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
@@ -22,18 +27,33 @@ def dashboard(request):
 @login_required
 def fresher_exp(request):
     """Step 0: Fresher vs Experience Selection"""
+
     if request.method == 'POST':
         experience_type = request.POST.get('type')
+
         ResumeFresherExperience.objects.update_or_create(
             user=request.user,
             defaults={'type': experience_type}
         )
+
         return redirect('edit_header')
-    return render(request, 'resume/fresher_exp.html')
+
+    # Get saved value
+    exp = ResumeFresherExperience.objects.filter(user=request.user).first()
+
+    context = {
+        "exp_type": exp.type if exp else None
+    }
+
+    return render(request, 'resume/fresher_exp.html', context)
+
+def get_experience_type(user):
+    exp = ResumeFresherExperience.objects.filter(user=user).first()
+    return exp.type if exp else None
 
 @login_required
 def edit_header(request):
-    """Step 1: Contact Header"""
+
     if request.method == 'POST':
         ResumeHeader.objects.update_or_create(
             user=request.user,
@@ -49,24 +69,112 @@ def edit_header(request):
             }
         )
         return redirect('edit_summary')
-    
-    # ✅ FIXED: Using filter().first() to avoid DoesNotExist error
+
     header = ResumeHeader.objects.filter(user=request.user).first()
-    return render(request, 'resume/header.html', {'header': header})
+
+    context = {
+        "header": header,
+        "exp_type": get_experience_type(request.user)
+    }
+
+    return render(request, 'resume/header.html', context)
 
 @login_required
 def edit_summary(request):
     """Step 2: Professional Summary"""
+
     if request.method == 'POST':
+
         summary_text = request.POST.get('summary')
+
         ResumeSummary.objects.update_or_create(
             user=request.user,
             defaults={'summary': summary_text}
         )
-        return redirect('edit_experience')
-    
+
+        # Get experience type
+        exp_type = get_experience_type(request.user)
+
+        # Redirect based on selection
+        if exp_type == "experienced":
+            return redirect('edit_experience')
+        else:
+            return redirect('edit_education')
+
     summary = ResumeSummary.objects.filter(user=request.user).first()
-    return render(request, 'resume/summary.html', {'summary': summary})
+
+    return render(request, 'resume/summary.html', {
+        'summary': summary,
+        'exp_type': get_experience_type(request.user)
+    })
+
+@login_required
+def ai_generate_summary(request):
+
+    header = ResumeHeader.objects.filter(user=request.user).first()
+    exp = ResumeFresherExperience.objects.filter(user=request.user).first()
+
+    profession = header.profession if header else ""
+    exp_type = exp.type if exp else "fresher"
+
+    prompt = f"""
+Write a professional resume summary.
+
+Profession: {profession}
+Experience Level: {exp_type}
+
+Rules:
+- 2 to 3 lines
+- ATS friendly
+- Professional tone
+- No extra explanation
+"""
+
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=[{'role':'user','content':prompt}],
+        options={
+            'temperature':0.6,
+            'num_predict':120
+        }
+    )
+
+    summary = response['message']['content'].strip()
+
+    return JsonResponse({"summary": summary})
+
+
+@login_required
+def ai_optimize_summary(request):
+
+    data = json.loads(request.body)
+    summary = data.get("summary","")
+
+    prompt = f"""
+Improve this resume summary.
+
+Summary:
+{summary}
+
+Rules:
+- Keep it 2-3 lines
+- Improve grammar
+- Make ATS optimized
+- Keep meaning same
+"""
+
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=[{'role':'user','content':prompt}],
+        options={
+            'temperature':0.4,
+            'num_predict':120
+        }
+    )
+
+    optimized = response['message']['content'].strip()
+
+    return JsonResponse({"summary": optimized})
 
 @login_required
 def edit_experience(request):
