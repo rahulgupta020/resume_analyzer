@@ -25,27 +25,21 @@
                 <form method="post">
                     {% csrf_token %}
 
-                    <div class="mb-4 position-relative">
+<div class="mb-4"> <div class="d-flex justify-content-between align-items-end mb-2">
+        <label class="form-label fw-bold mb-0">Summary</label>
+        
+        <div class="ai-buttons-functional"> <button type="button" id="generateSummary" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-robot"></i> AI Generate Summary
+            </button>
 
-                        <label class="form-label fw-bold">Summary</label>
-
-                        <div class="ai-buttons">
-
-                            <button type="button" id="generateSummary" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-robot"></i> AI Generate Summary
-                            </button>
-
-                            <button type="button" id="optimizeSummary" class="btn btn-sm btn-outline-success">
-                                <i class="fas fa-wand-magic-sparkles"></i> AI Optimize Summary
-                            </button>
-
-                        </div>
-
-                        <textarea id="summaryBox" name="summary" rows="8" class="form-control summary-textarea"
-                            placeholder="Write your professional summary..."
-                            required>{{ summary.summary|default:'' }}</textarea>
-
-                    </div>
+            <button type="button" id="optimizeSummary" class="btn btn-sm btn-outline-success">
+                <i class="fas fa-wand-magic-sparkles"></i> AI Optimize Summary
+            </button>
+        </div>
+    </div>
+    <textarea id="summaryBox" name="summary" rows="8" class="form-control summary-textarea"
+        placeholder="Write your professional summary..." required>{{ summary.summary|default:'' }}</textarea>
+</div>
 
                     <div class="form-text mt-2">
                         <i class="fas fa-info-circle me-1"></i>

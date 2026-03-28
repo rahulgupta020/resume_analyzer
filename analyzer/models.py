@@ -27,8 +27,8 @@ class ResumeExperience(models.Model):
     job_title = models.CharField(max_length=100)
     employer = models.CharField(max_length=100)
     location = models.CharField(max_length=255, blank=True)
-    start_month = models.IntegerField()
-    start_year = models.IntegerField()
+    start_month = models.IntegerField(null=True, blank=True)
+    start_year = models.IntegerField(null=True, blank=True)
     end_month = models.IntegerField(null=True, blank=True)
     end_year = models.IntegerField(null=True, blank=True)
     currently_working = models.BooleanField(default=False)
@@ -41,8 +41,8 @@ class ResumeEducation(models.Model):
     institute_location = models.CharField(max_length=255, blank=True)
     degree = models.CharField(max_length=100)
     field_of_study = models.CharField(max_length=100)
-    start_year = models.IntegerField()
-    end_year = models.IntegerField()
+    start_year = models.IntegerField(null=True, blank=True)
+    end_year = models.IntegerField(null=True, blank=True)
 
 class ResumeSkill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_skills')

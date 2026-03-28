@@ -7,3 +7,11 @@ spacy
 python-dotenv
 pytesseract
 pdfminer.six
+ollama
+celery 
+redis
+pdfplumber
+python-docx
+pdfminer.six
+pytesseract
+pillow 

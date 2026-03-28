@@ -1,3 +1,5 @@
+import time
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -6,6 +8,7 @@ from .models import (
     ResumeExperience, ResumeEducation, ResumeSkill, 
     ResumeAdditional, ResumeTemplate
 )
+from .ai_resume_parser import parse_resume_with_ai
 
 # Required Imports for Analysis
 import io
@@ -16,6 +19,8 @@ from pdfminer.high_level import extract_text
 from django.contrib import messages
 
 import ollama
+import json
+from django.http import JsonResponse
 import json
 from django.http import JsonResponse
 
@@ -118,16 +123,21 @@ def ai_generate_summary(request):
     exp_type = exp.type if exp else "fresher"
 
     prompt = f"""
-Write a professional resume summary.
+Generate ONLY the resume summary.
 
 Profession: {profession}
 Experience Level: {exp_type}
 
 Rules:
-- 2 to 3 lines
+- 2 to 4 lines
 - ATS friendly
 - Professional tone
-- No extra explanation
+- Do NOT add titles
+- Do NOT add explanations
+- Do NOT write phrases like:
+  "Here is a resume summary"
+  "Here is a possible summary"
+- Output ONLY the summary text.
 """
 
     response = ollama.chat(
@@ -151,16 +161,19 @@ def ai_optimize_summary(request):
     summary = data.get("summary","")
 
     prompt = f"""
-Improve this resume summary.
+Rewrite and optimize the following resume summary.
 
 Summary:
 {summary}
 
 Rules:
-- Keep it 2-3 lines
-- Improve grammar
-- Make ATS optimized
-- Keep meaning same
+- ALWAYS rewrite the sentences using different wording
+- Keep it 2-4 lines
+- Improve grammar and clarity
+- Make it ATS optimized
+- Keep the original meaning
+- Do NOT add explanations
+- Output ONLY the rewritten summary
 """
 
     response = ollama.chat(
@@ -351,20 +364,127 @@ def get_raw_text(file):
 
 @login_required
 def upload_resume(request):
+
     if request.method == 'POST' and request.FILES.get('resume'):
+
         resume_file = request.FILES['resume']
+
         raw_text = get_raw_text(resume_file)
-        if raw_text:
-            messages.success(request, "Analysis complete! Pick your template.")
-            return redirect('select_template')
-        else:
-            messages.error(request, "Format not supported.")
+        # print("Extracted Raw Text:", raw_text) 
+
+        if not raw_text:
+            messages.error(request, "Could not read resume.")
+            return redirect('upload_resume')
+
+        # AI Parsing
+        start_time = time.time()
+        parsed = parse_resume_with_ai(raw_text)
+        print("Time taken for AI parsing:", time.time() - start_time)
+
+        # --------------------------
+        # SAVE HEADER
+        # --------------------------
+
+        header = parsed.get("resume_header", {})
+
+        ResumeHeader.objects.update_or_create(
+            user=request.user,
+            defaults={
+                "full_name": header.get("full_name") or "",
+                "profession": header.get("profession") or "",
+                "email": header.get("email") or "",
+                "phone": header.get("phone") or "",
+                "address": header.get("address") or "",
+                "linkedin": header.get("linkedin") or "",
+                "github": header.get("github") or "",
+                "website": header.get("website") or ""
+            }
+        )
+
+        # --------------------------
+        # SUMMARY
+        # --------------------------
+
+        summary = parsed.get("resume_summary", {})
+
+        ResumeSummary.objects.update_or_create(
+            user=request.user,
+            defaults={
+                "summary": summary.get("summary") or ""
+            }
+        )
+
+        # --------------------------
+        # EXPERIENCE
+        # --------------------------
+
+        ResumeExperience.objects.filter(user=request.user).delete()
+
+        for exp in parsed.get("resume_experiences", []):
+
+            ResumeExperience.objects.create(
+                user=request.user,
+                job_title=exp.get("job_title") or "",
+                employer=exp.get("employer") or "",
+                location=exp.get("location") or "",
+                start_month=int(exp.get("start_month")) if exp.get("start_month") else None,
+                start_year=int(exp.get("start_year")) if exp.get("start_year") else None,
+                end_month=int(exp.get("end_month")) if exp.get("end_month") else None,
+                end_year=int(exp.get("end_year")) if exp.get("end_year") else None,
+                currently_working=exp.get("currently_working", False),
+                description=exp.get("description") or "",
+                skills=exp.get("skills") or ""
+            )
+
+        # --------------------------
+        # EDUCATION
+        # --------------------------
+
+        ResumeEducation.objects.filter(user=request.user).delete()
+
+        for edu in parsed.get("resume_education", []):
+
+            ResumeEducation.objects.create(
+                user=request.user,
+                institute_name=edu.get("institute_name") or "",
+                institute_location=edu.get("institute_location") or "",
+                degree=edu.get("degree") or "",
+                field_of_study=edu.get("field_of_study") or "",
+                start_year=int(edu.get("start_year") or None) if edu.get("start_year") else None,
+                end_year=int(edu.get("end_year") or None) if edu.get("end_year") else None
+            )
+
+        # --------------------------
+        # SKILLS
+        # --------------------------
+
+        ResumeSkill.objects.filter(user=request.user).delete()
+
+        for skill in parsed.get("resume_skills", []):
+            ResumeSkill.objects.create(
+                user=request.user,
+                skill_name=skill.get("skill_name")
+            )
+
+        # --------------------------
+        # ADDITIONAL
+        # --------------------------
+        ResumeAdditional.objects.filter(user=request.user).delete()
+        for add in parsed.get("resume_additional", []):
+            ResumeAdditional.objects.create(
+                user=request.user,
+                additional_title=add.get("additional_title") or "",
+                additional_desc=add.get("additional_desc") or ""
+            )
+
+
+
+        messages.success(request, "AI extracted your resume successfully!")
+
+        return redirect("fresher_exp")
+
     return render(request, 'resume/upload_resume.html')
 
-import json
-from django.http import JsonResponse
-import os
-from dotenv import load_dotenv
 
 @login_required
 def ats_analyze(request):
