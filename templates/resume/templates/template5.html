@@ -8,13 +8,13 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --navy: #0d1f3c;
-  --navy2: #132444;
+  --navy:  #0d1f3c;
   --black: #1a1a1a;
   --dark:  #2d2d2d;
   --mid:   #4a4a4a;
-  --light: #777;
-  --rule:  #c0c5cc;
+  --muted: #555555;
+  --light: #888888;
+  --rule:  #cccccc;
   --white: #ffffff;
 }
 
@@ -40,81 +40,125 @@ body {
 /* ── NAVY HEADER ── */
 .header {
   background: var(--navy);
-  padding: 30px 36px 26px;
+  padding: 26px 34px 22px;
 }
 .header h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 32px; font-weight: 800;
-  color: var(--white); letter-spacing: .04em;
+  font-size: 28px; font-weight: 800;
+  color: var(--white); letter-spacing: .05em;
   text-transform: uppercase; line-height: 1.1;
 }
 .header .profession {
-  font-size: 12.5px; font-weight: 600;
+  font-size: 11px; font-weight: 600;
   color: rgba(255,255,255,.7);
   letter-spacing: .18em; text-transform: uppercase;
   margin-top: 5px;
 }
 
 /* ── WHITE BODY ── */
-.body { flex: 1; display: flex; flex-direction: column; padding: 0 36px 36px; }
-
-/* ── ABOUT ME (full width) ── */
-.about { padding: 20px 0 14px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
-.sec-label {
-  font-size: 10px; font-weight: 700; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--navy);
-  margin-bottom: 8px;
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 34px 28px;
 }
-.about p { font-size: 11.5px; line-height: 1.7; color: var(--mid); }
+
+/* ── SECTION LABEL (shared) ── */
+.sec-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--navy);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px; margin-bottom: 8px;
+}
+
+/* ── ABOUT ME ── */
+.about {
+  padding: 14px 0 10px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 12px;
+}
+.about p { font-size: 10.5px; line-height: 1.72; color: var(--muted); }
 
 /* ── CONTACT ROW ── */
 .contact-row {
-  display: flex; gap: 30px; align-items: center;
-  padding-bottom: 16px; border-bottom: 1px solid var(--rule);
-  margin-bottom: 20px;
+  display: flex; gap: 24px; align-items: center;
+  padding-bottom: 12px; border-bottom: 1px solid var(--rule);
+  margin-bottom: 14px; flex-wrap: wrap;
 }
-.contact-row span { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--dark); }
-.contact-row i { font-size: 11px; color: var(--navy); }
+.contact-row span {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10.5px; color: var(--dark);
+}
+.contact-row i { font-size: 10px; color: var(--navy); }
 
-/* ── TWO-COLUMN MIDDLE ── */
-.mid-grid { display: grid; grid-template-columns: 175px 1fr; gap: 0 28px; flex: 1; }
+/* ── MIDDLE GRID: left col | right col ── */
+.mid-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0 22px;
+  flex: 1;
+}
 
-/* ── LEFT COL ── */
-.col-left { padding-right: 10px; border-right: 1px solid var(--rule); }
-.left-sec { margin-bottom: 24px; }
-.left-sec .sec-label { border-bottom: 1px solid var(--rule); padding-bottom: 5px; margin-bottom: 10px; }
+/* ── LEFT COLUMN ── */
+.col-left {
+  border-right: 1px solid var(--rule);
+  padding-right: 12px;
+  display: flex; flex-direction: column; gap: 16px;
+}
 
-.sub-title { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.left-sec {}
+
+.sub-title {
+  font-size: 11px; font-weight: 600;
+  color: var(--dark); margin-bottom: 5px; margin-top: 10px;
+}
+.sub-title:first-child { margin-top: 0; }
+
 .dot-list { list-style: none; }
 .dot-list li {
-  font-size: 11.5px; color: var(--mid);
-  padding-left: 13px; position: relative; margin-bottom: 4px;
+  font-size: 10.5px; color: var(--muted);
+  padding-left: 12px; position: relative; margin-bottom: 3px; line-height: 1.5;
 }
 .dot-list li::before { content: '•'; position: absolute; left: 0; color: var(--navy); }
 
-/* ── RIGHT COL (Career) ── */
-.col-right { padding-left: 4px; }
-.col-right .sec-label { border-bottom: 1px solid var(--rule); padding-bottom: 5px; margin-bottom: 14px; }
+/* Additional items shown as plain listed entries */
+.add-item { margin-bottom: 8px; }
+.add-item:last-child { margin-bottom: 0; }
+.add-title { font-size: 11px; font-weight: 600; color: var(--dark); }
+.add-desc  { font-size: 10px; color: var(--muted); line-height: 1.55; margin-top: 2px; }
 
-.exp-item { margin-bottom: 18px; }
-.exp-title { font-size: 13px; font-weight: 600; color: var(--dark); }
-.exp-meta  { font-size: 11px; color: var(--light); margin: 2px 0 7px; }
+/* ── RIGHT COLUMN ── */
+.col-right {
+  padding-left: 4px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.right-sec {}
+
+.exp-item { margin-bottom: 12px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-title { font-size: 12px; font-weight: 600; color: var(--dark); }
+.exp-meta  { font-size: 10px; color: var(--light); margin: 2px 0 5px; }
 .exp-bullets { list-style: none; }
 .exp-bullets li {
-  font-size: 11px; color: var(--mid); line-height: 1.6;
-  padding-left: 13px; position: relative; margin-bottom: 3px;
+  font-size: 10.5px; color: var(--muted); line-height: 1.6;
+  padding-left: 12px; position: relative; margin-bottom: 3px;
 }
 .exp-bullets li::before { content: '•'; position: absolute; left: 0; color: var(--navy); }
 
-/* ── EDUCATION FOOTER (3-col) ── */
+/* ── EDUCATION FOOTER ── */
 .edu-footer {
   border-top: 1px solid var(--rule);
-  padding-top: 14px; margin-top: 16px;
+  padding-top: 10px; margin-top: 12px;
 }
-.edu-footer .sec-label { margin-bottom: 10px; }
-.edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 16px; }
-.edu-cell .edu-title { font-size: 11.5px; font-weight: 600; color: var(--dark); }
-.edu-cell .edu-sub   { font-size: 11px; color: var(--light); margin-top: 2px; }
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 12px;
+  margin-top: 6px;
+}
+.edu-cell .edu-title { font-size: 10px; font-weight: 600; color: var(--dark); line-height: 1.3; }
+.edu-cell .edu-sub   { font-size: 9.5px; color: var(--light); margin-top: 2px; }
 
 /* ── PRINT ── */
 @media print {
@@ -127,7 +171,7 @@ body {
 <body>
 <div class="page">
 
-  <!-- HEADER -->
+  <!-- NAVY HEADER -->
   <div class="header">
     <h1>{{ header.full_name|default:"Juliana Tomassi" }}</h1>
     <div class="profession">{{ header.profession|default:"Full Stack Developer" }}</div>
@@ -143,107 +187,138 @@ body {
 
     <!-- CONTACT ROW -->
     <div class="contact-row">
-      <span><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"Incredible City" }}</span>
-      <span><i class="fas fa-envelope"></i> {{ header.email|default:"hello@amazingsite.com" }}</span>
-      <span><i class="fas fa-phone-alt"></i> {{ header.phone|default:"(55) 1234-5678" }}</span>
+      {% if header.address %}<span><i class="fas fa-map-marker-alt"></i> {{ header.address }}</span>{% endif %}
+      {% if header.email %}<span><i class="fas fa-envelope"></i> {{ header.email }}</span>{% endif %}
+      {% if header.phone %}<span><i class="fas fa-phone-alt"></i> {{ header.phone }}</span>{% endif %}
+      {% if header.linkedin %}<span><i class="fab fa-linkedin"></i> {{ header.linkedin }}</span>{% endif %}
+      {% if header.github %}<span><i class="fab fa-github"></i> {{ header.github }}</span>{% endif %}
+      {% if header.website %}<span><i class="fas fa-globe"></i> {{ header.website }}</span>{% endif %}
     </div>
 
-    <!-- MIDDLE: Skills | Career -->
+    <!-- MIDDLE GRID -->
     <div class="mid-grid">
 
-      <!-- LEFT: Skills + Languages -->
+      <!-- ── LEFT COLUMN ── -->
       <div class="col-left">
 
+        <!-- Skills -->
+        {% if skills %}
         <div class="left-sec">
           <div class="sec-label">Skills</div>
-
-          <div class="sub-title">Technical Skills</div>
           <ul class="dot-list">
             {% for skill in skills %}
               <li>{{ skill.skill_name }}</li>
-            {% empty %}
-              <li>Skill 1</li><li>Skill 2</li><li>Skill 3</li><li>Skill 4</li>
-            {% endfor %}
-          </ul>
-
-          <div class="sub-title" style="margin-top:14px;">Personal Skills</div>
-          <ul class="dot-list">
-            {% for add in additionals if add.type == 'personal' %}
-              <li>{{ add.additional_title }}</li>
-            {% empty %}
-              <li>Open mind</li><li>Communicative</li><li>Sociable</li><li>Dedicated</li>
             {% endfor %}
           </ul>
         </div>
+        {% endif %}
 
+        <!-- Additionals — each unique title becomes its own section -->
+        {% if additionals %}
+        {% regroup additionals by additional_title as add_groups %}
+        {% for group in add_groups %}
+        <div class="left-sec">
+          <div class="sec-label">{{ group.grouper }}</div>
+          {% for add in group.list %}
+            {% if add.additional_desc %}
+            <div class="add-item">
+              <div class="add-desc">{{ add.additional_desc }}</div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- Default: Languages section if no additionals -->
         <div class="left-sec">
           <div class="sec-label">Languages</div>
           <ul class="dot-list">
-            {% for add in additionals %}
-              <li>{{ add.additional_title }}{% if add.additional_desc %} ({{ add.additional_desc }}){% endif %}</li>
-            {% empty %}
-              <li>English (Advanced)</li>
-              <li>Spanish (Native)</li>
-            {% endfor %}
+            <li>English (Advanced)</li>
+            <li>Spanish (Native)</li>
           </ul>
         </div>
+        {% endif %}
 
       </div>
 
-      <!-- RIGHT: Career -->
+      <!-- ── RIGHT COLUMN ── -->
       <div class="col-right">
-        <div class="sec-label">Career</div>
 
-        {% for exp in experiences %}
-        <div class="exp-item">
-          <div class="exp-title">{{ exp.job_title }}</div>
-          <div class="exp-meta">{{ exp.employer }} · {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}</div>
-          {% if exp.description %}
-          <ul class="exp-bullets"><li>{{ exp.description }}</li></ul>
-          {% endif %}
+        <!-- Career / Experience -->
+        {% if experiences %}
+        <div class="right-sec">
+          <div class="sec-label">Career</div>
+          {% for exp in experiences %}
+          <div class="exp-item">
+            <div class="exp-title">{{ exp.job_title }}</div>
+            <div class="exp-meta">
+              {{ exp.employer }}
+              {% if exp.start_year %} · {{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}{% endif %}
+              {% if exp.location %} · {{ exp.location }}{% endif %}
+            </div>
+            {% if exp.description %}
+            <ul class="exp-bullets">
+              {% for line in exp.description.splitlines %}
+                {% if line.strip %}<li>{{ line }}</li>{% endif %}
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          {% endfor %}
         </div>
-        {% empty %}
-        <div class="exp-item">
-          <div class="exp-title">Senior Full Stack Developer</div>
-          <div class="exp-meta">Incredible Company 1 · 2020 – Present</div>
-          <ul class="exp-bullets">
-            <li>Lead a team of developers on web application projects.</li>
-            <li>Implement scalable solutions using state-of-the-art technologies.</li>
-            <li>Collaborate with designers and project managers to ensure the quality of the final product.</li>
-          </ul>
+        {% else %}
+        <div class="right-sec">
+          <div class="sec-label">Career</div>
+          <div class="exp-item">
+            <div class="exp-title">Senior Full Stack Developer</div>
+            <div class="exp-meta">Incredible Company 1 · 2020 – Present</div>
+            <ul class="exp-bullets">
+              <li>Lead a team of developers on web application projects.</li>
+              <li>Implement scalable solutions using state-of-the-art technologies.</li>
+              <li>Collaborate with designers and project managers to ensure quality.</li>
+            </ul>
+          </div>
+          <div class="exp-item">
+            <div class="exp-title">Full Stack Developer</div>
+            <div class="exp-meta">Incredible Company 2 · 2017 – 2019</div>
+            <ul class="exp-bullets">
+              <li>Development and maintenance of web applications.</li>
+              <li>Integration of APIs and external services.</li>
+              <li>Optimizing application performance and security.</li>
+            </ul>
+          </div>
+          <div class="exp-item">
+            <div class="exp-title">Junior Developer</div>
+            <div class="exp-meta">Incredible Company 3 · 2015 – 2017</div>
+            <ul class="exp-bullets">
+              <li>Development of front-end components using various programming languages.</li>
+              <li>Backend support with various technologies.</li>
+              <li>Collaboration in testing and debugging.</li>
+            </ul>
+          </div>
         </div>
-        <div class="exp-item">
-          <div class="exp-title">Full Stack Developer</div>
-          <div class="exp-meta">Incredible Company 2 · 2017 – 2019</div>
-          <ul class="exp-bullets">
-            <li>Development and maintenance of web applications using various technologies.</li>
-            <li>Integration of APIs and external services.</li>
-            <li>Optimizing application performance and security.</li>
-          </ul>
-        </div>
-        <div class="exp-item">
-          <div class="exp-title">Junior Developer</div>
-          <div class="exp-meta">Incredible Company 3 · 2015 – 2017</div>
-          <ul class="exp-bullets">
-            <li>Development of front-end components using various programming languages.</li>
-            <li>Backend support with various technologies.</li>
-            <li>Collaboration in testing and debugging.</li>
-          </ul>
-        </div>
-        {% endfor %}
+        {% endif %}
+
       </div>
     </div>
 
     <!-- EDUCATION FOOTER -->
+    {% if educations %}
     <div class="edu-footer">
       <div class="sec-label">Education</div>
       <div class="edu-grid">
         {% for edu in educations %}
         <div class="edu-cell">
           <div class="edu-title">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}</div>
-          <div class="edu-sub">{{ edu.institute_name }}{% if edu.start_year %} ({{ edu.start_year }}–{% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}){% endif %}</div>
+          <div class="edu-sub">{{ edu.institute_name }} ({{ edu.start_year }}–{{ edu.end_year }})</div>
         </div>
-        {% empty %}
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="edu-footer">
+      <div class="sec-label">Education</div>
+      <div class="edu-grid">
         <div class="edu-cell">
           <div class="edu-title">Bachelor's Degree in Systems Engineering</div>
           <div class="edu-sub">University 1 (2010–2014)</div>
@@ -256,11 +331,11 @@ body {
           <div class="edu-title">Advanced Course</div>
           <div class="edu-sub">Amazing Course (2018)</div>
         </div>
-        {% endfor %}
       </div>
     </div>
+    {% endif %}
 
-  </div><!-- /body -->
-</div><!-- /page -->
+  </div>
+</div>
 </body>
 </html>

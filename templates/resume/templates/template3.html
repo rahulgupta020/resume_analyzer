@@ -10,10 +10,11 @@
 :root {
   --black: #111111;
   --dark:  #2b2b2b;
-  --mid:   #555555;
+  --mid:   #444444;
+  --muted: #555555;
   --light: #888888;
   --rule:  #cccccc;
-  --bg-sidebar: #f2f2f2;
+  --bg-sidebar: #f0f0f0;
   --white: #ffffff;
 }
 
@@ -39,127 +40,128 @@ body {
 /* ── HEADER ── */
 .header {
   text-align: center;
-  padding: 36px 50px 22px;
+  padding: 28px 50px 18px;
   border-bottom: 2px solid var(--black);
 }
 .header h1 {
   font-family: 'EB Garamond', serif;
-  font-size: 38px; font-weight: 700;
+  font-size: 34px; font-weight: 700;
   letter-spacing: .06em; text-transform: uppercase;
-  color: var(--black);
+  color: var(--black); line-height: 1.1;
 }
 .header .profession {
-  font-size: 13px; font-weight: 400;
-  color: var(--mid); letter-spacing: .12em;
+  font-size: 12px; font-weight: 400;
+  color: var(--mid); letter-spacing: .1em;
   margin-top: 5px;
 }
 
 /* ── ABOUT ME (full width) ── */
 .about-section {
-  padding: 22px 50px;
+  padding: 16px 48px 14px;
   border-bottom: 1px solid var(--rule);
 }
 .about-section .sec-title {
-  font-size: 12px; font-weight: 700;
+  font-size: 11.5px; font-weight: 700;
   letter-spacing: .18em; text-transform: uppercase;
-  color: var(--black); margin-bottom: 10px;
+  color: var(--black); margin-bottom: 8px;
 }
 .about-section p {
-  font-size: 11.5px; line-height: 1.7; color: var(--mid);
+  font-size: 10.5px; line-height: 1.72; color: var(--muted);
 }
 
 /* ── BODY: two columns ── */
-.body {
-  display: flex;
-  flex: 1;
-}
+.body { display: flex; flex: 1; }
 
 /* ── SIDEBAR ── */
 .sidebar {
-  width: 36%;
+  width: 34%;
   background: var(--bg-sidebar);
-  padding: 22px 26px 40px;
+  padding: 16px 20px 36px 24px;
 }
 
 /* ── MAIN ── */
 .main {
-  width: 64%;
-  padding: 22px 34px 40px;
+  width: 66%;
+  padding: 16px 28px 36px 18px;
   border-left: 1px solid var(--rule);
 }
 
-/* ── SECTION TITLES ── */
+/* ── SECTION LABELS ── */
 .sec-label {
-  font-size: 11px; font-weight: 700;
+  font-size: 10px; font-weight: 700;
   letter-spacing: .2em; text-transform: uppercase;
   color: var(--black);
-  border-bottom: 2px solid var(--black);
-  padding-bottom: 5px;
-  margin-bottom: 14px;
+  border-bottom: 1.5px solid var(--black);
+  padding-bottom: 4px; margin-bottom: 10px;
 }
-.sec-block { margin-bottom: 24px; }
+.sec-block { margin-bottom: 18px; }
 .sec-block:last-child { margin-bottom: 0; }
 
 /* ── EDUCATION ── */
-.edu-item { margin-bottom: 14px; }
-.edu-item .inst { font-size: 11.5px; font-weight: 700; text-transform: uppercase; color: var(--black); }
-.edu-item .degree { font-size: 11px; color: var(--mid); margin: 1px 0; }
-.edu-item .years  { font-size: 11px; color: var(--light); }
+.edu-item { margin-bottom: 10px; }
+.edu-item:last-child { margin-bottom: 0; }
+.edu-inst   { font-size: 10.5px; font-weight: 700; text-transform: uppercase; color: var(--black); }
+.edu-degree { font-size: 10px; color: var(--muted); margin: 1px 0; }
+.edu-years  { font-size: 10px; color: var(--light); }
 
 /* ── SKILLS / EXPERTISE (with bar) ── */
 .bar-list { list-style: none; }
 .bar-list li {
   display: flex; align-items: center;
-  font-size: 11.5px; color: var(--dark);
-  margin-bottom: 9px; gap: 10px;
+  font-size: 10.5px; color: var(--dark);
+  margin-bottom: 7px; gap: 8px;
 }
-.bar-list li span { white-space: nowrap; min-width: 90px; }
+.bar-list li span { white-space: nowrap; min-width: 80px; font-size: 10.5px; }
 .bar-track {
   flex: 1; height: 3px;
   background: var(--rule); border-radius: 2px;
   overflow: hidden;
 }
-.bar-fill {
-  height: 100%; background: var(--black); border-radius: 2px;
-}
+.bar-fill { height: 100%; background: var(--black); border-radius: 2px; }
 
 /* ── CONTACT ── */
 .contact-list { list-style: none; }
 .contact-list li {
-  display: flex; align-items: flex-start; gap: 9px;
-  font-size: 11px; color: var(--mid); margin-bottom: 8px;
-  line-height: 1.5;
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 10px; color: var(--muted);
+  margin-bottom: 7px; line-height: 1.4;
 }
-.contact-list li i { color: var(--black); width: 14px; text-align: center; margin-top: 2px; flex-shrink: 0; }
+.contact-list li i { color: var(--black); width: 12px; font-size: 9px; margin-top: 2px; flex-shrink: 0; }
 
 /* ── WORK EXPERIENCE ── */
-.exp-item { margin-bottom: 20px; }
+.exp-item { margin-bottom: 14px; }
+.exp-item:last-child { margin-bottom: 0; }
+
 .exp-header {
   display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
-.exp-company { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--black); }
-.exp-dates   { font-size: 11px; font-weight: 600; color: var(--black); white-space: nowrap; }
+.exp-company { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--black); }
+.exp-dates   { font-size: 10px; font-weight: 600; color: var(--black); white-space: nowrap; flex-shrink: 0; }
+
 .exp-role-row {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 7px;
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 5px;
 }
-.exp-role { font-size: 11.5px; color: var(--mid); }
+.exp-role { font-size: 10px; color: var(--muted); white-space: nowrap; }
 .exp-role-line { flex: 1; height: 1px; background: var(--rule); }
-.exp-desc { font-size: 11px; color: var(--mid); line-height: 1.65; margin-bottom: 7px; }
+
+.exp-desc { font-size: 10px; color: var(--muted); line-height: 1.65; margin-bottom: 5px; }
+
 .exp-bullets { list-style: none; padding: 0; }
 .exp-bullets li {
-  font-size: 11px; color: var(--mid);
-  padding-left: 14px; position: relative; margin-bottom: 4px; line-height: 1.5;
+  font-size: 10px; color: var(--muted);
+  padding-left: 12px; position: relative;
+  margin-bottom: 3px; line-height: 1.5;
 }
 .exp-bullets li::before { content: '•'; position: absolute; left: 0; color: var(--black); }
 
 /* ── REFERENCE ── */
-.ref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.ref-item .ref-name { font-size: 11.5px; font-weight: 700; color: var(--black); }
-.ref-item .ref-org  { font-size: 10.5px; color: var(--mid); margin-bottom: 5px; }
-.ref-item p { font-size: 10.5px; color: var(--mid); line-height: 1.5; }
-.ref-item p i { margin-right: 5px; font-size: 10px; color: var(--black); }
+.ref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 8px; }
+.ref-name { font-size: 10.5px; font-weight: 700; color: var(--black); }
+.ref-org  { font-size: 9.5px; color: var(--muted); margin-bottom: 4px; }
+.ref-detail { font-size: 9.5px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+.ref-detail i { font-size: 8px; color: var(--black); }
 
 /* ── PRINT ── */
 @media print {
@@ -178,7 +180,7 @@ body {
     <div class="profession">{{ header.profession|default:"Marketing Manager" }}</div>
   </div>
 
-  <!-- ABOUT ME -->
+  <!-- ABOUT ME (full width) -->
   <div class="about-section">
     <div class="sec-title">About Me</div>
     <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." }}</p>
@@ -187,7 +189,7 @@ body {
   <!-- BODY -->
   <div class="body">
 
-    <!-- SIDEBAR -->
+    <!-- ── SIDEBAR ── -->
     <div class="sidebar">
 
       <!-- Education -->
@@ -195,37 +197,37 @@ body {
         <div class="sec-label">Education</div>
         {% for edu in educations %}
         <div class="edu-item">
-          <div class="inst">{{ edu.institute_name }}</div>
-          <div class="degree">{{ edu.degree }}{% if edu.field_of_study %} — {{ edu.field_of_study }}{% endif %}</div>
-          <div class="years">{{ edu.start_year }} – {% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>
+          <div class="edu-inst">{{ edu.institute_name }}</div>
+          <div class="edu-degree">{{ edu.degree }}{% if edu.field_of_study %} — {{ edu.field_of_study }}{% endif %}</div>
+          <div class="edu-years">{{ edu.start_year }} – {{ edu.end_year }}</div>
         </div>
         {% empty %}
         <div class="edu-item">
-          <div class="inst">Borcelle University</div>
-          <div class="degree">Lorem ipsum dolor</div>
-          <div class="years">2020 – 2023</div>
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-degree">Lorem ipsum dolor</div>
+          <div class="edu-years">2020 – 2023</div>
         </div>
         <div class="edu-item">
-          <div class="inst">Borcelle University</div>
-          <div class="degree">Lorem ipsum dolor</div>
-          <div class="years">2020 – 2023</div>
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-degree">Lorem ipsum dolor</div>
+          <div class="edu-years">2020 – 2023</div>
         </div>
         <div class="edu-item">
-          <div class="inst">Borcelle University</div>
-          <div class="degree">Lorem ipsum dolor</div>
-          <div class="years">2020 – 2023</div>
+          <div class="edu-inst">Borcelle University</div>
+          <div class="edu-degree">Lorem ipsum dolor</div>
+          <div class="edu-years">2020 – 2023</div>
         </div>
         {% endfor %}
       </div>
 
-      <!-- Skills -->
+      <!-- Skills (with bars) -->
       <div class="sec-block">
         <div class="sec-label">Skills</div>
         <ul class="bar-list">
           {% for skill in skills %}
           <li>
             <span>{{ skill.skill_name }}</span>
-            <div class="bar-track"><div class="bar-fill" style="width:{{ skill.level|default:75 }}%"></div></div>
+            <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
           </li>
           {% empty %}
           <li><span>Market Analysis</span><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div></li>
@@ -237,55 +239,52 @@ body {
         </ul>
       </div>
 
-      <!-- Expertise -->
-      {% if additionals %}
+      <!-- Expertise (additionals used for expertise) -->
       <div class="sec-block">
         <div class="sec-label">Expertise</div>
         <ul class="bar-list">
           {% for add in additionals %}
           <li>
             <span>{{ add.additional_title }}</span>
-            <div class="bar-track"><div class="bar-fill" style="width:{{ add.level|default:70 }}%"></div></div>
+            <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
           </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% else %}
-      <div class="sec-block">
-        <div class="sec-label">Expertise</div>
-        <ul class="bar-list">
+          {% empty %}
           <li><span>Strategic Planning</span><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div></li>
           <li><span>Communication</span><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div></li>
           <li><span>Data Analysis</span><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div></li>
           <li><span>Digital Marketing</span><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div></li>
+          {% endfor %}
         </ul>
       </div>
-      {% endif %}
 
       <!-- Contact -->
       <div class="sec-block">
         <div class="sec-label">Contact</div>
         <ul class="contact-list">
-          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
-          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
-          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
+          {% if header.phone %}<li><i class="fas fa-phone-alt"></i> {{ header.phone }}</li>{% endif %}
+          {% if header.address %}<li><i class="fas fa-map-marker-alt"></i> {{ header.address }}</li>{% endif %}
+          {% if header.email %}<li><i class="fas fa-envelope"></i> {{ header.email }}</li>{% endif %}
+          {% if header.linkedin %}<li><i class="fab fa-linkedin"></i> {{ header.linkedin }}</li>{% endif %}
+          {% if header.github %}<li><i class="fab fa-github"></i> {{ header.github }}</li>{% endif %}
+          {% if header.website %}<li><i class="fas fa-globe"></i> {{ header.website }}</li>{% endif %}
         </ul>
       </div>
 
     </div><!-- /sidebar -->
 
-    <!-- MAIN -->
+    <!-- ── MAIN ── -->
     <div class="main">
 
       <!-- Work Experience -->
       <div class="sec-block">
         <div class="sec-label">Work Experience</div>
-
         {% for exp in experiences %}
         <div class="exp-item">
           <div class="exp-header">
             <div class="exp-company">{{ exp.employer }}</div>
-            <div class="exp-dates">{% if exp.currently_working %}Now{% else %}{{ exp.end_year }}{% endif %} – {{ exp.start_year }}</div>
+            <div class="exp-dates">
+              {% if exp.currently_working %}Now{% else %}{{ exp.end_year }}{% endif %}–{{ exp.start_year }}
+            </div>
           </div>
           <div class="exp-role-row">
             <div class="exp-role">{{ exp.job_title }}</div>
@@ -305,7 +304,7 @@ body {
             <div class="exp-role">Office Marketing</div>
             <div class="exp-role-line"></div>
           </div>
-          <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
           <ul class="exp-bullets">
             <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
             <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
@@ -320,7 +319,7 @@ body {
             <div class="exp-role">Office Marketing</div>
             <div class="exp-role-line"></div>
           </div>
-          <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
           <ul class="exp-bullets">
             <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
             <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
@@ -335,7 +334,7 @@ body {
             <div class="exp-role">Office Marketing</div>
             <div class="exp-role-line"></div>
           </div>
-          <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          <div class="exp-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
           <ul class="exp-bullets">
             <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
             <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
@@ -348,31 +347,31 @@ body {
       <div class="sec-block">
         <div class="sec-label">Reference</div>
         <div class="ref-grid">
-          {% for ref in references %}
-          <div class="ref-item">
-            <div class="ref-name">{{ ref.name }}</div>
-            <div class="ref-org">{{ ref.organization }}</div>
-            <p><i class="fas fa-phone-alt"></i>{{ ref.phone }}</p>
-            <p><i class="fas fa-globe"></i>{{ ref.website }}</p>
+          {% for add in additionals %}
+          {% if add.additional_title and add.additional_desc %}
+          <div>
+            <div class="ref-name">{{ add.additional_title }}</div>
+            <div class="ref-org">{{ add.additional_desc }}</div>
           </div>
+          {% endif %}
           {% empty %}
-          <div class="ref-item">
+          <div>
             <div class="ref-name">Greta Mae Evans</div>
             <div class="ref-org">Borcelle University</div>
-            <p><i class="fas fa-phone-alt"></i>+123-456-7890</p>
-            <p><i class="fas fa-globe"></i>www.reallygreatsite.com</p>
+            <div class="ref-detail"><i class="fas fa-phone-alt"></i> +123-456-7890</div>
+            <div class="ref-detail"><i class="fas fa-globe"></i> www.reallygreatsite.com</div>
           </div>
-          <div class="ref-item">
+          <div>
             <div class="ref-name">Lars Peeters</div>
             <div class="ref-org">Borcelle University</div>
-            <p><i class="fas fa-phone-alt"></i>+123-456-7890</p>
-            <p><i class="fas fa-globe"></i>www.reallygreatsite.com</p>
+            <div class="ref-detail"><i class="fas fa-phone-alt"></i> +123-456-7890</div>
+            <div class="ref-detail"><i class="fas fa-globe"></i> www.reallygreatsite.com</div>
           </div>
-          <div class="ref-item">
+          <div>
             <div class="ref-name">Juliana Silva</div>
             <div class="ref-org">Borcelle University</div>
-            <p><i class="fas fa-phone-alt"></i>+123-456-7890</p>
-            <p><i class="fas fa-globe"></i>www.reallygreatsite.com</p>
+            <div class="ref-detail"><i class="fas fa-phone-alt"></i> +123-456-7890</div>
+            <div class="ref-detail"><i class="fas fa-globe"></i> www.reallygreatsite.com</div>
           </div>
           {% endfor %}
         </div>

@@ -10,12 +10,12 @@
     <div class="row mb-5 align-items-center">
         <div class="col-md-8">
             <h2 class="fw-bold m-0 text-dark">Hello, {{ request.user.username|title }}!</h2>
-            <p class="text-muted">Manage your resume versions and analyze your ATS performance.</p>
+            <p class="text-muted">You have <span id="js-resume-count" class="fw-bold text-primary">0</span> resume versions. Keep optimizing!</p>
         </div>
         <div class="col-md-4 text-md-end">
             <p class="small text-muted mb-1">Last activity: Today at {{ "now"|date:"h:i A" }}</p>
             <div class="progress shadow-sm" style="height: 10px; border-radius: 5px;">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 78%;" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-primary" id="js-profile-bar" role="progressbar" style="width: 78%;"></div>
             </div>
             <span class="small fw-bold text-primary">78% Profile Strength</span>
         </div>
@@ -29,42 +29,38 @@
                     <div class="col-lg-3 text-center border-end">
                         <div class="bg-white p-3 shadow-sm rounded-4 mb-3 border d-flex flex-column justify-content-center" style="height: 200px;">
                             <i class="fas fa-file-pdf fa-4x text-danger opacity-50 mb-2"></i>
-                            <h6 class="fw-bold mb-0 text-truncate">{{ request.user.username|title }}_Resume_2026</h6>
+                            <h6 class="fw-bold mb-0 text-truncate" id="js-latest-name">{{ request.user.username|title }}_Resume_2026</h6>
                         </div>
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{% url 'edit_header' %}" class="btn btn-sm btn-outline-primary fw-bold px-3">
-                                <i class="fas fa-edit me-1"></i> Edit
-                            </a>
-                            <a href="{% url 'resume_preview' %}" class="btn btn-sm btn-outline-dark fw-bold px-3">
-                                <i class="fas fa-eye me-1"></i> Preview
-                            </a>
+                            <a href="{% url 'edit_header' %}" class="btn btn-sm btn-outline-primary fw-bold px-3">Edit</a>
+                            <a href="{% url 'resume_preview' %}" class="btn btn-sm btn-outline-dark fw-bold px-3">Preview</a>
                         </div>
                     </div>
 
                     <div class="col-lg-4 px-lg-5 py-4 py-lg-0">
-                        <h6 class="text-primary fw-bold text-uppercase small ls-wide mb-3">Overall Strength</h6>
+                        <h6 class="text-primary fw-bold text-uppercase small ls-wide mb-3">Average ATS Score</h6>
                         <div class="d-flex align-items-center gap-4">
                             <div class="position-relative d-flex align-items-center justify-content-center" style="width: 90px; height: 90px;">
                                 <svg width="90" height="90" viewBox="0 0 90 90">
                                     <circle cx="45" cy="45" r="40" fill="none" stroke="#e2e8f0" stroke-width="8" />
-                                    <circle cx="45" cy="45" r="40" fill="none" stroke="#1a73e8" stroke-width="8" stroke-dasharray="251" stroke-dashoffset="50" stroke-linecap="round" style="transform: rotate(-90deg); transform-origin: center;" />
+                                    <circle id="js-strength-circle" cx="45" cy="45" r="40" fill="none" stroke="#1a73e8" stroke-width="8" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" style="transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 1s ease-in-out;" />
                                 </svg>
-                                <span class="position-absolute h3 fw-bold m-0 text-primary">82</span>
+                                <span class="position-absolute h3 fw-bold m-0 text-primary" id="js-avg-score">0</span>
                             </div>
                             <ul class="list-unstyled m-0 small">
                                 <li class="mb-1 text-success fw-bold"><i class="fas fa-check-circle me-2"></i> Contact Info Valid</li>
                                 <li class="mb-1 text-success fw-bold"><i class="fas fa-check-circle me-2"></i> Education Complete</li>
-                                <li class="text-warning fw-bold"><i class="fas fa-exclamation-circle me-2"></i> Summary Needs AI Polish</li>
+                                <li class="text-warning fw-bold" id="js-status-tip"><i class="fas fa-exclamation-circle me-2"></i> Summary Needs AI Polish</li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-lg-5 text-center text-lg-start">
                         <h4 class="fw-bold text-dark">Optimize for ATS</h4>
-                        <p class="text-muted mb-4 small">Our AI detected that your resume matches <span class="text-success fw-bold">92% of local job keywords</span>. Fix 2 minor issues to reach 100%.</p>
-                        <a href="{% url 'edit_header' %}" class="btn btn-primary px-5 py-3 shadow-sm fw-bold rounded-3">
-                            Start Review <i class="fas fa-chevron-right ms-2"></i>
-                        </a>
+                        <p class="text-muted mb-4 small">Based on your latest draft, you match <span class="text-success fw-bold" id="js-match-text">0%</span> of job keywords.</p>
+                        <button class="btn btn-primary px-5 py-3 shadow-sm fw-bold rounded-3" onclick="startAIReview()">
+                            Start AI Review <i class="fas fa-chevron-right ms-2"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -72,20 +68,16 @@
 
         <div class="col-12 mt-4">
             <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-                <div class="card-header bg-white py-4 border-0 px-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold m-0 text-dark">Resume Version History</h5>
-                        <a href="{% url 'fresher_exp' %}" class="btn btn-sm btn-dark px-4 rounded-pill">Create New Version</a>
-                    </div>
+                <div class="card-header bg-white py-4 border-0 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold m-0 text-dark">Resume Version History</h5>
+                    <a href="{% url 'fresher_exp' %}" class="btn btn-sm btn-dark px-4 rounded-pill">Create New Version</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" id="resume-table">
                         <thead class="bg-light">
                             <tr class="small text-muted text-uppercase fw-bold">
                                 <th class="px-4 py-3 border-0">Resume Name</th>
                                 <th class="py-3 border-0">Date</th>
-                                <th class="py-3 border-0">Day</th>
-                                <th class="py-3 border-0">Time</th>
                                 <th class="py-3 border-0">ATS Score</th>
                                 <th class="py-3 border-0">Status</th>
                                 <th class="px-4 py-3 border-0 text-end">Actions</th>
@@ -93,36 +85,29 @@
                         </thead>
                         <tbody>
                             <tr class="border-top">
-                                <td class="px-4 fw-bold text-primary">{{ request.user.username|title }}_Master_Final</td>
-                                <td>{{ "now"|date:"d M, Y" }}</td>
-                                <td>{{ "now"|date:"l" }}</td>
-                                <td>{{ "now"|date:"h:i A" }}</td>
-                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">92%</span></td>
-                                <td><span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Ready</span></td>
+                                <td class="px-4 fw-bold text-primary resume-name">Sumit_Master_Final</td>
+                                <td>{{ "now"|date:"d M, Y" }} <br> <small class="text-muted">{{ "now"|date:"l" }}</small></td>
+                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 score-val">92%</span></td>
+                                <td><span class="small text-success fw-bold">Ready</span></td>
                                 <td class="px-4 text-end">
-                                    <a href="{% url 'edit_header' %}" class="btn btn-sm text-dark px-2"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm text-muted px-2"><i class="fas fa-download"></i></button>
-                                    <button class="btn btn-sm text-danger px-2"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Editing...')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Downloading...')"><i class="fas fa-download"></i></button>
+                                    <button class="btn btn-sm btn-light border text-danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="px-4 fw-bold text-dark">{{ request.user.username|title }}_Draft_v1</td>
-                                <td>04 Mar, 2026</td>
-                                <td>Wednesday</td>
-                                <td>02:15 PM</td>
-                                <td><span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2">68%</span></td>
-                                <td><span class="small text-muted"><i class="fas fa-clock me-1"></i> Draft</span></td>
+                                <td class="px-4 fw-bold text-dark resume-name">Sumit_Draft_v1</td>
+                                <td>04 Mar, 2026 <br> <small class="text-muted">Wednesday</small></td>
+                                <td><span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2 score-val">68%</span></td>
+                                <td><span class="small text-muted">Draft</span></td>
                                 <td class="px-4 text-end">
-                                    <a href="{% url 'edit_header' %}" class="btn btn-sm text-dark px-2"><i class="fas fa-edit"></i></a>
-                                    <button class="btn btn-sm text-muted px-2"><i class="fas fa-download"></i></button>
-                                    <button class="btn btn-sm text-danger px-2"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Editing...')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Downloading...')"><i class="fas fa-download"></i></button>
+                                    <button class="btn btn-sm btn-light border text-danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="card-footer bg-white border-0 py-3 text-center">
-                    <button class="btn btn-link text-primary btn-sm text-decoration-none fw-bold">View Full Activity History</button>
                 </div>
             </div>
         </div>
@@ -134,5 +119,64 @@
     .table thead th { font-size: 0.75rem; letter-spacing: 0.5px; }
     .bg-success-subtle { background-color: #d1fae5 !important; }
     .bg-warning-subtle { background-color: #fef3c7 !important; }
+    .score-val { font-weight: bold; }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    updateDashboardStats();
+});
+
+function updateDashboardStats() {
+    const rows = document.querySelectorAll('#resume-table tbody tr');
+    const scoreBadges = document.querySelectorAll('.score-val');
+    
+    let totalScore = 0;
+    let count = rows.length;
+
+    // 1. Update Resume Count Text
+    document.getElementById('js-resume-count').innerText = count;
+
+    // 2. Calculate Average ATS Score
+    scoreBadges.forEach(badge => {
+        let score = parseInt(badge.innerText.replace('%', ''));
+        totalScore += score;
+    });
+
+    let average = count > 0 ? Math.round(totalScore / count) : 0;
+
+    // 3. Update Visual Numbers
+    document.getElementById('js-avg-score').innerText = average;
+    document.getElementById('js-match-text').innerText = average + "%";
+
+    // 4. Update SVG Circle Animation
+    // Circumference of circle (r=40) is ~251
+    const circle = document.getElementById('js-strength-circle');
+    const circumference = 251;
+    const offset = circumference - (average / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+
+    // 5. Update Latest Name in Hero Section
+    if(count > 0) {
+        const latestName = rows[0].querySelector('.resume-name').innerText;
+        document.getElementById('js-latest-name').innerText = latestName;
+    }
+}
+
+function deleteRow(btn) {
+    if(confirm("Are you sure you want to delete this version?")) {
+        const row = btn.closest('tr');
+        row.remove();
+        updateDashboardStats(); // Recalculate average after deletion
+    }
+}
+
+function actionToast(msg) {
+    console.log(msg); // You can replace this with a real toast notification
+}
+
+function startAIReview() {
+    alert("AI Review Started! Analyzing keywords...");
+}
+</script>
 {% endblock %}

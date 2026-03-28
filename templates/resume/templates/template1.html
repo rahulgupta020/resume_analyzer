@@ -12,7 +12,6 @@
   --blue: #2a6db5;
   --sky:  #b9d6f2;
   --grey: #e8ecf0;
-  --text: #2d3748;
   --muted: #5a6a7e;
   --white: #ffffff;
 }
@@ -39,10 +38,10 @@ body {
 
 /* ── DECORATIVE SHAPES ── */
 .deco { position: absolute; z-index: 1; }
-.deco-tr-dark  { top:0; right:0; width:130px; height:130px; background:var(--navy); clip-path:polygon(100% 0,0 0,100% 100%); }
-.deco-tr-bar   { top:18px; right:52px; width:210px; height:22px; background:var(--sky); transform:skewX(45deg); }
-.deco-bl-dark  { bottom:0; left:0; width:240px; height:110px; background:var(--navy); clip-path:polygon(0 0,100% 100%,0 100%); }
-.deco-bl-bar   { bottom:108px; left:-10px; width:190px; height:26px; background:var(--sky); transform:skewX(-45deg); }
+.deco-tr-dark { top:0; right:0; width:130px; height:130px; background:var(--navy); clip-path:polygon(100% 0,0 0,100% 100%); }
+.deco-tr-bar  { top:18px; right:52px; width:210px; height:22px; background:var(--sky); transform:skewX(45deg); }
+.deco-bl-dark { bottom:0; left:0; width:240px; height:110px; background:var(--navy); clip-path:polygon(0 0,100% 100%,0 100%); }
+.deco-bl-bar  { bottom:108px; left:-10px; width:190px; height:26px; background:var(--sky); transform:skewX(-45deg); }
 
 /* ── GREY HEADER BAND ── */
 .grey-band {
@@ -62,7 +61,6 @@ body {
   padding-top: 35px;
 }
 
-/* ── COLUMNS ── */
 .col-left  { width: 38%; padding: 0 28px 60px 32px; }
 .col-right { width: 62%; padding: 0 40px 60px 18px; }
 
@@ -75,8 +73,7 @@ body {
 }
 .photo-wrap img, .photo-placeholder {
   width: 200px; height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
+  border-radius: 50%; object-fit: cover;
   border: 5px solid var(--white);
   box-shadow: 0 6px 24px rgba(0,0,0,.18);
   position: relative; z-index: 10;
@@ -91,7 +88,7 @@ body {
   font-family: 'Cormorant Garamond', serif; font-weight: 700;
 }
 
-/* ── SECTION TITLE left ── */
+/* ── LEFT SECTIONS ── */
 .sec { margin-top: 24px; }
 .sec-title {
   display: flex; align-items: center; gap: 9px;
@@ -103,20 +100,16 @@ body {
 }
 .sec-title i { font-size: 11px; color: var(--blue); }
 
-/* ── BODY COPY ── */
 p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
 
-/* ── CONTACT LIST ── */
 .contact-list { list-style: none; }
 .contact-list li { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 8px; font-size: 11.5px; }
 .contact-list li i { color: var(--blue); width: 14px; text-align: center; margin-top: 3px; flex-shrink: 0; }
 
-/* ── BULLET LIST ── */
 .dot-list { list-style: none; }
 .dot-list li { padding: 3px 0 3px 15px; position: relative; font-size: 12px; }
 .dot-list li::before {
-  content: '';
-  position: absolute; left: 0; top: 50%;
+  content: ''; position: absolute; left: 0; top: 50%;
   transform: translateY(-50%);
   width: 5px; height: 5px;
   border-radius: 50%; background: var(--blue);
@@ -138,7 +131,7 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
   margin-top: 8px; letter-spacing: .1em; text-transform: uppercase;
 }
 
-/* ── RIGHT SECTION TITLES ── */
+/* ── RIGHT SECTIONS ── */
 .r-sec { margin-top: 30px; }
 .r-title {
   display: flex; align-items: center; gap: 11px;
@@ -153,8 +146,7 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
 .tl-item { position: relative; margin-bottom: 20px; }
 .tl-item:last-child { margin-bottom: 0; }
 .tl-item::before {
-  content: '';
-  position: absolute; left: -29px; top: 5px;
+  content: ''; position: absolute; left: -29px; top: 5px;
   width: 12px; height: 12px; border-radius: 50%;
   background: var(--blue);
   border: 2.5px solid var(--white);
@@ -166,6 +158,9 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
 .tl-desc  { list-style: none; padding-left: 2px; }
 .tl-desc li { position: relative; padding-left: 14px; font-size: 11.5px; margin-bottom: 3px; color: var(--muted); }
 .tl-desc li::before { content: '•'; position: absolute; left: 0; color: var(--navy); font-weight: bold; }
+
+/* ── ADDITIONAL SECTION ── */
+.additional-section { margin-top: 30px; }
 
 /* ── MODAL ── */
 #modal-toggle { display: none; }
@@ -187,7 +182,6 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
   color: var(--white); font-size: 44px; cursor: pointer; line-height: 1;
 }
 
-/* ── PRINT ── */
 @media print {
   body { background: #fff; padding: 0; }
   .page { box-shadow: none; }
@@ -213,9 +207,10 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
 
   <div class="resume-body">
 
-    <!-- LEFT COLUMN -->
+    <!-- ══ LEFT COLUMN ══ -->
     <div class="col-left">
 
+      <!-- Profile Photo -->
       <label for="modal-toggle" class="photo-wrap">
         {% if header.profile_image %}
           <img src="{{ header.profile_image.url }}" alt="{{ header.full_name }}">
@@ -224,52 +219,65 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
         {% endif %}
       </label>
 
+      <!-- About Me -->
       <div class="sec">
         <div class="sec-title"><i class="fas fa-user"></i> About Me</div>
-        <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet. Donec hendrerit libero eget est tempor, quis tempus arcu elementum." }}</p>
+        <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit." }}</p>
       </div>
 
+      <!-- Contact -->
       <div class="sec">
         <div class="sec-title"><i class="fas fa-address-book"></i> Contact</div>
         <ul class="contact-list">
-          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
-          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
-          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere Street., Any City" }}</li>
+          {% if header.phone %}<li><i class="fas fa-phone-alt"></i> {{ header.phone }}</li>{% endif %}
+          {% if header.email %}<li><i class="fas fa-envelope"></i> {{ header.email }}</li>{% endif %}
+          {% if header.address %}<li><i class="fas fa-map-marker-alt"></i> {{ header.address }}</li>{% endif %}
+          {% if header.linkedin %}<li><i class="fab fa-linkedin"></i> {{ header.linkedin }}</li>{% endif %}
+          {% if header.github %}<li><i class="fab fa-github"></i> {{ header.github }}</li>{% endif %}
+          {% if header.website %}<li><i class="fas fa-globe"></i> {{ header.website }}</li>{% endif %}
         </ul>
       </div>
 
+      <!-- Skills -->
       <div class="sec">
         <div class="sec-title"><i class="fas fa-bolt"></i> Skills</div>
         <ul class="dot-list">
           {% for skill in skills %}
             <li>{{ skill.skill_name }}</li>
           {% empty %}
-            <li>Web Design</li><li>Branding</li><li>Graphic Design</li><li>SEO</li><li>Marketing</li>
+            <li>Web Design</li><li>Branding</li><li>Graphic Design</li>
           {% endfor %}
         </ul>
       </div>
 
+      <!-- Additional (projects, certifications, awards, languages etc.) -->
+      {% if additionals %}
       <div class="sec">
-        <div class="sec-title"><i class="fas fa-language"></i> Language</div>
-        <ul class="dot-list">
-          {% for add in additionals %}
-            <li>{{ add.additional_title }}</li>
-          {% empty %}
-            <li>English</li><li>French</li>
-          {% endfor %}
-        </ul>
+        <div class="sec-title"><i class="fas fa-star"></i> Additional</div>
+        {% for add in additionals %}
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11.5px;font-weight:700;color:var(--navy);">{{ add.additional_title }}</div>
+          {% if add.additional_desc %}
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;">{{ add.additional_desc }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
       </div>
+      {% endif %}
 
     </div>
 
-    <!-- RIGHT COLUMN -->
+    <!-- ══ RIGHT COLUMN ══ -->
     <div class="col-right">
 
+      <!-- Name + Profession -->
       <div class="name-block">
         <h1>{{ header.full_name|default:"Adelin Palmerston" }}</h1>
         <div class="profession">{{ header.profession|default:"Graphics Designer" }}</div>
       </div>
 
+      <!-- Education -->
+      {% if educations %}
       <div class="r-sec">
         <div class="r-title"><i class="fas fa-graduation-cap"></i> Education</div>
         <div class="timeline">
@@ -277,51 +285,41 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
           <div class="tl-item">
             <div class="tl-date">({{ edu.start_year }} – {{ edu.end_year }})</div>
             <div class="tl-title">{{ edu.institute_name }}</div>
-            <div class="tl-sub">{{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}{% if edu.gpa %}&nbsp;·&nbsp;GPA {{ edu.gpa }}{% endif %}</div>
-          </div>
-          {% empty %}
-          <div class="tl-item">
-            <div class="tl-date">(2011 – 2015)</div>
-            <div class="tl-title">Wardiere University</div>
-            <div class="tl-sub">Bachelor of Design &nbsp;·&nbsp; 3.65</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-date">(2014 – 2019)</div>
-            <div class="tl-title">Wardiere University</div>
-            <div class="tl-sub">Bachelor of Design &nbsp;·&nbsp; 3.99</div>
+            <div class="tl-sub">
+              {{ edu.degree }}{% if edu.field_of_study %} in {{ edu.field_of_study }}{% endif %}
+              {% if edu.institute_location %} &nbsp;·&nbsp; {{ edu.institute_location }}{% endif %}
+            </div>
           </div>
           {% endfor %}
         </div>
       </div>
+      {% endif %}
 
+      <!-- Experience -->
+      {% if experiences %}
       <div class="r-sec">
         <div class="r-title"><i class="fas fa-briefcase"></i> Experience</div>
         <div class="timeline">
           {% for exp in experiences %}
           <div class="tl-item">
-            <div class="tl-date">({{ exp.start_year }} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %})</div>
+            <div class="tl-date">
+              ({{ exp.start_month }}/{{ exp.start_year }} –
+              {% if exp.currently_working %}Present{% else %}{{ exp.end_month }}/{{ exp.end_year }}{% endif %})
+            </div>
             <div class="tl-title">{{ exp.job_title }}</div>
-            <div class="tl-sub">{{ exp.employer }}</div>
+            <div class="tl-sub">{{ exp.employer }}{% if exp.location %}, {{ exp.location }}{% endif %}</div>
             {% if exp.description %}
-            <ul class="tl-desc"><li>{{ exp.description }}</li></ul>
+            <ul class="tl-desc">
+              {% for line in exp.description.splitlines %}
+                {% if line.strip %}<li>{{ line }}</li>{% endif %}
+              {% endfor %}
+            </ul>
             {% endif %}
-          </div>
-          {% empty %}
-          <div class="tl-item">
-            <div class="tl-date">(2020 – 2024)</div>
-            <div class="tl-title">Senior Graphic Designer</div>
-            <div class="tl-sub">Fauget Studio</div>
-            <ul class="tl-desc"><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet.</li></ul>
-          </div>
-          <div class="tl-item">
-            <div class="tl-date">(2017 – 2019)</div>
-            <div class="tl-title">Senior Graphic Designer</div>
-            <div class="tl-sub">Larana, Inc</div>
-            <ul class="tl-desc"><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra in lorem at laoreet.</li></ul>
           </div>
           {% endfor %}
         </div>
       </div>
+      {% endif %}
 
     </div>
   </div>

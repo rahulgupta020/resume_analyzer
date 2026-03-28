@@ -9,12 +9,13 @@
 
 :root {
   --blue-grey: #c9d0d8;
-  --sidebar-bg: #dde1e6;
-  --black: #1a1a1a;
-  --dark: #2e2e2e;
-  --mid: #4a4a4a;
-  --light: #777;
-  --white: #ffffff;
+  --sidebar:   #dde1e6;
+  --black:     #1a1a1a;
+  --dark:      #2e2e2e;
+  --mid:       #4a4a4a;
+  --light:     #777777;
+  --rule:      #cccccc;
+  --white:     #ffffff;
 }
 
 body {
@@ -39,96 +40,87 @@ body {
 /* ── HEADER BAND ── */
 .header {
   background: var(--blue-grey);
-  padding: 44px 50px 36px;
+  padding: 40px 46px 32px;
 }
 .header h1 {
   font-family: 'DM Serif Display', serif;
-  font-size: 46px; font-weight: 400;
+  font-size: 42px; font-weight: 400;
   color: var(--black); line-height: 1.1;
-  letter-spacing: -.5px;
+  letter-spacing: -.3px;
 }
 .header .profession {
   font-size: 14px; font-weight: 300;
-  color: var(--dark); margin-top: 8px;
+  color: var(--dark); margin-top: 7px;
   letter-spacing: .02em;
 }
 
 /* ── BODY ── */
-.body {
-  display: flex;
-  flex: 1;
-}
+.body { display: flex; flex: 1; }
 
 /* ── SIDEBAR ── */
 .sidebar {
-  width: 38%;
-  background: var(--sidebar-bg);
-  padding: 30px 26px 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+  width: 36%;
+  background: var(--sidebar);
+  padding: 26px 20px 50px 24px;
+  display: flex; flex-direction: column; gap: 28px;
 }
 
 /* ── MAIN ── */
 .main {
-  width: 62%;
+  width: 64%;
   background: var(--white);
-  padding: 30px 34px 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
+  padding: 26px 32px 50px 22px;
+  display: flex; flex-direction: column; gap: 20px;
 }
 
 /* ── SECTION LABELS ── */
 .sec-label {
-  font-size: 10px; font-weight: 500;
-  letter-spacing: .22em; text-transform: uppercase;
+  font-size: 9.5px; font-weight: 500;
+  letter-spacing: .24em; text-transform: uppercase;
   color: var(--mid);
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(0,0,0,.15);
-  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(0,0,0,.12);
+  padding-bottom: 5px; margin-bottom: 10px;
 }
 
 /* ── SIDEBAR TEXT ── */
 .sidebar p, .sidebar li {
-  font-size: 12px; line-height: 1.72;
+  font-size: 11.5px; line-height: 1.72;
   color: var(--dark); font-weight: 300;
 }
 
 /* ── CONTACT ── */
-.contact-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.contact-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 12px; color: var(--dark); font-weight: 300; }
-.contact-list li i { font-size: 11px; color: var(--black); margin-top: 2px; width: 13px; flex-shrink: 0; }
+.contact-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.contact-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11.5px; color: var(--dark); font-weight: 300; line-height: 1.4;
+}
+.contact-list li i {
+  font-size: 10px; color: var(--black); margin-top: 2px; width: 12px; flex-shrink: 0;
+}
 
-/* ── MAIN SECTIONS ── */
-.edu-item, .exp-item, .lang-block { margin-bottom: 12px; }
-.edu-item:last-child, .exp-item:last-child { margin-bottom: 0; }
+/* ── MAIN SECTION ITEMS ── */
+.edu-item  { margin-bottom: 12px; }
+.edu-item:last-child { margin-bottom: 0; }
 
 .inst-name {
-  font-size: 11.5px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: .06em;
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .07em;
   color: var(--black); margin-bottom: 2px;
 }
 .inst-detail {
-  font-size: 11.5px; font-style: italic;
+  font-size: 11px; font-style: italic;
   color: var(--mid); line-height: 1.5;
 }
-.inst-years {
-  font-size: 11px; color: var(--light); margin-top: 1px;
-}
+.inst-years { font-size: 10.5px; color: var(--light); margin-top: 1px; }
 
 .exp-company {
-  font-size: 11.5px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: .06em;
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .07em;
   color: var(--black); margin-bottom: 2px;
 }
-.exp-desc {
-  font-size: 11.5px; color: var(--mid); line-height: 1.6;
-}
+.exp-desc { font-size: 11px; color: var(--mid); line-height: 1.65; }
 
-.lang-text, .skill-text {
-  font-size: 11.5px; color: var(--mid); line-height: 1.72;
-}
+.plain-text { font-size: 11px; color: var(--mid); line-height: 1.72; }
 
 /* ── PRINT ── */
 @media print {
@@ -150,84 +142,87 @@ body {
   <!-- BODY -->
   <div class="body">
 
-    <!-- SIDEBAR -->
+    <!-- ── SIDEBAR ── -->
     <div class="sidebar">
 
+      <!-- Profile / Summary -->
       <div>
         <div class="sec-label">Profile</div>
         <p>{{ summary.summary|default:"Business Administration student. I consider my self a responsible and orderly person. I am looking foward for my first work experience." }}</p>
       </div>
 
+      <!-- Contact -->
       <div>
         <div class="sec-label">Contact Me</div>
         <ul class="contact-list">
-          <li><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</li>
-          <li><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</li>
-          <li><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere St., Any City" }}</li>
+          {% if header.phone %}<li><i class="fas fa-phone-alt"></i> {{ header.phone }}</li>{% endif %}
+          {% if header.email %}<li><i class="fas fa-envelope"></i> {{ header.email }}</li>{% endif %}
+          {% if header.address %}<li><i class="fas fa-map-marker-alt"></i> {{ header.address }}</li>{% endif %}
+          {% if header.linkedin %}<li><i class="fab fa-linkedin"></i> {{ header.linkedin }}</li>{% endif %}
+          {% if header.github %}<li><i class="fab fa-github"></i> {{ header.github }}</li>{% endif %}
+          {% if header.website %}<li><i class="fas fa-globe"></i> {{ header.website }}</li>{% endif %}
         </ul>
       </div>
 
     </div>
 
-    <!-- MAIN -->
+    <!-- ── MAIN ── -->
     <div class="main">
 
       <!-- Education -->
+      {% if educations %}
       <div>
         <div class="sec-label">Education</div>
         {% for edu in educations %}
         <div class="edu-item">
           <div class="inst-name">{{ edu.institute_name }}</div>
-          <div class="inst-detail">{{ edu.degree }}{% if edu.field_of_study %}, {{ edu.field_of_study }}{% endif %}{% if edu.currently_studying %}, in progress.{% endif %}</div>
-          {% if edu.start_year %}<div class="inst-years">{{ edu.start_year }}–{% if edu.currently_studying %}Present{% else %}{{ edu.end_year }}{% endif %}</div>{% endif %}
-        </div>
-        {% empty %}
-        <div class="edu-item">
-          <div class="inst-name">Borcelle University</div>
-          <div class="inst-detail">Business Administration career, in progress.</div>
-        </div>
-        <div class="edu-item">
-          <div class="inst-name">Borcelle College</div>
-          <div class="inst-years">2017–2021</div>
+          <div class="inst-detail">
+            {{ edu.degree }}{% if edu.field_of_study %}, {{ edu.field_of_study }}{% endif %}{% if edu.end_year == 0 or edu.end_year == None %}, in progress.{% endif %}
+          </div>
+          {% if edu.start_year %}<div class="inst-years">{{ edu.start_year }}–{{ edu.end_year }}</div>{% endif %}
         </div>
         {% endfor %}
       </div>
+      {% endif %}
 
-      <!-- Language -->
-      <div>
-        <div class="sec-label">Language</div>
-        {% for add in additionals %}
-        <div class="lang-text">{{ add.additional_title }}{% if add.additional_desc %} — {{ add.additional_desc }}{% endif %}</div>
-        {% empty %}
-        <div class="lang-text">Native English.<br>Advanced Spanish.</div>
-        {% endfor %}
-      </div>
-
-      <!-- Computer Skills / Skills -->
+      <!-- Skills as Languages section -->
+      {% if skills %}
       <div>
         <div class="sec-label">Computer Skills</div>
-        {% for skill in skills %}
-        <div class="skill-text">{{ skill.skill_name }}.</div>
-        {% empty %}
-        <div class="skill-text">Text processor.<br>Spreadsheet.<br>Slide presentation.</div>
-        {% endfor %}
+        <div class="plain-text">
+          {% for skill in skills %}{{ skill.skill_name }}.{% if not forloop.last %}<br>{% endif %}{% endfor %}
+        </div>
       </div>
+      {% endif %}
+
+      <!-- Additionals as Language / extra sections -->
+      {% if additionals %}
+      <div>
+        <div class="sec-label">Language</div>
+        <div class="plain-text">
+          {% for add in additionals %}
+          {{ add.additional_title }}{% if add.additional_desc %} — {{ add.additional_desc }}{% endif %}.{% if not forloop.last %}<br>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
 
       <!-- Work Experience -->
+      {% if experiences %}
       <div>
         <div class="sec-label">Work Experience</div>
         {% for exp in experiences %}
-        <div class="exp-item">
+        <div class="edu-item">
           <div class="exp-company">{{ exp.employer }}</div>
           <div class="exp-desc">{{ exp.description }}</div>
-        </div>
-        {% empty %}
-        <div class="exp-item">
-          <div class="exp-company">Ingoude Company</div>
-          <div class="exp-desc">Participation in volunteer collections to distribute in low-income schools.</div>
+          <div class="inst-years">
+            {{ exp.start_year }}{% if exp.end_year %} – {% if exp.currently_working %}Present{% else %}{{ exp.end_year }}{% endif %}{% endif %}
+            {% if exp.location %} · {{ exp.location }}{% endif %}
+          </div>
         </div>
         {% endfor %}
       </div>
+      {% endif %}
 
     </div>
   </div>
