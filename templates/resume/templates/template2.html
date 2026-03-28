@@ -8,14 +8,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black: #111;
-  --dark:  #2b2b2b;
-  --mid:   #555;
-  --light: #888;
-  --rule:  #c8cdd4;
-  --bg:    #f4f5f7;
-  --white: #ffffff;
+  --black:  #111111;
+  --dark:   #222222;
+  --mid:    #444444;
+  --muted:  #555555;
+  --light:  #888888;
+  --rule:   #c0c5cc;
+  --bg:     #f0f2f4;
   --border: #3a4a5c;
+  --white:  #ffffff;
 }
 
 body {
@@ -26,7 +27,7 @@ body {
   justify-content: center;
 }
 
-/* ── A4 ── */
+/* ── A4 PAGE ── */
 .page {
   width: 210mm;
   min-height: 297mm;
@@ -34,104 +35,130 @@ body {
   box-shadow: 0 20px 60px rgba(0,0,0,.5);
   display: flex;
   flex-direction: column;
-  padding: 0;
   overflow: hidden;
 }
 
-/* ── INNER CARD (white with border) ── */
+/* ── WHITE CARD WITH BORDER ── */
 .card {
-  margin: 18px;
+  margin: 14px;
   background: var(--white);
   border: 1.5px solid var(--border);
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 36px 40px 40px;
+  padding: 30px 36px 36px;
+  overflow: hidden;
 }
 
 /* ── HEADER ── */
-.header { text-align: center; padding-bottom: 18px; }
+.header {
+  text-align: center;
+  padding-bottom: 16px;
+}
 .header h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 42px; font-weight: 900;
-  letter-spacing: .05em; text-transform: uppercase;
+  font-size: 38px; font-weight: 900;
+  letter-spacing: .06em; text-transform: uppercase;
   color: var(--black); line-height: 1.1;
 }
 .header .profession {
-  font-size: 12px; font-weight: 500;
-  color: var(--mid); letter-spacing: .25em;
+  font-size: 11px; font-weight: 500;
+  color: var(--mid); letter-spacing: .28em;
   text-transform: uppercase; margin-top: 6px;
 }
 
 /* ── CONTACT BAR ── */
 .contact-bar {
   display: flex; justify-content: center; align-items: center;
-  gap: 28px;
+  gap: 24px; flex-wrap: wrap;
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
-  padding: 10px 0;
-  margin-bottom: 22px;
+  padding: 9px 0;
+  margin-bottom: 18px;
 }
 .contact-bar span {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 11.5px; color: var(--dark);
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10.5px; color: var(--dark); white-space: nowrap;
 }
-.contact-bar i { font-size: 12px; color: var(--border); }
+.contact-bar i { font-size: 11px; color: var(--border); flex-shrink: 0; }
 
 /* ── SECTION ── */
-.sec { margin-bottom: 22px; }
+.sec { margin-bottom: 18px; }
+.sec:last-child { margin-bottom: 0; }
+
 .sec-title {
   font-family: 'Playfair Display', serif;
-  font-size: 17px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .06em;
+  font-size: 15px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
   color: var(--black);
   border-bottom: 1.5px solid var(--black);
-  padding-bottom: 5px;
-  margin-bottom: 14px;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
 }
 
 /* ── ABOUT ── */
-.about p { font-size: 11.5px; line-height: 1.72; color: var(--mid); }
+.about-text {
+  font-size: 10.5px; line-height: 1.75; color: var(--muted);
+}
 
-/* ── EDU / EXP ROWS ── */
+/* ── EDU / EXP TWO-COL GRID ── */
 .item-grid {
   display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 0 20px;
-  margin-bottom: 14px;
+  grid-template-columns: 118px 1fr;
+  gap: 0 18px;
+  margin-bottom: 12px;
 }
 .item-grid:last-child { margin-bottom: 0; }
-.item-left .dates { font-size: 11px; font-weight: 600; color: var(--dark); }
-.item-left .org   { font-size: 11px; color: var(--light); margin-top: 2px; }
-.item-right .role { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
-.item-right .desc { font-size: 11px; color: var(--mid); line-height: 1.65; }
 
-/* ── SKILLS ── */
+.item-left { padding-top: 1px; }
+.item-left .dates {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--dark); line-height: 1.4;
+}
+.item-left .org {
+  font-size: 10px; color: var(--light);
+  margin-top: 2px; line-height: 1.4;
+}
+
+.item-right .role {
+  font-size: 11.5px; font-weight: 700;
+  color: var(--dark); margin-bottom: 3px; line-height: 1.4;
+}
+.item-right .desc {
+  font-size: 10.5px; color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ── SKILLS 4-COL ── */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px 0;
+  gap: 5px 0;
   list-style: none;
 }
 .skills-grid li {
-  font-size: 11.5px; color: var(--dark);
-  padding-left: 14px; position: relative;
+  font-size: 10.5px; color: var(--dark);
+  padding-left: 13px; position: relative;
+  line-height: 1.5;
 }
 .skills-grid li::before {
   content: '•'; position: absolute; left: 0;
-  color: var(--border); font-weight: bold;
+  color: var(--border); font-weight: 700;
 }
 
-/* ── REFERENCES ── */
+/* ── ADDITIONAL / REFERENCES ── */
 .ref-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px 30px;
+  gap: 10px 24px;
 }
-.ref-name { font-size: 12px; font-weight: 600; color: var(--dark); }
-.ref-role { font-size: 11px; color: var(--light); margin-bottom: 4px; }
-.ref-detail { font-size: 11px; color: var(--mid); display: flex; gap: 5px; align-items: center; margin-top: 2px; }
-.ref-detail strong { color: var(--dark); min-width: 40px; }
+.ref-name { font-size: 11.5px; font-weight: 700; color: var(--dark); }
+.ref-role  { font-size: 10px; color: var(--light); margin-bottom: 4px; }
+.ref-detail {
+  font-size: 10px; color: var(--muted);
+  display: flex; align-items: flex-start; gap: 4px; margin-top: 2px;
+}
+.ref-detail strong { color: var(--dark); flex-shrink: 0; }
 
 /* ── PRINT ── */
 @media print {
@@ -145,141 +172,109 @@ body {
 <div class="page">
 <div class="card">
 
-  <!-- HEADER -->
+  <!-- ── HEADER ── -->
   <div class="header">
     <h1>{{ header.full_name|default:"Anaisha Parvati" }}</h1>
     <div class="profession">{{ header.profession|default:"Head Manager" }}</div>
   </div>
 
-  <!-- CONTACT BAR -->
+  <!-- ── CONTACT BAR ── -->
   <div class="contact-bar">
-    <span><i class="fas fa-phone-alt"></i> {{ header.phone|default:"+123-456-7890" }}</span>
-    <span><i class="fas fa-map-marker-alt"></i> {{ header.address|default:"123 Anywhere Street., Any City" }}</span>
-    <span><i class="fas fa-envelope"></i> {{ header.email|default:"hello@reallygreatsite.com" }}</span>
+    {% if header.phone %}
+      <span><i class="fas fa-phone-alt"></i> {{ header.phone }}</span>
+    {% endif %}
+    {% if header.address %}
+      <span><i class="fas fa-map-marker-alt"></i> {{ header.address }}</span>
+    {% endif %}
+    {% if header.email %}
+      <span><i class="fas fa-envelope"></i> {{ header.email }}</span>
+    {% endif %}
+    {% if header.linkedin %}
+      <span><i class="fab fa-linkedin"></i> {{ header.linkedin }}</span>
+    {% endif %}
+    {% if header.github %}
+      <span><i class="fab fa-github"></i> {{ header.github }}</span>
+    {% endif %}
+    {% if header.website %}
+      <span><i class="fas fa-globe"></i> {{ header.website }}</span>
+    {% endif %}
   </div>
 
-  <!-- ABOUT ME -->
-  <div class="sec about">
+  <!-- ── ABOUT ME ── -->
+  <div class="sec">
     <div class="sec-title">About Me</div>
-    <p>{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." }}</p>
+    <p class="about-text">{{ summary.summary|default:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }}</p>
   </div>
 
-  <!-- EDUCATION -->
+  <!-- ── EDUCATION ── -->
+  {% if educations %}
   <div class="sec">
     <div class="sec-title">Education</div>
     {% for edu in educations %}
     <div class="item-grid">
       <div class="item-left">
-        <div class="dates">{{ edu.start_year }} – {% if edu.currently_studying %}Now{% else %}{{ edu.end_year }}{% endif %}</div>
-        <div class="org">{{ edu.institute_name }}</div>
+        <div class="dates">{{ edu.start_year }} – {{ edu.end_year }}</div>
+        <div class="org">{{ edu.institute_name }}{% if edu.institute_location %}, {{ edu.institute_location }}{% endif %}</div>
       </div>
       <div class="item-right">
         <div class="role">{{ edu.degree }}{% if edu.field_of_study %} of {{ edu.field_of_study }}{% endif %}</div>
-        <div class="desc">{{ edu.description|default:"" }}</div>
-      </div>
-    </div>
-    {% empty %}
-    <div class="item-grid">
-      <div class="item-left">
-        <div class="dates">2020 – 2023</div>
-        <div class="org">Wardiere University</div>
-      </div>
-      <div class="item-right">
-        <div class="role">Master of Business Management</div>
-        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
-      </div>
-    </div>
-    <div class="item-grid">
-      <div class="item-left">
-        <div class="dates">2016 – 2020</div>
-        <div class="org">Borcelle University</div>
-      </div>
-      <div class="item-right">
-        <div class="role">Bachelor of Business Management</div>
-        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
+        {% if edu.description %}<div class="desc">{{ edu.description }}</div>{% endif %}
       </div>
     </div>
     {% endfor %}
   </div>
+  {% endif %}
 
-  <!-- EXPERIENCE -->
+  <!-- ── EXPERIENCE ── -->
+  {% if experiences %}
   <div class="sec">
     <div class="sec-title">Experience</div>
     {% for exp in experiences %}
     <div class="item-grid">
       <div class="item-left">
-        <div class="dates">{{ exp.start_year }} – {% if exp.currently_working %}Now{% else %}{{ exp.end_year }}{% endif %}</div>
-        <div class="org">{{ exp.employer }}</div>
+        <div class="dates">
+          {{ exp.start_year }} –
+          {% if exp.currently_working %}Now{% else %}{{ exp.end_year }}{% endif %}
+        </div>
+        <div class="org">{{ exp.employer }}{% if exp.location %}, {{ exp.location }}{% endif %}</div>
       </div>
       <div class="item-right">
         <div class="role">{{ exp.job_title }}</div>
-        <div class="desc">{{ exp.description }}</div>
-      </div>
-    </div>
-    {% empty %}
-    <div class="item-grid">
-      <div class="item-left">
-        <div class="dates">2023 – Now</div>
-        <div class="org">Borcelle Studio</div>
-      </div>
-      <div class="item-right">
-        <div class="role">Head Manager</div>
-        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
-      </div>
-    </div>
-    <div class="item-grid">
-      <div class="item-left">
-        <div class="dates">2022 – 2023</div>
-        <div class="org">Liceria &amp; Co.</div>
-      </div>
-      <div class="item-right">
-        <div class="role">General Manager</div>
-        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.</div>
+        {% if exp.description %}<div class="desc">{{ exp.description }}</div>{% endif %}
       </div>
     </div>
     {% endfor %}
   </div>
+  {% endif %}
 
-  <!-- SKILLS -->
+  <!-- ── SKILLS ── -->
+  {% if skills %}
   <div class="sec">
     <div class="sec-title">Skills</div>
     <ul class="skills-grid">
       {% for skill in skills %}
         <li>{{ skill.skill_name }}</li>
-      {% empty %}
-        <li>Leadership</li><li>Digital Marketing</li><li>Communication</li><li>Innovation</li>
-        <li>Analytics</li><li>Teamwork</li><li>Problem Solving</li><li>Collaboration</li>
       {% endfor %}
     </ul>
   </div>
+  {% endif %}
 
-  <!-- REFERENCES -->
+  <!-- ── ADDITIONAL (projects, awards, certifications, languages, references) ── -->
+  {% if additionals %}
   <div class="sec">
-    <div class="sec-title">References</div>
+    <div class="sec-title">Additional</div>
     <div class="ref-grid">
-      {% for ref in references %}
+      {% for add in additionals %}
       <div>
-        <div class="ref-name">{{ ref.name }}</div>
-        <div class="ref-role">{{ ref.organization }}</div>
-        <div class="ref-detail"><strong>Phone:</strong> {{ ref.phone }}</div>
-        <div class="ref-detail"><strong>Social:</strong> {{ ref.social|default:ref.website }}</div>
-      </div>
-      {% empty %}
-      <div>
-        <div class="ref-name">Aarya Agarwal</div>
-        <div class="ref-role">CEO of Borcelle Company</div>
-        <div class="ref-detail"><strong>Phone:</strong> 123-456-7890</div>
-        <div class="ref-detail"><strong>Social:</strong> @reallygreatsite</div>
-      </div>
-      <div>
-        <div class="ref-name">Sharin Varma</div>
-        <div class="ref-role">HRD of Borcelle Company</div>
-        <div class="ref-detail"><strong>Phone:</strong> 123-456-7890</div>
-        <div class="ref-detail"><strong>Social:</strong> @reallygreatsite</div>
+        <div class="ref-name">{{ add.additional_title }}</div>
+        {% if add.additional_desc %}
+          <div class="ref-role">{{ add.additional_desc }}</div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
   </div>
+  {% endif %}
 
 </div><!-- /card -->
 </div><!-- /page -->
