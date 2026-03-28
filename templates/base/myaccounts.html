@@ -1,182 +1,180 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/myaccounts.css' %}">
+{% endblock %}
+
 {% block sidebar %}{% endblock %} 
 {% block content_class %}col-md-12{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
+<div class="container-fluid py-4 px-lg-5 dashboard-wrapper">
 
     <div class="row mb-5 align-items-center">
         <div class="col-md-8">
             <h2 class="fw-bold m-0 text-dark">Hello, {{ request.user.username|title }}!</h2>
-            <p class="text-muted">You have <span id="js-resume-count" class="fw-bold text-primary">0</span> resume versions. Keep optimizing!</p>
+            <p class="text-muted mb-0">Optimize your resume against specific job requirements.</p>
         </div>
         <div class="col-md-4 text-md-end">
-            <p class="small text-muted mb-1">Last activity: Today at {{ "now"|date:"h:i A" }}</p>
-            <div class="progress shadow-sm" style="height: 10px; border-radius: 5px;">
-                <div class="progress-bar bg-primary" id="js-profile-bar" role="progressbar" style="width: 78%;"></div>
-            </div>
-            <span class="small fw-bold text-primary">78% Profile Strength</span>
+            <p class="small text-muted mb-0">Last activity: {{ "now"|date:"h:i A" }}</p>
         </div>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
         <div class="col-lg-12">
-            <div class="card shadow-sm border-0 p-4 mb-4" style="border-radius: 16px; background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);">
+            <div class="card dashboard-card shadow-sm border-0 p-4">
                 <div class="row align-items-center">
                     
                     <div class="col-lg-3 text-center border-end">
-                        <div class="bg-white p-3 shadow-sm rounded-4 mb-3 border d-flex flex-column justify-content-center" style="height: 200px;">
-                            <i class="fas fa-file-pdf fa-4x text-danger opacity-50 mb-2"></i>
-                            <h6 class="fw-bold mb-0 text-truncate" id="js-latest-name">{{ request.user.username|title }}_Resume_2026</h6>
+                        <div class="resume-preview-box shadow-sm mb-3">
+                            <i class="fas fa-file-pdf fa-3x text-danger opacity-25 mb-2"></i>
+                            <h6 class="fw-bold mb-0 px-2 text-truncate" style="font-size: 0.85rem;">{{ request.user.username|title }}_Resume_2026</h6>
                         </div>
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{% url 'edit_header' %}" class="btn btn-sm btn-outline-primary fw-bold px-3">Edit</a>
-                            <a href="{% url 'resume_preview' %}" class="btn btn-sm btn-outline-dark fw-bold px-3">Preview</a>
+                            <a href="{% url 'edit_header' %}" class="btn btn-xs btn-outline-primary fw-bold">Edit</a>
+                            <a href="{% url 'resume_preview' %}" class="btn btn-xs btn-outline-dark fw-bold">Preview</a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 px-lg-5 py-4 py-lg-0">
-                        <h6 class="text-primary fw-bold text-uppercase small ls-wide mb-3">Average ATS Score</h6>
-                        <div class="d-flex align-items-center gap-4">
-                            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 90px; height: 90px;">
-                                <svg width="90" height="90" viewBox="0 0 90 90">
-                                    <circle cx="45" cy="45" r="40" fill="none" stroke="#e2e8f0" stroke-width="8" />
-                                    <circle id="js-strength-circle" cx="45" cy="45" r="40" fill="none" stroke="#1a73e8" stroke-width="8" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round" style="transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 1s ease-in-out;" />
+                    <div class="col-lg-4 px-lg-5 py-4 py-lg-0 border-end text-center text-lg-start">
+                        <h6 class="text-primary fw-bold text-uppercase small ls-wide mb-3">Baseline ATS Score</h6>
+                        <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-4">
+                            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 85px; height: 85px;">
+                                <svg width="85" height="85" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" stroke-width="10" />
+                                    <circle id="js-baseline-circle" cx="50" cy="50" r="45" fill="none" stroke="#1a73e8" stroke-width="10" stroke-dasharray="283" stroke-dashoffset="56" stroke-linecap="round" />
                                 </svg>
-                                <span class="position-absolute h3 fw-bold m-0 text-primary" id="js-avg-score">0</span>
+                                <span class="position-absolute fw-bold text-primary" id="js-baseline-val" style="font-size: 1.25rem;">82%</span>
                             </div>
-                            <ul class="list-unstyled m-0 small">
-                                <li class="mb-1 text-success fw-bold"><i class="fas fa-check-circle me-2"></i> Contact Info Valid</li>
-                                <li class="mb-1 text-success fw-bold"><i class="fas fa-check-circle me-2"></i> Education Complete</li>
-                                <li class="text-warning fw-bold" id="js-status-tip"><i class="fas fa-exclamation-circle me-2"></i> Summary Needs AI Polish</li>
+                            <ul class="list-unstyled m-0 small fw-medium text-muted text-start" style="font-size: 0.75rem;">
+                                <li class="mb-1" id="stat-layout"><i class="fas fa-check-circle text-success me-1"></i> Clean Layout</li>
+                                <li class="mb-1" id="stat-contact"><i class="fas fa-check-circle text-success me-1"></i> Contact OK</li>
+                                <li id="stat-jd"><i class="fas fa-info-circle text-warning me-1"></i> Based on latest JD</li>
                             </ul>
                         </div>
                     </div>
 
-                    <div class="col-lg-5 text-center text-lg-start">
-                        <h4 class="fw-bold text-dark">Optimize for ATS</h4>
-                        <p class="text-muted mb-4 small">Based on your latest draft, you match <span class="text-success fw-bold" id="js-match-text">0%</span> of job keywords.</p>
-                        <button class="btn btn-primary px-5 py-3 shadow-sm fw-bold rounded-3" onclick="startAIReview()">
-                            Start AI Review <i class="fas fa-chevron-right ms-2"></i>
+                    <div class="col-lg-5 ps-lg-4">
+                        <h6 class="fw-bold text-dark mb-2">ATS Simulator</h6>
+                        <textarea id="mock-jd-input" class="form-control border-0 bg-light p-2 mb-2" rows="2" placeholder="Paste Job Description here..."></textarea>
+                        <button id="btn-mock-ats" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm rounded-3">
+                            Calculate Match Rate
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-12 mt-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-                <div class="card-header bg-white py-4 border-0 px-4 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold m-0 text-dark">Resume Version History</h5>
-                    <a href="{% url 'fresher_exp' %}" class="btn btn-sm btn-dark px-4 rounded-pill">Create New Version</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="resume-table">
-                        <thead class="bg-light">
-                            <tr class="small text-muted text-uppercase fw-bold">
-                                <th class="px-4 py-3 border-0">Resume Name</th>
-                                <th class="py-3 border-0">Date</th>
-                                <th class="py-3 border-0">ATS Score</th>
-                                <th class="py-3 border-0">Status</th>
-                                <th class="px-4 py-3 border-0 text-end">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-top">
-                                <td class="px-4 fw-bold text-primary resume-name">Sumit_Master_Final</td>
-                                <td>{{ "now"|date:"d M, Y" }} <br> <small class="text-muted">{{ "now"|date:"l" }}</small></td>
-                                <td><span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 score-val">92%</span></td>
-                                <td><span class="small text-success fw-bold">Ready</span></td>
-                                <td class="px-4 text-end">
-                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Editing...')"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Downloading...')"><i class="fas fa-download"></i></button>
-                                    <button class="btn btn-sm btn-light border text-danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 fw-bold text-dark resume-name">Sumit_Draft_v1</td>
-                                <td>04 Mar, 2026 <br> <small class="text-muted">Wednesday</small></td>
-                                <td><span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2 score-val">68%</span></td>
-                                <td><span class="small text-muted">Draft</span></td>
-                                <td class="px-4 text-end">
-                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Editing...')"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-light border mx-1" onclick="actionToast('Downloading...')"><i class="fas fa-download"></i></button>
-                                    <button class="btn btn-sm btn-light border text-danger" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div id="mock-results-container" class="d-none animate-slide-up">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-white py-2 border-0 px-4 d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-primary small"><i class="fas fa-chart-bar me-2"></i> Match Analysis Results</span>
+                <button type="button" class="btn-close-red-square" onclick="hideResults()">×</button>
+            </div>
+            
+            <div class="card-body p-4 bg-white border-top">
+                <div class="row align-items-start">
+                    <div class="col-lg-3 text-center border-end">
+                        <h1 id="m-score" class="display-4 fw-bold mb-0"></h1>
+                        <p class="text-muted text-uppercase fw-bold mb-2" style="font-size: 10px; letter-spacing: 1px;">Match Percentage</p>
+                        <div id="m-verdict-box" class="p-2 bg-light rounded-3 text-start">
+                            <span id="m-verdict" class="fw-bold text-dark" style="font-size: 11px;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9 ps-lg-4">
+                        <div class="row mb-3 g-2">
+                            <div class="col-4">
+                                <span class="text-muted fw-bold" style="font-size: 10px;">MATCHED SKILLS</span>
+                                <div class="fw-bold text-dark" id="m-skill" style="font-size: 1.1rem;">0</div>
+                            </div>
+                            <div class="col-8 border-start ps-3">
+                                <span class="text-muted fw-bold" style="font-size: 10px;">TOP MISSING KEYWORDS</span>
+                                <div id="m-keywords" class="d-flex flex-wrap gap-1 mt-1"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-primary bg-opacity-10 p-2 rounded-3 border-start border-primary border-4">
+                            <span class="fw-bold text-primary" style="font-size: 11px;"><i class="fas fa-lightbulb me-1"></i> Recommended Fixes</span>
+                            <ul id="m-tips" class="small text-dark mb-0 ps-3 mt-1" style="font-size: 12px; line-height: 1.5;"></ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
-<style>
-    .ls-wide { letter-spacing: 0.1em; }
-    .table thead th { font-size: 0.75rem; letter-spacing: 0.5px; }
-    .bg-success-subtle { background-color: #d1fae5 !important; }
-    .bg-warning-subtle { background-color: #fef3c7 !important; }
-    .score-val { font-weight: bold; }
-</style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    updateDashboardStats();
-});
+function hideResults() {
+    document.getElementById('mock-results-container').classList.add('d-none');
+}
 
-function updateDashboardStats() {
-    const rows = document.querySelectorAll('#resume-table tbody tr');
-    const scoreBadges = document.querySelectorAll('.score-val');
+document.getElementById('btn-mock-ats').addEventListener('click', function() {
+    const jdText = document.getElementById('mock-jd-input').value.trim();
+    if(!jdText) {
+        document.getElementById('mock-jd-input').classList.add('border-danger');
+        return;
+    }
+
+    const btn = this;
+    const container = document.getElementById('mock-results-container');
     
-    let totalScore = 0;
-    let count = rows.length;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Checking...';
 
-    // 1. Update Resume Count Text
-    document.getElementById('js-resume-count').innerText = count;
+    fetch("{% url 'ats_analyze' %}", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": "{{ csrf_token }}" },
+        body: JSON.stringify({ jd: jdText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-redo me-1"></i> Refresh Analysis';
 
-    // 2. Calculate Average ATS Score
-    scoreBadges.forEach(badge => {
-        let score = parseInt(badge.innerText.replace('%', ''));
-        totalScore += score;
+        const scoreVal = data.ats_score;
+
+        // 🟢 1. DYNAMICALLY UPDATE BASELINE SCORE & STATUS (TOP)
+        document.getElementById('js-baseline-val').innerText = scoreVal + '%';
+        
+        // Update Circle
+        const circle = document.getElementById('js-baseline-circle');
+        const circumference = 283; 
+        const offset = circumference - (scoreVal / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+
+        // Color Logic
+        let colorClass = scoreVal >= 85 ? 'text-success' : (scoreVal >= 70 ? 'text-warning' : 'text-danger');
+        document.getElementById('js-baseline-val').className = `position-absolute fw-bold ${colorClass}`;
+        
+        // Update Status List based on Score
+        const statJD = document.getElementById('stat-jd');
+        if (scoreVal >= 85) {
+            statJD.innerHTML = '<i class="fas fa-star text-success me-1"></i> Strong JD Match';
+        } else if (scoreVal >= 70) {
+            statJD.innerHTML = '<i class="fas fa-adjust text-warning me-1"></i> Partial JD Match';
+        } else {
+            statJD.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i> Poor JD Match';
+        }
+
+        // 🔴 2. UPDATE COMPACT RESULTS AREA (BOTTOM)
+        document.getElementById('m-score').innerText = scoreVal + '%';
+        document.getElementById('m-score').className = `display-4 fw-bold mb-0 ${colorClass}`;
+        document.getElementById('m-verdict').innerText = data.final_verdict;
+        document.getElementById('m-skill').innerText = data.matched_keywords.length;
+
+        const kw = document.getElementById('m-keywords'); kw.innerHTML = '';
+        data.missing_keywords.slice(0, 5).forEach(m => kw.innerHTML += `<span class="keyword-badge">${m}</span>`);
+
+        const tips = document.getElementById('m-tips'); tips.innerHTML = '';
+        data.improvement_suggestions.slice(0, 2).forEach(t => tips.innerHTML += `<li>${t}</li>`);
+
+        container.classList.remove('d-none');
     });
-
-    let average = count > 0 ? Math.round(totalScore / count) : 0;
-
-    // 3. Update Visual Numbers
-    document.getElementById('js-avg-score').innerText = average;
-    document.getElementById('js-match-text').innerText = average + "%";
-
-    // 4. Update SVG Circle Animation
-    // Circumference of circle (r=40) is ~251
-    const circle = document.getElementById('js-strength-circle');
-    const circumference = 251;
-    const offset = circumference - (average / 100) * circumference;
-    circle.style.strokeDashoffset = offset;
-
-    // 5. Update Latest Name in Hero Section
-    if(count > 0) {
-        const latestName = rows[0].querySelector('.resume-name').innerText;
-        document.getElementById('js-latest-name').innerText = latestName;
-    }
-}
-
-function deleteRow(btn) {
-    if(confirm("Are you sure you want to delete this version?")) {
-        const row = btn.closest('tr');
-        row.remove();
-        updateDashboardStats(); // Recalculate average after deletion
-    }
-}
-
-function actionToast(msg) {
-    console.log(msg); // You can replace this with a real toast notification
-}
-
-function startAIReview() {
-    alert("AI Review Started! Analyzing keywords...");
-}
+});
 </script>
 {% endblock %}
