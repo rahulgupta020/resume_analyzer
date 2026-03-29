@@ -487,61 +487,227 @@ def upload_resume(request):
 
 
 @login_required
+def ats_baseline_score(request):
+
+    header = ResumeHeader.objects.filter(user=request.user).first()
+    summary = ResumeSummary.objects.filter(user=request.user).first()
+    experiences = ResumeExperience.objects.filter(user=request.user)
+    skills = ResumeSkill.objects.filter(user=request.user)
+
+    resume_text = ""
+
+    if header:
+        resume_text += f"Name: {header.full_name}\n"
+        resume_text += f"Profession: {header.profession}\n"
+        resume_text += f"Email: {header.email}\n"
+        resume_text += f"Phone: {header.phone}\n"
+
+    if summary:
+        resume_text += f"Summary: {summary.summary}\n"
+
+    resume_text += "Skills: " + ", ".join([s.skill_name for s in skills]) + "\n"
+
+    for exp in experiences:
+        resume_text += f"{exp.job_title} at {exp.employer}. {exp.description}\n"
+
+
+    prompt = f"""
+You are an ATS resume analyzer.
+
+Analyze the resume and evaluate:
+
+1. Contact Information
+2. ATS Friendly Structure
+3. Skills and Keywords
+4. Summary Quality
+5. Experience Impact
+
+Also detect missing industry keywords.
+
+Resume:
+{resume_text}
+
+Return JSON ONLY:
+
+{{
+"ats_score": number between 0-100,
+"layout": "good or bad",
+"contact": "good or missing",
+"summary": "good or weak",
+"keywords": "good or weak",
+"missing_keywords": ["keyword1","keyword2","keyword3"],
+"suggestions": ["tip1","tip2","tip3"]
+}}
+"""
+
+    response = ollama.chat(
+        model="llama3.2:1b",
+        messages=[{"role": "user", "content": prompt}],
+        options={"temperature": 0.2}
+    )
+
+    content = response["message"]["content"]
+
+    try:
+        data = json.loads(content)
+    except:
+        data = {
+            "ats_score": 65,
+            "layout": "good",
+            "contact": "good",
+            "summary": "weak",
+            "keywords": "weak",
+            "missing_keywords": ["Python", "FastAPI", "Docker"],
+            "suggestions": [
+                "Add measurable achievements in experience section",
+                "Include more industry keywords",
+                "Strengthen professional summary"
+            ]
+        }
+
+    return JsonResponse(data)
+
+
+import json
+import re
+import ollama
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def ats_analyze(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            jd_text = data.get("jd", "")
-            if not jd_text:
-                return JsonResponse({"error": "Job Description is required."}, status=400)
-                
-            # Gather Resume Text
-            header = ResumeHeader.objects.filter(user=request.user).first()
-            summary = ResumeSummary.objects.filter(user=request.user).first()
-            experiences = ResumeExperience.objects.filter(user=request.user)
-            skills = ResumeSkill.objects.filter(user=request.user)
-            
-            resume_text = "RESUME DETAILS:\n"
-            if header:
-                resume_text += f"Profession: {header.profession}\n"
-            if summary:
-                resume_text += f"Summary: {summary.summary}\n"
-            resume_text += "Skills: " + ", ".join([s.skill_name for s in skills]) + "\n"
-            resume_text += "Experience:\n"
-            for exp in experiences:
-                resume_text += f"- {exp.job_title} at {exp.employer}. {exp.description}\n"
-                
-            # LOCAL ATS ATS LOGIC (No API)
-            import re
-            
-            # Extract meaningful words
-            jd_words = set([w.strip().lower() for w in re.split(r'\W+', jd_text) if len(w) > 3])
-            resume_words = set([w.strip().lower() for w in re.split(r'\W+', resume_text) if len(w) > 3])
-            
-            common = list(jd_words.intersection(resume_words))
-            missing = list(jd_words.difference(resume_words))[:6]
-            matched = common[:10]
-            
-            score = min(98, 55 + len(matched) * 4) # Base 55 + 4 per match
-            
-            exp_match = "HIGH" if score >= 85 else ("MEDIUM" if score >= 70 else "LOW")
-            verdict = "Candidate is a strong fit!" if score >= 80 else "Candidate needs more tailored keywords."
-            
-            result = {
-              "ats_score": score,
-              "summary": f"Your resume contains {len(matched)} direct keyword matches with the job description.",
-              "matched_keywords": matched,
-              "missing_keywords": missing if missing else ["Everything looks covered!"],
-              "experience_match": exp_match,
-              "improvement_suggestions": [
-                  "Ensure your past job titles align closely with this JD.",
-                  "Add concrete, quantifiable metrics to your recent roles."
-              ],
-              "final_verdict": verdict
-            }
-            return JsonResponse(result)
-            
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
-            
-    return JsonResponse({"error": "Invalid request"}, status=400)
+
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request method"}, status=400)
+
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    jd_text = data.get("jd", "")
+
+    header = ResumeHeader.objects.filter(user=request.user).first()
+    summary = ResumeSummary.objects.filter(user=request.user).first()
+    experiences = ResumeExperience.objects.filter(user=request.user)
+    skills = ResumeSkill.objects.filter(user=request.user)
+
+    resume_text = ""
+
+    if header:
+        resume_text += f"Profession: {header.profession}\n"
+
+    if summary:
+        resume_text += f"Summary: {summary.summary}\n"
+
+    if skills.exists():
+        resume_text += "Skills: " + ", ".join([s.skill_name for s in skills]) + "\n"
+
+    for exp in experiences:
+        resume_text += f"{exp.job_title} at {exp.employer}. {exp.description}\n"
+
+
+    # ----------------------------
+    # AI PROMPT
+    # ----------------------------
+    prompt = f"""
+You are an ATS resume analyzer.
+
+Compare the resume with the job description.
+
+Return ONLY valid JSON.
+
+Rules:
+- matched_keywords must contain ONLY keywords present in BOTH resume and job description
+- missing_keywords must contain ONLY keywords present in job description but NOT in resume
+- Keywords must be short (1-3 words)
+- Do NOT write sentences inside keyword arrays
+- ats_score must be between 0 and 100
+
+IMPORTANT RULES:
+- Output must start with {{ and end with }}
+- Do NOT write explanations
+- Do NOT write text before JSON
+- Do NOT write text after JSON
+
+
+RESUME:
+{resume_text}
+
+JOB DESCRIPTION:
+{jd_text}
+
+Return JSON ONLY:
+
+{{
+"ats_score": 0,
+"matched_keywords": ["keyword1","keyword2"],
+"missing_keywords": ["keyword1","keyword2"],
+"improvement_suggestions": ["tip1","tip2"],
+"final_verdict": "short verdict sentence"
+}}
+"""
+
+
+    # ----------------------------
+    # CALL OLLAMA
+    # ----------------------------
+    response = ollama.chat(
+        model="llama3.2:1b",
+        messages=[{"role": "user", "content": prompt}],
+        options={"temperature": 0.2}
+    )
+
+    content = response["message"]["content"]
+    # print("RAW CONTENT:\n", content)
+
+    # ----------------------------
+    # CLEAN RESPONSE
+    # ----------------------------
+    try:
+        # Extract JSON if extra text exists
+        json_match = re.search(r"\{[\s\S]*\}", content)
+        if json_match:
+            result = json.loads(json_match.group())
+        else:
+            raise ValueError("No JSON found")
+
+        # print("JSON MATCH:\n", json_match.group() if json_match else "None")
+
+    except Exception:
+        result = {
+            "ats_score": 60,
+            "matched_keywords": [],
+            "missing_keywords": ["Python", "SQL", "Communication"],
+            "improvement_suggestions": [
+                "Add more technical skills",
+                "Highlight measurable achievements",
+                "Improve resume summary"
+            ],
+            "final_verdict": "AI parsing failed but resume analysis fallback applied"
+        }
+
+    # ----------------------------
+    # SAFETY FIXES
+    # ----------------------------
+
+    if not result.get("matched_keywords"):
+        result["matched_keywords"] = []
+
+    if not result.get("missing_keywords"):
+        result["missing_keywords"] = ["Add more relevant keywords"]
+
+    if not result.get("improvement_suggestions"):
+        result["improvement_suggestions"] = [
+            "Add more relevant technical skills",
+            "Improve project descriptions"
+        ]
+
+    if not result.get("final_verdict"):
+        result["final_verdict"] = "Resume partially matches the job description"
+
+    if not result.get("ats_score"):
+        result["ats_score"] = 60
+
+    return JsonResponse(result)

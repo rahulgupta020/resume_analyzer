@@ -32,7 +32,8 @@ urlpatterns = [
     path('resume/templates/', select_template, name='select_template'),
     path('resume/preview/', resume_preview, name='resume_preview'),
     path('resume/render_template/', render_resume_template, name='render_resume_template'),
-    path('resume/ats-analyze/', ats_analyze, name='ats_analyze'),
+    path("ats-baseline/", ats_baseline_score, name="ats_baseline"),
+    path("ats-analyze/", ats_analyze, name="ats_analyze"),
 ]
 
 # --- ADDED: Development Helpers ---

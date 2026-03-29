@@ -16,9 +16,9 @@
             <h2 class="fw-bold m-0 text-dark">Hello, {{ request.user.username|title }}!</h2>
             <p class="text-muted mb-0">Optimize your resume against specific job requirements.</p>
         </div>
-        <div class="col-md-4 text-md-end">
+        <!-- <div class="col-md-4 text-md-end">
             <p class="small text-muted mb-0">Last activity: {{ "now"|date:"h:i A" }}</p>
-        </div>
+        </div> -->
     </div>
 
     <div class="row g-4 mb-4">
@@ -40,12 +40,39 @@
                     <div class="col-lg-4 px-lg-5 py-4 py-lg-0 border-end text-center text-lg-start">
                         <h6 class="text-primary fw-bold text-uppercase small ls-wide mb-3">Baseline ATS Score</h6>
                         <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-4">
-                            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 85px; height: 85px;">
+                            <!-- <div class="position-relative d-flex align-items-center justify-content-center" style="width: 85px; height: 85px;">
                                 <svg width="85" height="85" viewBox="0 0 100 100">
                                     <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" stroke-width="10" />
                                     <circle id="js-baseline-circle" cx="50" cy="50" r="45" fill="none" stroke="#1a73e8" stroke-width="10" stroke-dasharray="283" stroke-dashoffset="56" stroke-linecap="round" />
                                 </svg>
                                 <span class="position-absolute fw-bold text-primary" id="js-baseline-val" style="font-size: 1.25rem;">82%</span>
+                            </div> -->
+                            <div class="position-relative d-inline-flex justify-content-center align-items-center">
+
+                                <svg width="110" height="110">
+                                    <circle cx="55" cy="55" r="45" stroke="#eee" stroke-width="10" fill="none"></circle>
+
+                                    <circle id="js-baseline-circle"
+                                            cx="55" cy="55" r="45"
+                                            stroke="#0d6efd"
+                                            stroke-width="10"
+                                            fill="none"
+                                            stroke-dasharray="283"
+                                            stroke-dashoffset="283"
+                                            transform="rotate(-90 55 55)">
+                                    </circle>
+                                </svg>
+
+                                <!-- Loader -->
+                                <div id="js-baseline-loader" class="position-absolute">
+                                    <div class="spinner-border text-primary"></div>
+                                </div>
+
+                                <!-- Score -->
+                                <div id="js-baseline-val"
+                                    class="position-absolute fw-bold d-none">
+                                </div>
+
                             </div>
                             <ul class="list-unstyled m-0 small fw-medium text-muted text-start" style="font-size: 0.75rem;">
                                 <li class="mb-1" id="stat-layout"><i class="fas fa-check-circle text-success me-1"></i> Clean Layout</li>
@@ -53,11 +80,14 @@
                                 <li id="stat-jd"><i class="fas fa-info-circle text-warning me-1"></i> Based on latest JD</li>
                             </ul>
                         </div>
+
+                        <div id="baseline-keywords" class="mt-2"></div>
+
                     </div>
 
                     <div class="col-lg-5 ps-lg-4">
                         <h6 class="fw-bold text-dark mb-2">ATS Simulator</h6>
-                        <textarea id="mock-jd-input" class="form-control border-0 bg-light p-2 mb-2" rows="2" placeholder="Paste Job Description here..."></textarea>
+                        <textarea id="mock-jd-input" class="form-control border-0 bg-light p-2 mb-2" rows="8" placeholder="Paste Job Description here..."></textarea>
                         <button id="btn-mock-ats" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm rounded-3">
                             Calculate Match Rate
                         </button>
@@ -71,7 +101,7 @@
         <div class="card shadow-sm border-0 rounded-4">
             <div class="card-header bg-white py-2 border-0 px-4 d-flex justify-content-between align-items-center">
                 <span class="fw-bold text-primary small"><i class="fas fa-chart-bar me-2"></i> Match Analysis Results</span>
-                <button type="button" class="btn-close-red-square" onclick="hideResults()">×</button>
+                <button type="button" class="btn-close-red-square" onclick="hideResults()">x</button>
             </div>
             
             <div class="card-body p-4 bg-white border-top">
@@ -109,72 +139,156 @@
 </div>
 
 <script>
+
+// Hide JD results
 function hideResults() {
     document.getElementById('mock-results-container').classList.add('d-none');
 }
 
+
+// ===============================
+// JD MATCH ANALYSIS
+// ===============================
 document.getElementById('btn-mock-ats').addEventListener('click', function() {
+
     const jdText = document.getElementById('mock-jd-input').value.trim();
-    if(!jdText) {
+
+    if(!jdText){
         document.getElementById('mock-jd-input').classList.add('border-danger');
         return;
     }
 
     const btn = this;
     const container = document.getElementById('mock-results-container');
-    
+
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Checking...';
 
     fetch("{% url 'ats_analyze' %}", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-CSRFToken": "{{ csrf_token }}" },
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
         body: JSON.stringify({ jd: jdText })
     })
     .then(response => response.json())
     .then(data => {
+
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-redo me-1"></i> Refresh Analysis';
 
         const scoreVal = data.ats_score;
 
-        // 🟢 1. DYNAMICALLY UPDATE BASELINE SCORE & STATUS (TOP)
-        document.getElementById('js-baseline-val').innerText = scoreVal + '%';
-        
-        // Update Circle
-        const circle = document.getElementById('js-baseline-circle');
-        const circumference = 283; 
-        const offset = circumference - (scoreVal / 100) * circumference;
-        circle.style.strokeDashoffset = offset;
+        let colorClass =
+            scoreVal >= 85 ? 'text-success' :
+            scoreVal >= 70 ? 'text-warning' :
+            'text-danger';
 
-        // Color Logic
-        let colorClass = scoreVal >= 85 ? 'text-success' : (scoreVal >= 70 ? 'text-warning' : 'text-danger');
-        document.getElementById('js-baseline-val').className = `position-absolute fw-bold ${colorClass}`;
-        
-        // Update Status List based on Score
-        const statJD = document.getElementById('stat-jd');
-        if (scoreVal >= 85) {
-            statJD.innerHTML = '<i class="fas fa-star text-success me-1"></i> Strong JD Match';
-        } else if (scoreVal >= 70) {
-            statJD.innerHTML = '<i class="fas fa-adjust text-warning me-1"></i> Partial JD Match';
-        } else {
-            statJD.innerHTML = '<i class="fas fa-times-circle text-danger me-1"></i> Poor JD Match';
-        }
-
-        // 🔴 2. UPDATE COMPACT RESULTS AREA (BOTTOM)
+        // ===============================
+        // UPDATE JD RESULT SECTION ONLY
+        // ===============================
         document.getElementById('m-score').innerText = scoreVal + '%';
         document.getElementById('m-score').className = `display-4 fw-bold mb-0 ${colorClass}`;
+
         document.getElementById('m-verdict').innerText = data.final_verdict;
+
         document.getElementById('m-skill').innerText = data.matched_keywords.length;
 
-        const kw = document.getElementById('m-keywords'); kw.innerHTML = '';
-        data.missing_keywords.slice(0, 5).forEach(m => kw.innerHTML += `<span class="keyword-badge">${m}</span>`);
+        const kw = document.getElementById('m-keywords');
+        kw.innerHTML = '';
 
-        const tips = document.getElementById('m-tips'); tips.innerHTML = '';
-        data.improvement_suggestions.slice(0, 2).forEach(t => tips.innerHTML += `<li>${t}</li>`);
+        data.missing_keywords.slice(0,5).forEach(m=>{
+            kw.innerHTML += `<span class="keyword-badge">${m}</span>`;
+        });
+
+        const tips = document.getElementById('m-tips');
+        tips.innerHTML = '';
+
+        data.improvement_suggestions.slice(0,2).forEach(t=>{
+            tips.innerHTML += `<li>${t}</li>`;
+        });
 
         container.classList.remove('d-none');
+
     });
 });
+
+
+// ===============================
+// BASELINE ATS SCORE (LOAD ON PAGE)
+// ===============================
+
+document.addEventListener("DOMContentLoaded", function(){
+
+fetch("{% url 'ats_baseline' %}")
+.then(res => res.json())
+.then(data => {
+
+    const scoreVal = data.ats_score;
+
+    // Hide loader
+    document.getElementById('js-baseline-loader').classList.add('d-none');
+
+    // Show score
+    const scoreEl = document.getElementById('js-baseline-val');
+    scoreEl.classList.remove('d-none');
+    scoreEl.innerText = scoreVal + '%';
+
+    const circle = document.getElementById('js-baseline-circle');
+
+    const circumference = 283;
+    const offset = circumference - (scoreVal / 100) * circumference;
+
+    circle.style.strokeDashoffset = offset;
+
+    let colorClass =
+        scoreVal >= 85 ? 'text-success' :
+        scoreVal >= 70 ? 'text-warning' :
+        'text-danger';
+
+    scoreEl.className =
+        `position-absolute fw-bold ${colorClass}`;
+
+
+    // Layout Status
+    const statLayout = document.getElementById('stat-layout');
+    statLayout.innerHTML =
+        data.layout == "good"
+        ? '<i class="fas fa-check-circle text-success me-1"></i> Clean Layout'
+        : '<i class="fas fa-times-circle text-danger me-1"></i> Poor Layout';
+
+
+    // Contact Status
+    const statContact = document.getElementById('stat-contact');
+    statContact.innerHTML =
+        data.contact == "good"
+        ? '<i class="fas fa-check-circle text-success me-1"></i> Contact OK'
+        : '<i class="fas fa-times-circle text-danger me-1"></i> Missing Contact';
+
+
+    const statJD = document.getElementById('stat-jd');
+    statJD.innerHTML =
+        '<i class="fas fa-info-circle text-warning me-1"></i> Based on latest JD';
+
+
+    // ===============================
+    // SHOW MISSING KEYWORDS
+    // ===============================
+    const keywordsBox = document.getElementById("baseline-keywords");
+
+    if(data.missing_keywords){
+        keywordsBox.innerHTML = "";
+
+        data.missing_keywords.slice(0,4).forEach(k=>{
+            keywordsBox.innerHTML += `<span class="keyword-badge">${k}</span>`;
+        });
+    }
+
+});
+
+});
+
 </script>
+
 {% endblock %}
