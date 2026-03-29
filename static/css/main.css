@@ -588,93 +588,33 @@ body {
    ============================================================ */
 
 /* --- Global Auth Centering --- */
-
-/* Password field with eye icon */
-
 .auth-section {
     background-color: var(--bg-color);
-    /* Adapts to your theme mode */
-    min-height: 90vh;
-    /* Takes full height minus navbar */
+    /* Changed from 90vh to 100vh to ensure it covers the full screen */
+    min-height: 100vh; 
+    
     display: flex;
-    align-items: center;
-    /* Vertical Center */
-    justify-content: center;
-    /* Horizontal Center */
-    padding: 20px;
+    flex-direction: column; /* Stack vertically if needed */
+    align-items: center;    /* Horizontal Center */
+    justify-content: center; /* Vertical Center */
+    
+    padding: 80px 20px; /* Extra top padding to account for fixed navbars */
+    box-sizing: border-box;
 }
 
 .auth-container {
     width: 100%;
     max-width: 450px;
-    /* Standard card width */
+    /* Removes any default margin that might offset the flex centering */
+    margin: 0 auto; 
 }
 
 .auth-card {
     background: var(--card-bg);
-    /* Dark/Light mode card background */
     padding: 40px;
-    border-radius: 12px;
+    border-radius: 16px; /* Slightly more rounded for a modern look */
     border: 1px solid var(--border-color);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
-
-/* Typography & Inputs */
-.auth-card h2 {
-    text-align: center;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 8px;
-}
-
-.auth-card p {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 15px;
-    margin-bottom: 30px;
-}
-
-/* Form Helper Classes */
-.btn-full {
-    width: 100%;
-    padding: 12px;
-    font-weight: 600;
-}
-
-.text-link {
-    font-size: 14px;
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.text-link:hover {
-    text-decoration: underline;
-}
-
-.password-wrapper{
-    position: relative;
-    width: 100%;
-}
-
-.password-wrapper input{
-    width: 100%;
-    padding-right: 45px; /* space for icon */
-}
-
-.toggle-password{
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #6c757d;
-    font-size: 16px;
-    z-index: 5; /* IMPORTANT */
-}
-
-.toggle-password:hover{
-    color: #000;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* Deeper shadow for "lift" */
 }
 
 
@@ -1780,92 +1720,152 @@ hr {
 /* ============================================================
    14. RESUME PREVIEW STYLES
    ============================================================ */
-/* LEFT PANEL FIX */
-.preview-sidebar {
-    position: sticky;
-    top: 20px;
+/* --- Header Buttons --- */
+.btn-custom-sm {
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    display: inline-flex;
+    align-items: center;
 }
 
-/* RIGHT CONTAINER */
-.resume-outer-box {
-    background: #e2e8f0;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* CENTER ALIGN */
-.resume-center {
-    display: flex;
-    justify-content: center;
-}
-
-/* WRAPPER */
-.resume-paper-wrapper {
-    width: 100%;
-    max-width: 900px;
-    padding: 20px;
-    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-}
-
-/* A4 PAPER */
-.resume-iframe {
-    width: 794px;
-    height: 1123px;
+.btn-ats-action {
+    background-color: #1a73e8;
+    color: white;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 8px;
     border: none;
-    background: rgb(245, 243, 243);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-ats-action:hover {
+    background-color: #1557b0;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+}
+
+/* --- Resume Iframe Perfecting --- */
+.resume-frame-wrapper {
+    background: #f1f5f9; /* Slate background to make the white paper pop */
+    padding: 40px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    overflow: auto;
+}
+
+#resume-frame {
+    width: 800px; /* Precise A4 Width */
+    height: 1132px; /* Precise A4 Height */
+    border: none;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    background: white;
+    border-radius: 2px;
+}
+
+/* Responsive Scaling for smaller screens */
+@media (max-width: 1200px) {
+    #resume-frame {
+        width: 100%;
+        height: 1000px;
+    }
+    .resume-frame-wrapper {
+        padding: 20px;
+    }
+}
+
+
+/* ============================================================
+   15. MY ACCOUNTS STYLES
+   ============================================================ */
+
+
+
+/* --- General Styles --- */
+.dashboard-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+.btn-xs {
+    padding: 4px 12px;
+    font-size: 11px;
     border-radius: 6px;
 }
 
-/* RESPONSIVE SCALE */
-@media (max-width: 100px) {
-    .resume-iframe {
-        transform: scale(0.8);
-        transform-origin: top center;
-    }
+.resume-preview-box {
+    background-color: #f1f5f9;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
 }
 
-@media (max-width: 768px) {
-    .resume-iframe {
-        transform: scale(0.6);
-    }
-}
-
-.custom-close-btn {
+/* --- The Signature Red Square X Button --- */
+.btn-close-red-square {
+    width: 26px;
+    height: 26px;
     background-color: #e74c3c;
-    color: #fff;
+    color: white;
     border: none;
-    width: 30px;
-    height: 30px;
     border-radius: 6px;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.custom-close-btn:hover {
+.btn-close-red-square:hover {
     background-color: #c0392b;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
-/* SIZE OF ATS SImulator */
-.custom-modal-size {
-    max-width: 700px;
-    /* perfect balanced width */
-    width: 100%;
-    /* responsive for smaller screens */
+/* --- SVG Progress Circle --- */
+#js-baseline-circle {
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (max-width: 768px) {
-    .custom-modal-size {
-        max-width: 95%;
-    }
+/* --- Keyword Badges --- */
+.keyword-badge {
+    background-color: rgba(231, 76, 60, 0.08);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.15);
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+/* --- Animations --- */
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ls-wide { letter-spacing: 0.1em; }
+
+/* Textarea focus fix */
+#mock-jd-input:focus {
+    background-color: #fff !important;
+    box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+    border: 1px solid #1a73e8 !important;
 }
