@@ -255,6 +255,73 @@ Rules:
 
 
 @login_required
+def ai_generate_experience(request):
+    data = json.loads(request.body)
+    title = data.get("title", "")
+    company = data.get("company", "")
+
+    prompt = f"""
+Generate ONLY the work experience description for a resume.
+
+Job Title: {title}
+Company: {company}
+
+Rules:
+- 3 to 5 bullet points
+- Professional tone
+- Emphasize impact and skills
+- Start each bullet point with an action verb
+- Do NOT add titles
+- Do NOT add explanations
+- Output ONLY the description text, using standard formatting (like '-' or '•').
+"""
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=[{'role':'user','content':prompt}],
+        options={
+            'temperature':0.6,
+            'num_predict':250
+        }
+    )
+
+    desc = response['message']['content'].strip()
+    return JsonResponse({"description": desc})
+
+@login_required
+def ai_optimize_experience(request):
+    data = json.loads(request.body)
+    desc = data.get("description", "")
+
+    prompt = f"""
+Rewrite and optimize the following work experience description.
+
+Description:
+{desc}
+
+Rules:
+- ALWAYS rewrite using different, more powerful wording
+- Keep it 3-5 bullet points
+- Improve grammar and clarity
+- Make it ATS optimized by including action verbs
+- Keep the original meaning
+- Do NOT add explanations
+- Output ONLY the rewritten description using standard formatting.
+"""
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=[{'role':'user','content':prompt}],
+        options={
+            'temperature':0.4,
+            'num_predict':250
+        }
+    )
+
+    optimized = response['message']['content'].strip()
+    return JsonResponse({"description": optimized})
+
+
+
+@login_required
 def edit_experience(request):
     """Step 3: Work History (Multiple Items)"""
     if request.method == 'POST':

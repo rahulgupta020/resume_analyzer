@@ -66,7 +66,17 @@
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label>Description</label>
+                            <div class="d-flex justify-content-between align-items-end mb-2">
+                                <label class="mb-0">Description</label>
+                                <div class="ai-buttons-functional gap-2 d-flex">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="aiGenerateExperience(this, {{ forloop.counter0 }})">
+                                        <i class="fas fa-robot"></i> AI Generate
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="aiOptimizeExperience(this, {{ forloop.counter0 }})">
+                                        <i class="fas fa-wand-magic-sparkles"></i> AI Optimize
+                                    </button>
+                                </div>
+                            </div>
                             <textarea name="description_{{ forloop.counter0 }}" class="form-control" rows="4" required>{{ exp.description|default:'' }}</textarea>
                         </div>
 
@@ -93,7 +103,20 @@
                         </div>
                         <div class="col-md-3 mb-3 end-date-group"><label>End Month</label><input type="number" name="end_month_0" class="form-control"></div>
                         <div class="col-md-3 mb-3 end-date-group"><label>End Year</label><input type="number" name="end_year_0" class="form-control"></div>
-                        <div class="col-md-12 mb-3"><label>Description</label><textarea name="description_0" class="form-control" rows="4" required></textarea></div>
+                        <div class="col-md-12 mb-3">
+                            <div class="d-flex justify-content-between align-items-end mb-2">
+                                <label class="mb-0">Description</label>
+                                <div class="ai-buttons-functional gap-2 d-flex">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="aiGenerateExperience(this, 0)">
+                                        <i class="fas fa-robot"></i> AI Generate
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="aiOptimizeExperience(this, 0)">
+                                        <i class="fas fa-wand-magic-sparkles"></i> AI Optimize
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea name="description_0" class="form-control" rows="4" required></textarea>
+                        </div>
                         <div class="col-md-12 mb-3"><label>Skills Used</label><input type="text" name="skills_0" class="form-control"></div>
                     </div>
                 </div>
@@ -132,6 +155,13 @@ document.getElementById('add-btn-trigger').addEventListener('click', function() 
     // Reset visibility of end date fields for the new clone
     newBlock.querySelectorAll('.end-date-group').forEach(div => div.style.display = 'block');
 
+    newBlock.querySelectorAll('button').forEach(btn => {
+        let onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes('ai')) {
+            btn.setAttribute('onclick', onclickAttr.replace(/,\s*\d+\)/, ', ' + count + ')'));
+        }
+    });
+
     const removeBtn = newBlock.querySelector('.btn-remove-entry');
     if (removeBtn) removeBtn.style.display = 'flex';
 
@@ -157,6 +187,78 @@ function toggleEndDate(checkbox) {
     endDates.forEach(div => {
         div.style.display = checkbox.checked ? 'none' : 'block';
     });
+}
+
+async function aiGenerateExperience(btn, index) {
+    const jobTitleInput = document.querySelector(`input[name="job_title_${index}"]`);
+    const employerInput = document.querySelector(`input[name="employer_${index}"]`);
+    const descBox = document.querySelector(`textarea[name="description_${index}"]`);
+    
+    if (!jobTitleInput || !jobTitleInput.value || !employerInput || !employerInput.value) {
+        alert("Please enter Job Title and Company first.");
+        return;
+    }
+    
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch("/ai/generate-experience/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                title: jobTitleInput.value,
+                company: employerInput.value
+            })
+        });
+        const data = await response.json();
+        if (data.description) {
+            descBox.value = data.description;
+        }
+    } catch (error) {
+        console.error("Generate Error:", error);
+        alert("AI failed to generate description.");
+    }
+    
+    btn.innerHTML = '<i class="fas fa-robot"></i> AI Generate';
+    btn.disabled = false;
+}
+
+async function aiOptimizeExperience(btn, index) {
+    const descBox = document.querySelector(`textarea[name="description_${index}"]`);
+    const text = descBox.value;
+    
+    if (text.trim() === "") {
+        alert("Please write a description first.");
+        return;
+    }
+    
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Optimizing';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch("/ai/optimize-experience/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ description: text })
+        });
+        const data = await response.json();
+        if (data.description) {
+            descBox.value = data.description;
+        }
+    } catch (error) {
+        console.error("Optimize Error:", error);
+        alert("AI failed to optimize description.");
+    }
+    
+    btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> AI Optimize';
+    btn.disabled = false;
 }
 </script>
 {% endblock %}
