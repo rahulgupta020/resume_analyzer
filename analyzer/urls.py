@@ -25,6 +25,8 @@ urlpatterns = [
     path('resume/summary/', edit_summary, name='edit_summary'),
     path("ai/generate-summary/", ai_generate_summary),
     path("ai/optimize-summary/", ai_optimize_summary),
+    path("ai/generate-additional/", ai_generate_additional),
+    path("ai/optimize-additional/", ai_optimize_additional),
     path('resume/experience/', edit_experience, name='edit_experience'),
     path('resume/education/', edit_education, name='edit_education'),
     path('resume/skills/', edit_skills, name='edit_skills'),

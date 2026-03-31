@@ -250,20 +250,7 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
         </ul>
       </div>
 
-      <!-- Additional (projects, certifications, awards, languages etc.) -->
-      {% if additionals %}
-      <div class="sec">
-        <div class="sec-title"><i class="fas fa-star"></i> Additional</div>
-        {% for add in additionals %}
-        <div style="margin-bottom:10px;">
-          <div style="font-size:11.5px;font-weight:700;color:var(--navy);">{{ add.additional_title }}</div>
-          {% if add.additional_desc %}
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;">{{ add.additional_desc }}</div>
-          {% endif %}
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
+
 
     </div>
 
@@ -320,6 +307,45 @@ p, li { font-size: 12px; line-height: 1.68; color: var(--muted); }
         </div>
       </div>
       {% endif %}
+
+      <!-- Additional -->
+      {% if additionals %}
+      <div class="r-sec">
+        <div class="r-title"><i class="fas fa-star"></i> Additional</div>
+        <div class="timeline">
+          {% for add in additionals %}
+          <div class="tl-item">
+            <div class="tl-title">{{ add.additional_title }}</div>
+            {% if add.additional_desc %}
+            <div class="tl-sub">
+              {% for line in add.additional_desc.splitlines %}
+                {% if line.strip %}<p style="margin-bottom: 3px;">{{ line }}</p>{% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Custom Sections -->
+      {% for custom in custom_sections %}
+      <div class="r-sec">
+        <div class="r-title"><i class="fas fa-star"></i> {{ custom.title }}</div>
+        <div class="timeline">
+          <div class="tl-item">
+            {% if custom.description %}
+            <div class="tl-sub">
+              {% for line in custom.description.splitlines %}
+                {% if line.strip %}<p style="margin-bottom: 3px;">{{ line }}</p>{% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
 
     </div>
   </div>

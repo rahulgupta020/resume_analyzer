@@ -343,39 +343,42 @@ body {
         {% endfor %}
       </div>
 
-      <!-- Reference -->
+      <!-- Additional -->
+      {% if additionals %}
       <div class="sec-block">
-        <div class="sec-label">Reference</div>
+        <div class="sec-label">Additional</div>
         <div class="ref-grid">
           {% for add in additionals %}
-          {% if add.additional_title and add.additional_desc %}
+          {% if add.additional_title or add.additional_desc %}
           <div>
             <div class="ref-name">{{ add.additional_title }}</div>
-            <div class="ref-org">{{ add.additional_desc }}</div>
+            <div class="ref-org">
+              {% for line in add.additional_desc.splitlines %}
+                {% if line.strip %}<p>{{ line }}</p>{% endif %}
+              {% endfor %}
+            </div>
           </div>
           {% endif %}
-          {% empty %}
-          <div>
-            <div class="ref-name">Greta Mae Evans</div>
-            <div class="ref-org">Borcelle University</div>
-            <div class="ref-detail"><i class="fas fa-phone-alt"></i> +123-456-7890</div>
-            <div class="ref-detail"><i class="fas fa-globe"></i> www.reallygreatsite.com</div>
-          </div>
-          <div>
-            <div class="ref-name">Lars Peeters</div>
-            <div class="ref-org">Borcelle University</div>
-            <div class="ref-detail"><i class="fas fa-phone-alt"></i> +123-456-7890</div>
-            <div class="ref-detail"><i class="fas fa-globe"></i> www.reallygreatsite.com</div>
-          </div>
-          <div>
-            <div class="ref-name">Juliana Silva</div>
-            <div class="ref-org">Borcelle University</div>
-            <div class="ref-detail"><i class="fas fa-phone-alt"></i> +123-456-7890</div>
-            <div class="ref-detail"><i class="fas fa-globe"></i> www.reallygreatsite.com</div>
-          </div>
           {% endfor %}
         </div>
       </div>
+      {% endif %}
+
+      <!-- Custom Sections -->
+      {% for custom in custom_sections %}
+      <div class="sec-block">
+        <div class="sec-label">{{ custom.title }}</div>
+        <div class="ref-grid">
+          <div>
+            <div class="ref-org">
+              {% for line in custom.description.splitlines %}
+                {% if line.strip %}<p>{{ line }}</p>{% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
 
     </div><!-- /main -->
   </div><!-- /body -->

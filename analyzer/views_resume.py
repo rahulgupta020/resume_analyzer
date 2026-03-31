@@ -6,7 +6,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from .models import (
     ResumeFresherExperience, ResumeHeader, ResumeSummary, 
     ResumeExperience, ResumeEducation, ResumeSkill, 
-    ResumeAdditional, ResumeTemplate
+    ResumeAdditional, ResumeCustomSection, ResumeTemplate, ResumeLanguage
 )
 from .ai_resume_parser import parse_resume_with_ai
 
@@ -189,6 +189,71 @@ Rules:
 
     return JsonResponse({"summary": optimized})
 
+
+@login_required
+def ai_generate_additional(request):
+    data = json.loads(request.body)
+    title = data.get("title", "")
+
+    prompt = f"""
+Generate ONLY the project or award description for a resume.
+
+Title: {title}
+
+Rules:
+- 2 to 4 lines
+- Professional tone
+- Emphasize impact and skills
+- Do NOT add titles
+- Do NOT add explanations
+- Output ONLY the description text.
+"""
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=[{'role':'user','content':prompt}],
+        options={
+            'temperature':0.6,
+            'num_predict':120
+        }
+    )
+
+    desc = response['message']['content'].strip()
+    return JsonResponse({"description": desc})
+
+
+@login_required
+def ai_optimize_additional(request):
+    data = json.loads(request.body)
+    desc = data.get("description", "")
+
+    prompt = f"""
+Rewrite and optimize the following project or award description.
+
+Description:
+{desc}
+
+Rules:
+- ALWAYS rewrite the sentences using different wording
+- Keep it 2-4 lines
+- Improve grammar and clarity
+- Make it ATS optimized
+- Keep the original meaning
+- Do NOT add explanations
+- Output ONLY the rewritten description
+"""
+    response = ollama.chat(
+        model='llama3.2:1b',
+        messages=[{'role':'user','content':prompt}],
+        options={
+            'temperature':0.4,
+            'num_predict':120
+        }
+    )
+
+    optimized = response['message']['content'].strip()
+    return JsonResponse({"description": optimized})
+
+
 @login_required
 def edit_experience(request):
     """Step 3: Work History (Multiple Items)"""
@@ -277,11 +342,42 @@ def edit_additional(request):
                     additional_title=title,
                     additional_desc=request.POST.get(f"additional_desc_{i}")
                 )
+                
+        # Process languages
+        ResumeLanguage.objects.filter(user=request.user).delete()
+        lang_count = int(request.POST.get("language_count", 0))
+        for i in range(lang_count):
+            lang = request.POST.get(f"language_name_{i}")
+            if lang:
+                ResumeLanguage.objects.create(
+                    user=request.user,
+                    language=lang,
+                    proficiency=request.POST.get(f"proficiency_{i}", "")
+                )
+                
+        # Process custom sections
+        ResumeCustomSection.objects.filter(user=request.user).delete()
+        custom_count = int(request.POST.get("custom_count", 0))
+        for i in range(custom_count):
+            title = request.POST.get(f"custom_title_{i}")
+            if title:
+                ResumeCustomSection.objects.create(
+                    user=request.user,
+                    title=title,
+                    description=request.POST.get(f"custom_desc_{i}", "")
+                )
+                
         return redirect("select_template")
 
     # ✅ FIXED: Changed filter(request.user) to filter(user=request.user)
     additionals = ResumeAdditional.objects.filter(user=request.user)
-    return render(request, "resume/additional.html", {"additionals": additionals})
+    languages = ResumeLanguage.objects.filter(user=request.user)
+    custom_sections = ResumeCustomSection.objects.filter(user=request.user)
+    return render(request, "resume/additional.html", {
+        "additionals": additionals,
+        "languages": languages,
+        "custom_sections": custom_sections
+    })
 
 @login_required
 def select_template(request):
@@ -321,6 +417,8 @@ def render_resume_template(request):
         "educations": ResumeEducation.objects.filter(user=request.user),
         "skills": ResumeSkill.objects.filter(user=request.user),
         "additionals": ResumeAdditional.objects.filter(user=request.user),
+        "languages": ResumeLanguage.objects.filter(user=request.user),
+        "custom_sections": ResumeCustomSection.objects.filter(user=request.user),
         "template": ResumeTemplate.objects.filter(user=request.user).first(),
     }
 
@@ -470,6 +568,7 @@ def upload_resume(request):
         # ADDITIONAL
         # --------------------------
         ResumeAdditional.objects.filter(user=request.user).delete()
+        ResumeCustomSection.objects.filter(user=request.user).delete()
         for add in parsed.get("resume_additional", []):
             ResumeAdditional.objects.create(
                 user=request.user,

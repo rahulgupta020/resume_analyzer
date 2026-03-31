@@ -1,0 +1,137 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Languages - ResumeIQ{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/additional.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="form-page-wrapper">
+    <div class="container py-4">
+        <div class="card form-card shadow-lg border-0 mb-5">
+            <div class="card-body p-4 p-md-5">
+                <div class="form-header mb-4 d-flex justify-content-between align-items-start">
+                    <div>
+                        <h2 class="fw-bold mb-1">Languages</h2>
+                        <p class="text-muted">Add the languages you speak and your proficiency level.</p>
+                    </div>
+                    <span class="badge bg-soft-info text-info p-2">
+                        <i class="fas fa-language me-1"></i> Communication Skills
+                    </span>
+                </div>
+
+                <form method="post" id="language-form">
+                    {% csrf_token %}
+                    <div id="language-container">
+                        {% if languages %}
+                            {% for lang in languages %}
+                            <div class="additional-entry-card p-4 mb-4 rounded-3 border position-relative">
+                                <button type="button" class="btn-remove-card" onclick="removeLang(this)"
+                                        {% if forloop.first %}style="display:none;"{% endif %}>×</button>
+                                <div class="row g-3">
+                                    <div class="col-md-6 form-group">
+                                        <label class="form-label fw-bold">Language</label>
+                                        <input type="text" name="language_name_{{ forloop.counter0 }}"
+                                               value="{{ lang.language_name }}" class="form-control"
+                                               placeholder="e.g. English, Hindi, French">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label class="form-label fw-bold">Proficiency</label>
+                                        <select name="proficiency_{{ forloop.counter0 }}" class="form-control">
+                                            <option value="">-- Select --</option>
+                                            <option value="Native" {% if lang.proficiency == "Native" %}selected{% endif %}>Native</option>
+                                            <option value="Fluent" {% if lang.proficiency == "Fluent" %}selected{% endif %}>Fluent</option>
+                                            <option value="Advanced" {% if lang.proficiency == "Advanced" %}selected{% endif %}>Advanced</option>
+                                            <option value="Intermediate" {% if lang.proficiency == "Intermediate" %}selected{% endif %}>Intermediate</option>
+                                            <option value="Beginner" {% if lang.proficiency == "Beginner" %}selected{% endif %}>Beginner</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="additional-entry-card p-4 mb-4 rounded-3 border position-relative">
+                                <button type="button" class="btn-remove-card" style="display:none;" onclick="removeLang(this)">×</button>
+                                <div class="row g-3">
+                                    <div class="col-md-6 form-group">
+                                        <label class="form-label fw-bold">Language</label>
+                                        <input type="text" name="language_name_0" class="form-control" placeholder="e.g. English">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label class="form-label fw-bold">Proficiency</label>
+                                        <select name="proficiency_0" class="form-control">
+                                            <option value="">-- Select --</option>
+                                            <option value="Native">Native</option>
+                                            <option value="Fluent">Fluent</option>
+                                            <option value="Advanced">Advanced</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Beginner">Beginner</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <input type="hidden" id="language-count" name="language_count" value="{{ languages|length|default:1 }}">
+
+                    <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                        <a href="{% url 'edit_additional' %}" class="btn btn-outline-secondary px-4">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary px-4 me-2" onclick="addLang()">
+                                <i class="fas fa-plus me-1"></i> Add More
+                            </button>
+                            <button type="submit" class="btn btn-primary px-5 py-2">
+                                Save &amp; Continue <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function addLang() {
+    const container = document.getElementById('language-container');
+    const countInput = document.getElementById('language-count');
+    const count = parseInt(countInput.value);
+
+    const div = document.createElement('div');
+    div.className = 'additional-entry-card p-4 mb-4 rounded-3 border position-relative shadow-sm';
+    div.innerHTML = `
+        <button type="button" class="btn-remove-card" onclick="removeLang(this)">×</button>
+        <div class="row g-3">
+            <div class="col-md-6 form-group">
+                <label class="form-label fw-bold">Language</label>
+                <input type="text" name="language_name_${count}" class="form-control" placeholder="e.g. French">
+            </div>
+            <div class="col-md-6 form-group">
+                <label class="form-label fw-bold">Proficiency</label>
+                <select name="proficiency_${count}" class="form-control">
+                    <option value="">-- Select --</option>
+                    <option value="Native">Native</option>
+                    <option value="Fluent">Fluent</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Beginner">Beginner</option>
+                </select>
+            </div>
+        </div>
+    `;
+    container.appendChild(div);
+    countInput.value = count + 1;
+}
+
+function removeLang(button) {
+    const card = button.closest('.additional-entry-card');
+    card.classList.add('fade-out');
+    setTimeout(() => { card.remove(); }, 300);
+}
+</script>
+{% endblock %}

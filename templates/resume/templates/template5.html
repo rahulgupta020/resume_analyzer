@@ -214,7 +214,7 @@ body {
         {% endif %}
 
         <!-- Additionals — each unique title becomes its own section -->
-        {% if additionals %}
+        {% if False %}
         {% regroup additionals by additional_title as add_groups %}
         {% for group in add_groups %}
         <div class="left-sec">
@@ -298,6 +298,41 @@ body {
           </div>
         </div>
         {% endif %}
+      <!-- Additional -->
+      {% if additionals %}
+      <div style="margin-top:20px; margin-bottom: 20px;">
+        <div class="sec-title" style="text-transform:uppercase; font-weight:bold; margin-bottom:8px;">Additional</div>
+        <div>
+          {% for add in additionals %}
+          <div style="margin-bottom:12px;">
+            <div style="font-weight:600;">{{ add.additional_title }}</div>
+            {% if add.additional_desc %}
+              <div style="opacity:0.85; margin-top:4px;">
+                {% for line in add.additional_desc.splitlines %}
+                  {% if line.strip %}<p style="margin:0 0 4px 0;">{{ line }}</p>{% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Custom Sections -->
+      {% for custom in custom_sections %}
+      <div style="margin-top:20px; margin-bottom: 20px;">
+        <div class="sec-title" style="text-transform:uppercase; font-weight:bold; margin-bottom:8px;">{{ custom.title }}</div>
+        <div>
+          <div style="opacity:0.85; margin-top:4px;">
+            {% for line in custom.description.splitlines %}
+              {% if line.strip %}<p style="margin:0 0 4px 0;">{{ line }}</p>{% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
 
       </div>
     </div>

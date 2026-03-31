@@ -35,11 +35,21 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label fw-bold">Title of Project / Award</label>
                                     <input type="text" name="additional_title_{{ forloop.counter0 }}" 
-                                           value="{{ additional.additional_title|default:'' }}" class="form-control">
+                                           value="{{ additional.additional_title|default:'' }}" class="form-control additional-title-input">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label fw-bold">Description</label>
-                                    <textarea name="additional_desc_{{ forloop.counter0 }}" class="form-control" rows="4">{{ additional.additional_desc|default:'' }}</textarea>
+                                    <div class="d-flex justify-content-between align-items-end mb-2">
+                                        <label class="form-label fw-bold mb-0">Description</label>
+                                        <div class="ai-buttons-functional">
+                                            <button type="button" class="btn btn-sm btn-outline-primary ai-generate-additional">
+                                                <i class="fas fa-robot"></i> AI Generate
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-success ai-optimize-additional">
+                                                <i class="fas fa-wand-magic-sparkles"></i> AI Optimize
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <textarea name="additional_desc_{{ forloop.counter0 }}" class="form-control additional-desc-input" rows="4">{{ additional.additional_desc|default:'' }}</textarea>
                                 </div>
                             </div>
                             {% endfor %}
@@ -48,17 +58,124 @@
                                 <button type="button" class="btn-remove-card" style="display:none;" onclick="removeAdditional(this)">×</button>
                                 <div class="form-group mb-3">
                                     <label class="form-label fw-bold">Title of Project / Award</label>
-                                    <input type="text" name="additional_title_0" class="form-control" placeholder="e.g. ResumeIQ Platform">
+                                    <input type="text" name="additional_title_0" class="form-control additional-title-input" placeholder="e.g. ResumeIQ Platform">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label fw-bold">Description</label>
-                                    <textarea name="additional_desc_0" class="form-control" rows="4" placeholder="e.g. Built a full-stack application..."></textarea>
+                                    <div class="d-flex justify-content-between align-items-end mb-2">
+                                        <label class="form-label fw-bold mb-0">Description</label>
+                                        <div class="ai-buttons-functional">
+                                            <button type="button" class="btn btn-sm btn-outline-primary ai-generate-additional">
+                                                <i class="fas fa-robot"></i> AI Generate
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-success ai-optimize-additional">
+                                                <i class="fas fa-wand-magic-sparkles"></i> AI Optimize
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <textarea name="additional_desc_0" class="form-control additional-desc-input" rows="4" placeholder="e.g. Built a full-stack application..."></textarea>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
 
                     <input type="hidden" id="additional-count" name="additional_count" value="{{ additionals|length|default:1 }}">
+
+                    <hr class="my-5">
+
+                    <div class="form-header mb-4 d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="fw-bold mb-1">Custom Sections</h3>
+                            <p class="text-muted">Headers like Hobbies or Publications.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="custom-section-container">
+                        {% if custom_sections %}
+                            {% for custom in custom_sections %}
+                            <div class="custom-entry-card p-4 mb-3 rounded-3 border position-relative shadow-sm">
+                                <button type="button" class="btn-remove-card" onclick="removeCustom(this)">×</button>
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-bold">Section Header</label>
+                                    <input type="text" name="custom_title_{{ forloop.counter0 }}" class="form-control" value="{{ custom.title }}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Description</label>
+                                    <textarea name="custom_desc_{{ forloop.counter0 }}" class="form-control" rows="4">{{ custom.description }}</textarea>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <input type="hidden" id="custom-count" name="custom_count" value="{{ custom_sections|length|default:0 }}">
+
+                    <hr class="my-5">
+                    
+                    <div class="form-header mb-4 d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="fw-bold mb-1">Languages</h3>
+                            <p class="text-muted">List languages you know and your proficiency level.</p>
+                        </div>
+                    </div>
+
+                    <div id="language-container">
+                        {% if languages %}
+                            {% for lang in languages %}
+                            <div class="language-entry-card p-4 mb-3 rounded-3 border position-relative shadow-sm">
+                                <button type="button" class="btn-remove-card" onclick="removeLanguage(this)" 
+                                        {% if forloop.first %}style="display:none;"{% endif %}>×</button>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <label class="form-label fw-bold">Language</label>
+                                        <input type="text" name="language_name_{{ forloop.counter0 }}" 
+                                               value="{{ lang.language|default:'' }}" class="form-control" placeholder="e.g. English">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Proficiency</label>
+                                        <select class="form-select" name="proficiency_{{ forloop.counter0 }}">
+                                            <option value="" {% if not lang.proficiency %}selected{% endif %}>Select Proficiency</option>
+                                            <option value="Native" {% if lang.proficiency == 'Native' %}selected{% endif %}>Native</option>
+                                            <option value="Fluent" {% if lang.proficiency == 'Fluent' %}selected{% endif %}>Fluent</option>
+                                            <option value="Proficient" {% if lang.proficiency == 'Proficient' %}selected{% endif %}>Proficient</option>
+                                            <option value="Conversational" {% if lang.proficiency == 'Conversational' %}selected{% endif %}>Conversational</option>
+                                            <option value="Beginner" {% if lang.proficiency == 'Beginner' %}selected{% endif %}>Beginner</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="language-entry-card p-4 mb-3 rounded-3 border position-relative shadow-sm">
+                                <button type="button" class="btn-remove-card" style="display:none;" onclick="removeLanguage(this)">×</button>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <label class="form-label fw-bold">Language</label>
+                                        <input type="text" name="language_name_0" class="form-control" placeholder="e.g. English">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Proficiency</label>
+                                        <select class="form-select" name="proficiency_0">
+                                            <option value="" selected>Select Proficiency</option>
+                                            <option value="Native">Native</option>
+                                            <option value="Fluent">Fluent</option>
+                                            <option value="Proficient">Proficient</option>
+                                            <option value="Conversational">Conversational</option>
+                                            <option value="Beginner">Beginner</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="addLanguage()">
+                            <i class="fas fa-plus me-1"></i> Add Language
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="language-count" name="language_count" value="{{ languages|length|default:1 }}">
 
                     <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
                         <a href="{% url 'edit_skills' %}" class="btn btn-outline-secondary px-4">
@@ -122,11 +239,21 @@ function addAdditional(preTitle = '', preDesc = '') {
         <button type="button" class="btn-remove-card" onclick="removeAdditional(this)">×</button>
         <div class="form-group mb-3">
             <label class="form-label fw-bold">Title Of Project / Award</label>
-            <input type="text" name="additional_title_${count}" class="form-control" value="${preTitle}" placeholder="e.g. Hackathon Winner">
+            <input type="text" name="additional_title_${count}" class="form-control additional-title-input" value="${preTitle}" placeholder="e.g. Hackathon Winner">
         </div>
         <div class="form-group">
-            <label class="form-label fw-bold">Description</label>
-            <textarea name="additional_desc_${count}" class="form-control" rows="4">${preDesc}</textarea>
+            <div class="d-flex justify-content-between align-items-end mb-2">
+                <label class="form-label fw-bold mb-0">Description</label>
+                <div class="ai-buttons-functional">
+                    <button type="button" class="btn btn-sm btn-outline-primary ai-generate-additional">
+                        <i class="fas fa-robot"></i> AI Generate
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-success ai-optimize-additional">
+                        <i class="fas fa-wand-magic-sparkles"></i> AI Optimize
+                    </button>
+                </div>
+            </div>
+            <textarea name="additional_desc_${count}" class="form-control additional-desc-input" rows="4">${preDesc}</textarea>
         </div>
     `;
 
@@ -143,8 +270,8 @@ function saveCustomField() {
         return;
     }
 
-    // Call addAdditional with the data from the modal
-    addAdditional(titleInput.value, descInput.value);
+    // Call addCustom with the data from the modal
+    addCustom(titleInput.value, descInput.value);
 
     // Clear inputs and close modal
     titleInput.value = '';
@@ -154,10 +281,160 @@ function saveCustomField() {
     modal.hide();
 }
 
+function addCustom(preTitle = '', preDesc = '') {
+    const container = document.getElementById('custom-section-container');
+    let countInput = document.getElementById('custom-count');
+    let count = parseInt(countInput.value);
+
+    const div = document.createElement('div');
+    div.className = 'custom-entry-card p-4 mb-3 rounded-3 border position-relative shadow-sm fade-in';
+    div.innerHTML = `
+        <button type="button" class="btn-remove-card" onclick="removeCustom(this)">×</button>
+        <div class="form-group mb-3">
+            <label class="form-label fw-bold">Section Header</label>
+            <input type="text" name="custom_title_${count}" class="form-control" value="${preTitle}">
+        </div>
+        <div class="form-group">
+            <label class="form-label fw-bold">Description</label>
+            <textarea name="custom_desc_${count}" class="form-control" rows="4">${preDesc}</textarea>
+        </div>
+    `;
+    container.appendChild(div);
+    countInput.value = count + 1;
+}
+
+function removeCustom(button) {
+    const card = button.closest('.custom-entry-card');
+    card.classList.add('fade-out');
+    setTimeout(() => { card.remove(); }, 300);
+}
+
 function removeAdditional(button) {
     const card = button.closest('.additional-entry-card');
     card.classList.add('fade-out');
     setTimeout(() => { card.remove(); }, 300);
 }
+
+function addLanguage() {
+    const container = document.getElementById('language-container');
+    let countInput = document.getElementById('language-count');
+    let count = parseInt(countInput.value);
+
+    const div = document.createElement('div');
+    div.className = 'language-entry-card p-4 mb-3 rounded-3 border position-relative shadow-sm fade-in';
+
+    div.innerHTML = `
+        <button type="button" class="btn-remove-card" onclick="removeLanguage(this)">×</button>
+        <div class="row">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <label class="form-label fw-bold">Language</label>
+                <input type="text" name="language_name_${count}" class="form-control" placeholder="e.g. Spanish">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Proficiency</label>
+                <select class="form-select" name="proficiency_${count}">
+                    <option value="" selected>Select Proficiency</option>
+                    <option value="Native">Native</option>
+                    <option value="Fluent">Fluent</option>
+                    <option value="Proficient">Proficient</option>
+                    <option value="Conversational">Conversational</option>
+                    <option value="Beginner">Beginner</option>
+                </select>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(div);
+    countInput.value = count + 1;
+}
+
+function removeLanguage(button) {
+    const card = button.closest('.language-entry-card');
+    card.classList.add('fade-out');
+    setTimeout(() => { card.remove(); }, 300);
+}
+
+document.addEventListener("click", async function (e) {
+    // Generate Additional
+    const generateBtn = e.target.closest('.ai-generate-additional');
+    if (generateBtn) {
+        const card = generateBtn.closest('.additional-entry-card');
+        const titleInput = card.querySelector('.additional-title-input');
+        const descInput = card.querySelector('.additional-desc-input');
+
+        const titleText = titleInput.value.trim();
+        if (!titleText) {
+            alert("Please enter a Title of Project / Award first.");
+            return;
+        }
+
+        const originalHtml = generateBtn.innerHTML;
+        generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating';
+        generateBtn.disabled = true;
+
+        try {
+            const response = await fetch("/ai/generate-additional/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ title: titleText })
+            });
+
+            const data = await response.json();
+            if (data.description) {
+                descInput.value = data.description;
+            }
+        } catch (error) {
+            console.error("Generate Error:", error);
+            alert("AI failed to generate description.");
+        }
+
+        generateBtn.innerHTML = originalHtml;
+        generateBtn.disabled = false;
+        return;
+    }
+
+    // Optimize Additional
+    const optimizeBtn = e.target.closest('.ai-optimize-additional');
+    if (optimizeBtn) {
+        const card = optimizeBtn.closest('.additional-entry-card');
+        const descInput = card.querySelector('.additional-desc-input');
+
+        const descText = descInput.value.trim();
+        if (!descText) {
+            alert("Please write a description first.");
+            return;
+        }
+
+        const originalHtml = optimizeBtn.innerHTML;
+        optimizeBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Optimizing';
+        optimizeBtn.disabled = true;
+
+        try {
+            const response = await fetch("/ai/optimize-additional/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ description: descText })
+            });
+
+            const data = await response.json();
+            if (data.description) {
+                descInput.value = data.description;
+            }
+        } catch (error) {
+            console.error("Optimize Error:", error);
+            alert("AI failed to optimize description.");
+        }
+
+        optimizeBtn.innerHTML = originalHtml;
+        optimizeBtn.disabled = false;
+        return;
+    }
+});
 </script>
 {% endblock %}

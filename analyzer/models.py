@@ -53,6 +53,16 @@ class ResumeAdditional(models.Model):
     additional_title = models.CharField(max_length=100)
     additional_desc = models.TextField(blank=True)
 
+class ResumeCustomSection(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_custom_sections')
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+
 class ResumeTemplate(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='resume_template')
     template_name = models.CharField(max_length=50)
+
+class ResumeLanguage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_languages')
+    language = models.CharField(max_length=50)
+    proficiency = models.CharField(max_length=50, blank=True)
